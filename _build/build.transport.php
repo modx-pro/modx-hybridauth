@@ -42,7 +42,6 @@ require_once $sources['build'] . '/includes/functions.php';
 
 $modx= new modX();
 $modx->initialize('mgr');
-echo '<pre>'; /* used for nice formatting of log messages */
 $modx->setLogLevel(modX::LOG_LEVEL_INFO);
 $modx->setLogTarget('ECHO');
 
@@ -125,6 +124,13 @@ $vehicle->resolve('file',array(
 ));
 $builder->putVehicle($vehicle);
 
+$vehicle->resolve('php',array(
+	'source' => $sources['resolvers'] . 'resolve.tables.php',
+));
+
+$modx->log(modX::LOG_LEVEL_INFO,'Packaged in resolvers.'); flush();
+$builder->putVehicle($vehicle);
+
 /* load system settings */
 $settings = include $sources['data'].'transport.settings.php';
 if (!is_array($settings)) {
@@ -143,44 +149,11 @@ if (!is_array($settings)) {
 }
 unset($settings,$setting,$attributes);
 
-/* load menu */
-$menu = include $sources['data'].'transport.menu.php';
-if (empty($menu)) {
-	$modx->log(modX::LOG_LEVEL_ERROR,'Could not package in menu.');
-} else {
-	$vehicle= $builder->createVehicle($menu,array (
-		xPDOTransport::PRESERVE_KEYS => true,
-		xPDOTransport::UPDATE_OBJECT => true,
-		xPDOTransport::UNIQUE_KEY => 'text',
-		xPDOTransport::RELATED_OBJECTS => true,
-		xPDOTransport::RELATED_OBJECT_ATTRIBUTES => array (
-			'Action' => array (
-				xPDOTransport::PRESERVE_KEYS => false,
-				xPDOTransport::UPDATE_OBJECT => false,
-				xPDOTransport::UNIQUE_KEY => array ('namespace','controller'),
-			),
-		),
-	));
-	$modx->log(modX::LOG_LEVEL_INFO,'Adding in PHP resolvers...');
-	$vehicle->resolve('php',array(
-		'source' => $sources['resolvers'] . 'resolve.tables.php',
-	));
-	$vehicle->resolve('php',array(
-		'source' => $sources['resolvers'] . 'resolve.paths.php',
-	));
-	$builder->putVehicle($vehicle);
-	$modx->log(modX::LOG_LEVEL_INFO,'Packaged in menu.');
-}
-unset($vehicle,$menu);
-
 /* now pack in the license file, readme and setup options */
 $builder->setPackageAttributes(array(
 	'changelog' => file_get_contents($sources['docs'] . 'changelog.txt')
 	,'license' => file_get_contents($sources['docs'] . 'license.txt')
 	,'readme' => file_get_contents($sources['docs'] . 'readme.txt')
-	//'setup-options' => array(
-		//'source' => $sources['build'].'setup.options.php',
-	//),
 ));
 $modx->log(modX::LOG_LEVEL_INFO,'Added package attributes and setup options.');
 

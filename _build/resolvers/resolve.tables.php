@@ -14,7 +14,11 @@ if ($object->xpdo) {
 
 			$manager = $modx->getManager();
 
-			$manager->createObjectContainer('HybridAuthItem');
+			$manager->createObjectContainer('haUserService');
+
+			if ($modx instanceof modX) {
+				$modx->addExtensionPackage('hybridauth', '[[++core_path]]components/hybridauth/model/');
+			}
 
 			break;
 		case xPDOTransport::ACTION_UPGRADE:

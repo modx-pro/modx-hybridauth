@@ -9,8 +9,26 @@ $settings = array();
 
 $settings[0]= $modx->newObject('modSystemSetting');
 $settings[0]->fromArray(array(
-	'key' => 'ha.keys.Example',
-	'value' => '{"id":"195149345691.apps.googleusercontent.com","secret":"IjaE1KngN5PZE6srKjGllq4Z"}',
+	'key' => 'ha.keys.Yandex',
+	'value' => '{"id":"12345","secret":"12345"}',
+	'xtype' => 'textfield',
+	'namespace' => 'hybridauth',
+	'area' => '',
+),'',true,true);
+
+$settings[1]= $modx->newObject('modSystemSetting');
+$settings[1]->fromArray(array(
+	'key' => 'ha.keys.Twitter',
+	'value' => '{"key":"12345","secret":"12345"}',
+	'xtype' => 'textfield',
+	'namespace' => 'hybridauth',
+	'area' => '',
+),'',true,true);
+
+$settings[2]= $modx->newObject('modSystemSetting');
+$settings[2]->fromArray(array(
+	'key' => 'ha.keys.Google',
+	'value' => '{"id":"12345","secret":"12345"}',
 	'xtype' => 'textfield',
 	'namespace' => 'hybridauth',
 	'area' => '',

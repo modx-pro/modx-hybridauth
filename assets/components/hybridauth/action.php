@@ -10,8 +10,6 @@ $modx->error->message = null;
 $HybridAuth = $modx->getService('hybridauth','HybridAuth',$modx->getOption('hybridauth.core_path',null,$modx->getOption('core_path').'components/hybridauth/').'model/hybridauth/',array());
 if (!($HybridAuth instanceof HybridAuth)) return '';
 
-if ($modx->error->hasError()) {
-	return $modx->error->message;
+if (!$modx->error->hasError()) {
+	$HybridAuth->process();
 }
-
-$HybridAuth->process();

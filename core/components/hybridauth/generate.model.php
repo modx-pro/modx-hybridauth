@@ -10,7 +10,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))).'/index.php';
 /*******************************************************/
 
 $package = 'hybridauth'; // Class name for generation
-$suffix = 'hybridauth_'; // Suffix of tables.
+$suffix = 'ha_'; // Suffix of tables.
 $prefix = $modx->config['table_prefix']; // table prefix
 
 // Folders for schema and model
@@ -20,7 +20,7 @@ $xml = $Schema.$package.'.mysql.schema.xml';
 
 // Remove old files
 rrmdir($Model.$package .'/mysql');
-unlink($xml);
+//unlink($xml);
 
 /*******************************************************/
 
@@ -32,12 +32,16 @@ $modx->loadClass('transport.modPackageBuilder', '', false, true);
 $manager = $modx->getManager();
 $generator = $manager->getGenerator();
 
-$generator->writeSchema($xml, $package, 'xPDOObject', $prefix.$suffix, true);
+//$generator->writeSchema($xml, $package, 'xPDOObject', $prefix.$suffix, true);
 
-$tmp = str_replace('table="', 'table="'.$suffix, file_get_contents($xml));
-file_put_contents($xml, $tmp);
+//$tmp = str_replace('table="', 'table="'.$suffix, file_get_contents($xml));
+//file_put_contents($xml, $tmp);
 
 $generator->parseSchema($xml, $Model);
+$modx->addPackage($package, $Model);
+$manager->removeObjectContainer('haUserService');
+$manager->createObjectContainer('haUserService');
+$modx->addExtensionPackage('hybridauth', '[[++core_path]]components/hybridauth/model/');
 
 print "\nDone\n";
 
@@ -54,7 +58,7 @@ function rrmdir($dir) {
 		
 		foreach ($objects as $object) { 
 			if ($object != "." && $object != "..") { 
-				if (filetype($dir."/".$object) == "dir") rrmdir($dir."/".$object); else unlink($dir."/".$object); 
+				if (filetype($dir."/".$object) == "dir") rrmdir($dir."/".$object); else unlink($dir."/".$object);
 			} 
 		}
 		

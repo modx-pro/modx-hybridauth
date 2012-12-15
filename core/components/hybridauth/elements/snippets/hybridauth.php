@@ -18,11 +18,12 @@ if (!empty($_REQUEST['action'])) {
 
 if (empty($action)) {$action = $modx->getOption('action', $scriptProperties, 'loadTpl');}
 
+$output = '';
 switch ($action) {
 	case 'login': $output = $HybridAuth->Login(@$_REQUEST['provider']); break;
-	case 'logout': $output = $HybridAuth->Logout(); break;
-	//case 'getProfile': return $HybridAuth->getProfile(); break;
-	//case 'updateProfile': return $HybridAuth->updateProfile(); break;
+	case 'logout': $HybridAuth->Logout(); break;
+	case 'getProfile': return $HybridAuth->getProfile(); break;
+	case 'updateProfile': return $HybridAuth->updateProfile($_POST); break;
 	case 'loadTpl':
 	default: $output =  $HybridAuth->loadTpl(); break;
 }
