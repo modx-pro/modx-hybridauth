@@ -4,6 +4,7 @@ Changelog for HybridAuth.
 ==============
 - Added parameter &groups=``. For example, &groups=`Users:1` will add new user to group "Users" with role "member"
 - Updated snippet params, added russian localization.
+- [#1] Updated readme
 
 0.1.0 beta
 ==============
