@@ -1,11 +1,11 @@
 [[+photo:notempty=`<img src="[[+photo]]" align="left" alt="username"/>`]]
-Приветствую, <b>[[+username]]</b> ([[+fullname]])!
+[[%ha.greeting]] <b>[[+username]]</b> ([[+fullname]])!
 <br/>
-<a href="[[+logout_url]]">Выйти</a>
+<a href="[[+logout_url]]">[[%ha.logout]]</a>
 [[+error:notempty=`<div class="alert alert-block alert-error">[[+error]]</div>`]]
 
 <br><br>
-Доступны сервисы:
-[[+yandex.provider:is=``:then=`<a href="[[+login_url]]&provider=Yandex">Яндекс</a>`:else=`Яндекс`]],
-[[+google.provider:is=``:then=`<a href="[[+login_url]]&provider=Google">Google</a>`:else=`Google`]] и
+[[%ha.providers_available]]
+[[+yandex.provider:is=``:then=`<a href="[[+login_url]]&provider=Yandex">Yandex</a>`:else=`Yandex`]],
+[[+google.provider:is=``:then=`<a href="[[+login_url]]&provider=Google">Google</a>`:else=`Google`]],
 [[+twitter.provider:is=``:then=`<a href="[[+login_url]]&provider=Twitter">Twitter</a>`:else=`Twitter`]]
