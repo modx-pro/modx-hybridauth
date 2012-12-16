@@ -17,99 +17,77 @@ $properties = array(
 		'name' => 'rememberme',
 		'value' => true,
 		'type' => 'combo-boolean',
-		'desc' => 'If true, user will receive long session',
+		'desc' => 'ha.rememberme',
 	),
 	array(
 		'name' => 'loginTpl',
 		'value' => 'tpl.HybridAuth.login',
 		'type' => 'textfield',
-		'desc' => 'Chunk for anonymous user',
+		'desc' => 'ha.loginTpl',
 	),
 	array(
 		'name' => 'logoutTpl',
 		'value' => 'tpl.HybridAuth.logout',
 		'type' => 'textfield',
-		'desc' => 'Chunk for authenticated user',
+		'desc' => 'ha.logoutTpl',
 	),
 	array(
 		'name' => 'profileTpl',
 		'value' => 'tpl.HybridAuth.profile',
 		'type' => 'textfield',
-		'desc' => 'Chunk for display and edit user profile',
+		'desc' => 'ha.profileTpl',
 	),
-	/*
-	array(
-		'name' => 'saltName',
-		'value' => '',
-		'type' => 'textfield',
-		'desc' => 'Salt for generated user key',
-	),
-	array(
-		'name' => 'saltPass',
-		'value' => '',
-		'type' => 'textfield',
-		'desc' => 'Salt for generated user password',
-	),
-	*/
 	array(
 		'name' => 'groups',
 		'value' => '',
 		'type' => 'textfield',
-		'desc' => 'Comma separated list of existing user groups for joining by user at the first login',
+		'desc' => 'ha.groups',
 	),
 	array(
 		'name' => 'loginContext',
 		'value' => '',
 		'type' => 'textfield',
-		'desc' => 'Main context for authentication',
+		'desc' => 'ha.loginContext',
 	),
 	array(
 		'name' => 'addContexts',
 		'value' => '',
 		'type' => 'textfield',
-		'desc' => 'Comma separated list of additional contexts for authentication',
+		'desc' => 'ha.addContexts',
 	),
-	/*
-	array(
-		'name' => 'updateProfile',
-		'value' => true,
-		'type' => 'combo-boolean',
-		'desc' => 'If true, user profile will be updated by data from remote service on every login',
-	),
-	*/
 	array(
 		'name' => 'profileFields',
 		'value' => 'username:25,email:50,fullname:50,phone:12,mobilephone:12,dob:10,gender,address,country,city,state,zip,fax,photo,comment,website',
 		'type' => 'textfield',
-		'desc' => 'Comma separated list of allowed user fields for update with maximum length of sended values',
+		'desc' => 'ha.profileFields',
 	),
 	array(
 		'name' => 'action',
 		'value' => 'loadTpl',
 		'type' => 'list',
-		'desc' => 'Action of the snippet',
+		'desc' => 'ha.action',
 		'options' => array(
-			array('text' => 'getProfile','value' => 'getProfile'),
 			array('text' => 'loadTpl','value' => 'loadTpl'),
+			array('text' => 'getProfile','value' => 'getProfile'),
 		),
 	),
 	array(
 		'name' => 'requiredFields',
 		'value' => 'username,email,fullname',
 		'type' => 'textfield',
-		'desc' => 'Comma separated list of required user fields when update',
+		'desc' => 'ha.requiredFields',
 	),
 	array(
 		'name' => 'loginResourceId',
 		'value' => 0,
 		'type' => 'numberfield',
-		'desc' => 'Resource id to redirect to on successful login. 0 will redirect to self.',
+		'desc' => 'ha.loginResourceId',
 	),
 	array(
 		'name' => 'logoutResourceId',
 		'value' => 0,
 		'type' => 'numberfield',
-		'desc' => 'Resource id to redirect to on successful logout. 0 will redirect to self.',
+		'desc' => 'ha.logoutResourceId',
 	),
 );
 
