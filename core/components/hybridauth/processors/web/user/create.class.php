@@ -36,21 +36,27 @@ class haUserCreateProcessor extends modUserCreateProcessor {
 		$memberships = array();
 		$groups = $this->getProperty('groups',null);
 		if ($groups !== null) {
-			$groups = is_array($groups) ? $groups : $this->modx->fromJSON($groups);
+			$groups = explode(',', $groups);
 			$groupsAdded = array();
 			$idx = 0;
-			foreach ($groups as $group) {
-				if (in_array($group['usergroup'],$groupsAdded)) continue;
-				/** @var modUserGroupMember $membership */
-				$membership = $this->modx->newObject('modUserGroupMember');
-				$membership->set('user_group',$group['usergroup']);
-				$membership->set('role',$group['role']);
-				$membership->set('member',$this->object->get('id'));
-				$membership->set('rank',isset($group['rank']) ? $group['rank'] : $idx);
-				$membership->save();
-				$memberships[] = $membership;
-				$groupsAdded[] = $group['usergroup'];
-				$idx++;
+			foreach ($groups as $tmp) {
+				@list($group, $role) = explode(':',$tmp);
+				if (in_array($group,$groupsAdded)) {continue;}
+				if (empty($role)) {$role = 1;}
+
+				if ($tmp = $this->modx->getObject('modUserGroup', array('name' => $group))) {
+					$gid = $tmp->get('id');
+					/** @var modUserGroupMember $membership */
+					$membership = $this->modx->newObject('modUserGroupMember');
+					$membership->set('user_group',$gid);
+					$membership->set('role',$role);
+					$membership->set('member',$this->object->get('id'));
+					$membership->set('rank',$idx);
+					$membership->save();
+					$memberships[] = $membership;
+					$groupsAdded[] = $group;
+					$idx++;
+				}
 			}
 		}
 		return $memberships;

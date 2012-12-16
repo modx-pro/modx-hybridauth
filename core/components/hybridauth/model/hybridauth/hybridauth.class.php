@@ -93,6 +93,7 @@ class HybridAuth {
 	 *
 	 * @access public
 	 * @param string $ctx The context to load. Defaults to web.
+	 * @return bool|mixed|object
 	 */
 	public function initialize($ctx = 'web') {
 		switch ($ctx) {
@@ -176,6 +177,7 @@ class HybridAuth {
 						,'zip' => !empty($profile['zip']) ? $profile['zip'] : ''
 						,'active' => 1
 						,'provider' => $profile
+						,'groups' => $this->config['groups']
 					);
 					$response = $this->runProcessor('web/user/create', $arr);
 					if ($response->isError()) {
@@ -267,7 +269,7 @@ class HybridAuth {
 		$providers = $this->Hybrid_Auth->getConnectedProviders();
 		$providerId = ucfirst($provider);
 		if (is_array($providers) && in_array($provider, $providers)) {
-			/* @var Hybrid_Provider_Adapter $provider */
+			/* @var Hybrid_Providers_Google $provider */
 			$provider = $this->Hybrid_Auth->getAdapter($providerId);
 			$profile = $provider->getUserProfile();
 			$array = json_encode($profile);
@@ -289,7 +291,7 @@ class HybridAuth {
 		if (!$this->modx->user->isAuthenticated()) {
 			$id = $this->modx->getOption('unauthorized_page');
 			if ($id != $this->modx->resource->id) {
-				return $this->modx->sendForward($id);
+				$this->modx->sendForward($id);
 			}
 			else {
 				header('HTTP/1.0 401 Unauthorized');
@@ -300,9 +302,8 @@ class HybridAuth {
 		/* @var modUser $user */
 		/* @var modUserProfile $profile */
 		if (empty($data) && $user = $this->modx->getObject('modUser', $this->modx->user->id)) {
-			$profile = $user->getOne('Profile')->toArray();
-			$user = $user->toArray();
-			$arr = array_merge($user, $profile);
+			$profile = $user->getOne('Profile');
+			$arr = array_merge($user->toArray(), $profile->toArray());
 		}
 		else {
 			$arr = $data;
@@ -345,6 +346,11 @@ class HybridAuth {
 		}
 
 		$data['requiredFields'] = explode(',', $this->config['requiredFields']);
+		if ($this->modx->user->class_key != 'haUser') {
+			$this->modx->user->class_key = 'haUser';
+			$this->modx->user->save();
+		}
+
 		$response = $this->runProcessor('web/user/update', $data);
 		if ($response->isError()) {
 			foreach ($response->errors as $error) {

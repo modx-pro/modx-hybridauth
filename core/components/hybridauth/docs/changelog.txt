@@ -1,5 +1,10 @@
 Changelog for HybridAuth.
 
+0.2.0 beta
+==============
+- Added parameter &groups=``. For example, &groups=`Users:1` will add new user to group "Users" with role "member"
+
+
 0.1.0 beta
 ==============
 - Initial release.
