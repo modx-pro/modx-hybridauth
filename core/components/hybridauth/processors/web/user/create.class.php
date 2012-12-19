@@ -62,6 +62,18 @@ class haUserCreateProcessor extends modUserCreateProcessor {
 		return $memberships;
 	}
 
+
+	/**
+	 * @return modUserProfile
+	 */
+	public function addProfile() {
+		$this->profile = $this->modx->newObject('modUserProfile');
+		$this->profile->fromArray($this->getProperties());
+		$this->profile->set('blocked',$this->getProperty('blocked',false));
+		$this->object->addOne($this->profile,'Profile');
+		return $this->profile;
+	}
+
 }
 
 return 'haUserCreateProcessor';

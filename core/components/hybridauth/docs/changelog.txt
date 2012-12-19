@@ -1,5 +1,9 @@
 Changelog for HybridAuth.
 
+0.2.1 beta
+==============
+- Fixed save of a photo in profile
+
 0.2.0 beta
 ==============
 - Added parameter &groups=``. For example, &groups=`Users:1` will add new user to group "Users" with role "member"
