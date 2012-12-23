@@ -1,8 +1,11 @@
 Changelog for HybridAuth.
 
-0.2.1 beta
+0.3.0 beta
 ==============
-- Fixed save of a photo in profile
+- Fixed save of a photo in profile.
+- Improved errors hadling.
+- Fixed increment of username if remote username exists on site.
+- If authentificated user linking remote service record, that already exists in remote profiles of the site - this record changes the owner. You can re-link any of your records to any accounts on site.
 
 0.2.0 beta
 ==============

@@ -84,7 +84,17 @@ class HybridAuth {
 
 		if (!empty($ha_config)) {
 			require_once 'lib/Auth.php';
-			$this->Hybrid_Auth = new Hybrid_Auth($ha_config);
+			try {
+				$this->Hybrid_Auth = new Hybrid_Auth($ha_config);
+			}
+			catch (Exception $e) {
+				$code = $e->getCode();
+				if ($code < 5) {$level = modX::LOG_LEVEL_ERROR;}
+				else {$level = modX::LOG_LEVEL_INFO;}
+
+				$this->modx->log($level, '[HybridAuth] ' . $e->getMessage());
+				$this->Refresh();
+			}
 		}
 	}
 
@@ -152,57 +162,97 @@ class HybridAuth {
 					$profile['internalKey'] = $uid;
 					$response = $this->runProcessor('web/service/create', $profile);
 					if ($response->isError()) {
-						$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] unable to save service profile for user '.$uid.'. Message: '.$response->getMessage());
-						$_SESSION['HA']['error'] = $response->getMessage();
+						$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] unable to save service profile for user '.$uid.'. Message: '.implode(', ',$response->getAllErrors()));
+						$_SESSION['HA']['error'] = implode(', ',$response->getAllErrors());
 					}
 				}
 				// Creating new user and adding this record to him
 				else {
-					$username = !empty($profile['displayName']) ? $profile['displayName'] : $profile['identifier'];
-					if ($exists = $this->modx->getCount('haUser', array('username' => $username))) {
-						$username .= $exists;
-					}
-					$arr = array(
-						'username' => $username
-						,'fullname' => !empty($profile['lastName']) ? $profile['firstName'] .' '. $profile['lastName'] : $profile['firstName']
-						,'dob' => !empty($profile['birthday']) && !empty($profile['birthmonth']) && !empty($profile['birthyear']) ? $profile['birthyear'].'-'.$profile['birthmonth'].'-'.$profile['birthday'] : ''
-						,'email' => !empty($profile['emailVerified']) ? $profile['emailVerified'] : $profile['email']
-						,'photo' => !empty($profile['photoURL']) ? $profile['photoURL'] : ''
-						,'website' => !empty($profile['webSiteURL']) ? $profile['webSiteURL'] : ''
-						,'phone' => !empty($profile['phone']) ? $profile['phone'] : ''
-						,'address' => !empty($profile['address']) ? $profile['address'] : ''
-						,'country' => !empty($profile['country']) ? $profile['country'] : ''
-						,'state' => !empty($profile['region']) ? $profile['region'] : ''
-						,'city' => !empty($profile['city']) ? $profile['city'] : ''
-						,'zip' => !empty($profile['zip']) ? $profile['zip'] : ''
-						,'active' => 1
-						,'provider' => $profile
-						,'groups' => $this->config['groups']
-					);
-					$response = $this->runProcessor('web/user/create', $arr);
-					if ($response->isError()) {
-						$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] Unable to create user '.print_r($arr,1).'. Message: '.$response->getMessage());
-						$_SESSION['HA']['error'] = $response->getMessage();
-					}
-					else {
-						$login_data = array(
-							'username' => $response->response['object']['username'],
-							'password' => md5(rand()),
-							'rememberme' => $this->config['rememberme']
-						);
-						$uid = $response->response['object']['id'];
-						$profile['internalKey'] = $uid;
-						$response = $this->runProcessor('web/service/create', $profile);
-						if ($response->isError()) {
-							$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] unable to save service profile for user '.$uid.'. Message: '.$response->getMessage());
-							$_SESSION['HA']['error'] = $response->getMessage();
+					/* @var modUserProfile $existingProfile */
+					/* @var modUser $existingUser */
+					/*
+					// But first checking user email. If it exists - linking this profile to existing user
+					$email = !empty($profile['emailVerified']) ? $profile['emailVerified'] : $profile['email'];
+					if (!empty($email) && $existingProfile = $this->modx->getObject('modUserProfile', array('email' => $email))) {
+						if ($existingUser = $existingProfile->getOne('User')) {
+							$login_data = array(
+								'username' => $existingUser->get('username'),
+								'password' => md5(rand()),
+								'rememberme' => $this->config['rememberme']
+							);
+
+							$profile['internalKey'] = $existingUser->get('id');
+							$response = $this->runProcessor('web/service/create', $profile);
+							if ($response->isError()) {
+								$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] unable to save service profile for email '.$email.'. Message: '.implode(', ',$response->getAllErrors()));
+								$_SESSION['HA']['error'] = implode(', ',$response->getAllErrors());
+							}
+						}
+						else {
+							$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] user with this email already exists but i can not link his account with service.');
+							$_SESSION['HA']['error'] = 'User with this email already exists but i can not link his account with service.';
 						}
 					}
+					else {
+					*/
+						$username = !empty($profile['displayName']) ? $profile['displayName'] : $profile['identifier'];
+						if ($exists = $this->modx->getCount('haUser', array('username' => $username))) {
+							for ($i = 1; $i <= 10; $i++) {
+								$tmp = $username . $i;
+								if (!$this->modx->getCount('haUser', array('username' => $tmp))) {
+									$username = $tmp;
+									break;
+								}
+							}
+						}
+						$arr = array(
+							'username' => $username
+							,'fullname' => !empty($profile['lastName']) ? $profile['firstName'] .' '. $profile['lastName'] : $profile['firstName']
+							,'dob' => !empty($profile['birthday']) && !empty($profile['birthmonth']) && !empty($profile['birthyear']) ? $profile['birthyear'].'-'.$profile['birthmonth'].'-'.$profile['birthday'] : ''
+							,'email' => !empty($profile['emailVerified']) ? $profile['emailVerified'] : $profile['email']
+							,'photo' => !empty($profile['photoURL']) ? $profile['photoURL'] : ''
+							,'website' => !empty($profile['webSiteURL']) ? $profile['webSiteURL'] : ''
+							,'phone' => !empty($profile['phone']) ? $profile['phone'] : ''
+							,'address' => !empty($profile['address']) ? $profile['address'] : ''
+							,'country' => !empty($profile['country']) ? $profile['country'] : ''
+							,'state' => !empty($profile['region']) ? $profile['region'] : ''
+							,'city' => !empty($profile['city']) ? $profile['city'] : ''
+							,'zip' => !empty($profile['zip']) ? $profile['zip'] : ''
+							,'active' => 1
+							,'provider' => $profile
+							,'groups' => $this->config['groups']
+						);
+						$response = $this->runProcessor('web/user/create', $arr);
+						if ($response->isError()) {
+							$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] Unable to create user '.print_r($arr,1).'. Message: '.implode(', ',$response->getAllErrors()));
+							$_SESSION['HA']['error'] = implode(', ',$response->getAllErrors());
+						}
+						else {
+							$login_data = array(
+								'username' => $response->response['object']['username'],
+								'password' => md5(rand()),
+								'rememberme' => $this->config['rememberme']
+							);
+							$uid = $response->response['object']['id'];
+							$profile['internalKey'] = $uid;
+							$response = $this->runProcessor('web/service/create', $profile);
+							if ($response->isError()) {
+								$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] unable to save service profile for user '.$uid.'. Message: '.implode(', ',$response->getAllErrors()));
+								$_SESSION['HA']['error'] = implode(', ',$response->getAllErrors());
+							}
+						}
+					//}
 				}
 			}
 			else {
 				// Find and use linked MODX user
-				$uid = $service->get('internalKey');
+				if ($this->modx->user->isAuthenticated()) {
+					$uid = $this->modx->user->id;
+				}
+				else {
+					$uid = $service->get('internalKey');
+				}
+
 				/* @var haUser $user */
 				if ($user = $this->modx->getObject('haUser', $uid)) {
 					$login_data = array(
@@ -212,10 +262,11 @@ class HybridAuth {
 					);
 
 					$profile['id'] = $service->get('id');
+					$profile['internalKey'] = $uid;
 					$response = $this->runProcessor('web/service/update', $profile);
 					if ($response->isError()) {
-						$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] unable to update service profile for user '.$uid.'. Message: '.$response->getMessage());
-						$_SESSION['HA']['error'] = $response->getMessage();
+						$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] unable to update service profile for user '.$uid.'. Message: '.implode(', ',$response->getAllErrors()));
+						$_SESSION['HA']['error'] = implode(', ',$response->getAllErrors());
 					}
 				}
 				else {
@@ -234,8 +285,8 @@ class HybridAuth {
 				// Login
 				$response = $this->modx->runProcessor('security/login', $login_data);
 				if ($response->isError()) {
-					$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] error login for user '.$login_data['username'].'. Message: '.$response->getMessage());
-					$_SESSION['HA']['error'] = $response->getMessage();
+					$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] error login for user '.$login_data['username'].'. Message: '.implode(', ',$response->getAllErrors()));
+					$_SESSION['HA']['error'] = implode(', ',$response->getAllErrors());
 				}
 			}
 
@@ -253,8 +304,8 @@ class HybridAuth {
 		$this->Hybrid_Auth->logoutAllProviders();
 		$response = $this->modx->runProcessor('security/logout');
 		if ($response->isError()) {
-			$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] logout error. Username: '.$this->modx->user->get('username').', uid: '.$this->modx->user->get('id').'. Message: '.$response->getMessage());
-			$_SESSION['HA']['error'] = $response->getMessage();
+			$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] logout error. Username: '.$this->modx->user->get('username').', uid: '.$this->modx->user->get('id').'. Message: '.implode(', ',$response->getAllErrors()));
+			$_SESSION['HA']['error'] = implode(', ',$response->getAllErrors());
 		}
 		$this->Refresh('logout');
 	}
