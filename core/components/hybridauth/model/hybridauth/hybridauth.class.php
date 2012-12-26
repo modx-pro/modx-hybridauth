@@ -50,6 +50,7 @@ class HybridAuth {
 
 		$this->modx->addPackage('hybridauth',$this->config['modelPath']);
 		$this->modx->lexicon->load('hybridauth:default');
+		$this->modx->lexicon->load('core:user');
 
 		if (!empty($_SESSION['HA::CONFIG']['config'])) {
 			$ha_config = unserialize($_SESSION['HA::CONFIG']['config']);
@@ -160,6 +161,13 @@ class HybridAuth {
 				if ($this->modx->user->isAuthenticated()) {
 					$uid = $this->modx->user->id;
 					$profile['internalKey'] = $uid;
+
+					// Changing class for existing user
+					if ($this->modx->user->class_key != 'haUser') {
+						$this->modx->user->set('class_key', 'haUser');
+						$this->modx->user->save();
+					}
+
 					$response = $this->runProcessor('web/service/create', $profile);
 					if ($response->isError()) {
 						$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] unable to save service profile for user '.$uid.'. Message: '.implode(', ',$response->getAllErrors()));
@@ -254,7 +262,13 @@ class HybridAuth {
 				}
 
 				/* @var haUser $user */
-				if ($user = $this->modx->getObject('haUser', $uid)) {
+				if ($user = $this->modx->getObject('modUser', $uid)) {
+					// Changing class for existing user
+					if ($user->class_key != 'haUser') {
+						$user->set('class_key', 'haUser');
+						$user->save();
+					}
+
 					$login_data = array(
 						'username' => $user->get('username'),
 						'password' => md5(rand()),
@@ -270,8 +284,10 @@ class HybridAuth {
 					}
 				}
 				else {
-					$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] Could not find user with id = '.$uid);
-					$_SESSION['HA']['error'] = $this->modx->lexicon('user_profile_err_nf');
+					$service->remove();
+					return $this->Login($provider);
+					//$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] Could not find user with id = '.$uid);
+					//$_SESSION['HA']['error'] = $this->modx->lexicon('user_profile_err_nf');
 				}
 			}
 

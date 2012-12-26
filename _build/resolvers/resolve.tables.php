@@ -6,9 +6,11 @@
  * @subpackage build
  */
 if ($object->xpdo) {
+	/* @var $modx modX */
+	$modx =& $object->xpdo;
+
 	switch ($options[xPDOTransport::PACKAGE_ACTION]) {
 		case xPDOTransport::ACTION_INSTALL:
-			$modx =& $object->xpdo;
 			$modelPath = $modx->getOption('hybridauth.core_path',null,$modx->getOption('core_path').'components/hybridauth/').'model/';
 			$modx->addPackage('hybridauth',$modelPath);
 
@@ -20,9 +22,14 @@ if ($object->xpdo) {
 				$modx->addExtensionPackage('hybridauth', '[[++core_path]]components/hybridauth/model/');
 			}
 
-			break;
+		break;
 		case xPDOTransport::ACTION_UPGRADE:
-			break;
+		break;
+		case xPDOTransport::ACTION_UNINSTALL:
+			$sql = "UPDATE {$modx->getTableName('modUser')} SET `class_key` = 'modUser' WHERE `class_key` = 'haUser';";
+			/* @var PDOStatement $stmt */
+			if ($stmt = $modx->prepare($sql)) {$stmt->execute();}
+		break;
 	}
 }
 return true;

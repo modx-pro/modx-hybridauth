@@ -1,5 +1,10 @@
 Changelog for HybridAuth.
 
+0.3.1 beta
+==============
+- Changing user class to haUser on login through remote service.
+- On uninstall of component all haUsers becomes modUsers.
+
 0.3.0 beta
 ==============
 - Fixed save of a photo in profile.
