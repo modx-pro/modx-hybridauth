@@ -1,5 +1,9 @@
 Changelog for HybridAuth.
 
+0.3.2 beta
+==============
+- Added exception handler for catching all exceptions from HybridAuth into MODX system log
+
 0.3.1 beta
 ==============
 - Changing user class to haUser on login through remote service.
