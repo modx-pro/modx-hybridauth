@@ -74,10 +74,13 @@ class HybridAuth {
 				}
 			}
 		}
+		else if (!empty($_SESSION['HA::CONFIG']['config'])) {
+			$ha_config = unserialize($_SESSION['HA::CONFIG']['config']);
+		}
 		else {
-			$error = '[HybridAuth] ' . $this->modx->lexicon('ha_err_no_providers');
-			$this->modx->log(modX::LOG_LEVEL_ERROR, $error);
-			$this->modx->error->failure($error);
+				$error = '[HybridAuth] ' . $this->modx->lexicon('ha_err_no_providers');
+				$this->modx->log(modX::LOG_LEVEL_ERROR, $error);
+				$this->modx->error->failure($error);
 		}
 
 		if (!empty($ha_config)) {
@@ -301,7 +304,7 @@ class HybridAuth {
 			$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] logout error. Username: '.$this->modx->user->get('username').', uid: '.$this->modx->user->get('id').'. Message: '.implode(', ',$response->getAllErrors()));
 			$_SESSION['HA']['error'] = implode(', ',$response->getAllErrors());
 		}
-
+		unset($_SESSION['HA::CONFIG']);
 		$this->Refresh('logout');
 	}
 

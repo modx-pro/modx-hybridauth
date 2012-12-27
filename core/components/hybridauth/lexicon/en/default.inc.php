@@ -14,10 +14,10 @@ $_lang['ha.username'] = 'Username';
 $_lang['ha.fullname'] = 'Full name';
 $_lang['ha.email'] = 'Email';
 $_lang['ha.updateProfile'] = 'Update Profile';
-$_lang['ha.profile.update_success'] = 'Profile was updated successfully';
-$_lang['ha.profile.update_error'] = 'Error when update profile';
+$_lang['ha.profile_update_success'] = 'Profile was updated successfully';
+$_lang['ha.profile_update_error'] = 'Error when update profile';
 $_lang['ha.logout'] = 'Logout';
 $_lang['ha.greeting'] = 'Welcome, ';
-$_lang['ha.providers.available'] = 'Available providers are ';
+$_lang['ha.providers_available'] = 'Available providers are ';
 $_lang['ha.login_intro'] = 'You can authorize on site with: ';
 /*--------*/
