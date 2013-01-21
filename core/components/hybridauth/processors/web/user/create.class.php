@@ -20,8 +20,9 @@ class haUserCreateProcessor extends modUserCreateProcessor {
 		if (!$this->getProperty('username')) {
 			$this->addFieldError('username', $this->modx->lexicon('field_required'));
 		}
+
 		if (!$this->getProperty('email')) {
-			$this->setProperty('email', ' ');
+			$this->setProperty('email', 'emptyemail@nomail.com');
 		}
 
 		return parent::beforeSet();
@@ -72,6 +73,20 @@ class haUserCreateProcessor extends modUserCreateProcessor {
 		$this->profile->set('blocked',$this->getProperty('blocked',false));
 		$this->object->addOne($this->profile,'Profile');
 		return $this->profile;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @return boolean
+	 */
+	public function beforeSave() {
+		$beforeSave = parent::beforeSave();
+
+		if ($this->profile->get('email') == 'emptyemail@nomail.com') {
+			$this->profile->set('email', '');
+		}
+
+		return $beforeSave;
 	}
 
 }

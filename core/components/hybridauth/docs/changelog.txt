@@ -1,5 +1,9 @@
 Changelog for HybridAuth.
 
+0.3.3 beta
+==============
+- Fixed issue with empty email
+
 0.3.2 beta
 ==============
 - Added exception handler for catching all exceptions from HybridAuth into MODX system log

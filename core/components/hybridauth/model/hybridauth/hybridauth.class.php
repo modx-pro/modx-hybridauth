@@ -78,9 +78,9 @@ class HybridAuth {
 			$ha_config = unserialize($_SESSION['HA::CONFIG']['config']);
 		}
 		else {
-				$error = '[HybridAuth] ' . $this->modx->lexicon('ha_err_no_providers');
-				$this->modx->log(modX::LOG_LEVEL_ERROR, $error);
-				$this->modx->error->failure($error);
+			$error = '[HybridAuth] ' . $this->modx->lexicon('ha_err_no_providers');
+			$this->modx->log(modX::LOG_LEVEL_ERROR, $error);
+			$this->modx->error->failure($error);
 		}
 
 		if (!empty($ha_config)) {
