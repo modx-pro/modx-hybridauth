@@ -300,6 +300,7 @@ class HybridAuth {
 	function Logout() {
 		$this->Hybrid_Auth->logoutAllProviders();
 		$response = $this->modx->runProcessor('security/logout');
+		$this->modx->user->endSession(); //Без этой строки не работает Logout ? я незнаю почему так ((
 		if ($response->isError()) {
 			$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] logout error. Username: '.$this->modx->user->get('username').', uid: '.$this->modx->user->get('id').'. Message: '.implode(', ',$response->getAllErrors()));
 			$_SESSION['HA']['error'] = implode(', ',$response->getAllErrors());
