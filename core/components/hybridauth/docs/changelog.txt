@@ -1,5 +1,9 @@
 Changelog for HybridAuth.
 
+0.4.0 beta
+==============
+- Updated HybridAuth core to version 2.1.1
+
 0.3.3 beta
 ==============
 - Fixed issue with empty email
@@ -16,9 +20,9 @@ Changelog for HybridAuth.
 0.3.0 beta
 ==============
 - Fixed save of a photo in profile.
-- Improved errors hadling.
+- Improved errors handling.
 - Fixed increment of username if remote username exists on site.
-- If authentificated user linking remote service record, that already exists in remote profiles of the site - this record changes the owner. You can re-link any of your records to any accounts on site.
+- If authenticated user linking remote service record, that already exists in remote profiles of the site - this record changes the owner. You can re-link any of your records to any accounts on site.
 
 0.2.0 beta
 ==============
