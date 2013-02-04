@@ -17,75 +17,81 @@ class HybridAuth {
 		$connectorUrl = $assetsUrl.'connector.php';
 		$actionUrl = $modx->getOption('site_url') . substr($assetsUrl.'action.php', 1);
 
-		$this->config = array_merge(array(
-			'assetsUrl' => $assetsUrl
-			,'cssUrl' => $assetsUrl.'css/'
-			,'jsUrl' => $assetsUrl.'js/'
-			,'imagesUrl' => $assetsUrl.'images/'
-			,'siteUrl' => $modx->getOption('site_url')
+		if (empty($config) && !empty($_SESSION['HybridAuth'])) {
+			$this->config = $_SESSION['HybridAuth'];
+		}
+		else {
+			$this->config = array_merge(array(
+				'assetsUrl' => $assetsUrl
+				,'cssUrl' => $assetsUrl.'css/'
+				,'jsUrl' => $assetsUrl.'js/'
+				,'imagesUrl' => $assetsUrl.'images/'
+				,'siteUrl' => $modx->getOption('site_url')
 
-			,'connectorUrl' => $connectorUrl
+				,'connectorUrl' => $connectorUrl
 
-			,'corePath' => $corePath
-			,'modelPath' => $corePath.'model/'
-			,'chunksPath' => $corePath.'elements/chunks/'
-			,'templatesPath' => $corePath.'elements/templates/'
-			,'chunkSuffix' => '.chunk.tpl'
-			,'snippetsPath' => $corePath.'elements/snippets/'
-			,'processorsPath' => $corePath.'processors/'
+				,'corePath' => $corePath
+				,'modelPath' => $corePath.'model/'
+				,'chunksPath' => $corePath.'elements/chunks/'
+				,'templatesPath' => $corePath.'elements/templates/'
+				,'chunkSuffix' => '.chunk.tpl'
+				,'snippetsPath' => $corePath.'elements/snippets/'
+				,'processorsPath' => $corePath.'processors/'
 
-			,'rememberme' => true
-			,'loginTpl' => 'tpl.HybridAuth.login'
-			,'logoutTpl' => 'tpl.HybridAuth.logout'
-			,'profileTpl' => 'tpl.HybridAuth.profile'
-			,'saltName' => ''
-			,'saltPass' => ''
-			,'groups' => ''
-			,'loginContext' => ''
-			,'addContexts' => ''
-			,'updateProfile' => true
-			,'profileFields' => 'username:25,email:50,fullname:50,phone:12,mobilephone:12,dob:10,gender,address,country,city,state,zip,fax,photo,comment,website'
-			,'requiredFields' => 'username,email,fullname'
-			,'loginResourceId' => null
-			,'logoutResourceId' => null
-		),$config);
+				,'rememberme' => true
+				,'loginTpl' => 'tpl.HybridAuth.login'
+				,'logoutTpl' => 'tpl.HybridAuth.logout'
+				,'profileTpl' => 'tpl.HybridAuth.profile'
+				,'saltName' => ''
+				,'saltPass' => ''
+				,'groups' => ''
+				,'loginContext' => ''
+				,'addContexts' => ''
+				,'updateProfile' => true
+				,'profileFields' => 'username:25,email:50,fullname:50,phone:12,mobilephone:12,dob:10,gender,address,country,city,state,zip,fax,photo,comment,website'
+				,'requiredFields' => 'username,email,fullname'
+				,'loginResourceId' => null
+				,'logoutResourceId' => null
+			),$config);
+
+			$providers = explode(',', $this->config['providers']);
+			if (!empty($providers[0])) {
+				$this->config['HA'] = array(
+					'base_url' => $actionUrl
+					,'debug_mode' => !empty($config['debug']) && ($config['debug'] == 'true' || $config['debug'] == 1) ? 1 : 0
+					,'debug_file' => MODX_CORE_PATH . 'cache/logs/error.log'
+					,'providers' => array()
+				);
+				foreach ($providers as $provider) {
+					$provider = ucfirst(trim($provider));
+					$keys = $this->modx->fromJSON($this->modx->getOption('ha.keys.' . $provider));
+					if (is_array($keys)) {
+						$this->config['HA']['providers'][$provider] = array(
+							'enabled' => true
+							,'keys' => $keys
+						);
+					}
+					else {
+						$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] ' . $this->modx->lexicon('ha_err_no_provider_keys', array('provider' => $provider)));
+					}
+				}
+			}
+			else {
+				$error = '[HybridAuth] ' . $this->modx->lexicon('ha_err_no_providers');
+				$this->modx->log(modX::LOG_LEVEL_ERROR, $error);
+				$this->modx->error->failure($error);
+			}
+		}
+
+		$_SESSION['HybridAuth'] = $this->config;
 
 		$this->modx->addPackage('hybridauth',$this->config['modelPath']);
 		$this->modx->lexicon->load('hybridauth:default');
 		$this->modx->lexicon->load('core:user');
 
-		$providers = explode(',', $this->config['providers']);
-		if (!empty($providers[0])) {
-			$ha_config = array(
-				'base_url' => $actionUrl
-				,'providers' => array()
-			);
-			foreach ($providers as $provider) {
-				$provider = ucfirst(trim($provider));
-				$keys = $this->modx->fromJSON($this->modx->getOption('ha.keys.' . $provider));
-				if (is_array($keys)) {
-					$ha_config['providers'][$provider] = array(
-						'enabled' => true
-						,'keys' => $keys
-					);
-				}
-				else {
-					$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] ' . $this->modx->lexicon('ha_err_no_provider_keys', array('provider' => $provider)));
-				}
-			}
-		}
-		else if (!empty($_SESSION['HA::CONFIG']['config'])) {
-			$ha_config = unserialize($_SESSION['HA::CONFIG']['config']);
-		}
-		else {
-			$error = '[HybridAuth] ' . $this->modx->lexicon('ha_err_no_providers');
-			$this->modx->log(modX::LOG_LEVEL_ERROR, $error);
-			$this->modx->error->failure($error);
-		}
-
-		if (!empty($ha_config)) {
+		if (!empty($this->config['HA'])) {
 			require_once 'lib/Auth.php';
-			$this->Hybrid_Auth = new Hybrid_Auth($ha_config);
+			$this->Hybrid_Auth = new Hybrid_Auth($this->config['HA']);
 		}
 	}
 

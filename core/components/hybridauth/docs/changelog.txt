@@ -3,6 +3,7 @@ Changelog for HybridAuth.
 0.4.0 beta
 ==============
 - Updated HybridAuth core to version 2.1.1
+- Improved initialization of main class
 
 0.3.3 beta
 ==============
