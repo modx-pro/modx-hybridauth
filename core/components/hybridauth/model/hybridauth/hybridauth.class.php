@@ -525,7 +525,7 @@ class HybridAuth {
 	 * */
 	function Sanitize($string = '', $length = 0) {
 		$expr = '/[^-_a-zа-яё0-9@\s\.\,\:\/\\\]+/iu';
-		$sanitized = preg_replace($expr, '', $string);
+		$sanitized = trim(preg_replace($expr, '', $string));
 
 		return substr($sanitized, 0, $length);
 	}
