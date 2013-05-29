@@ -24,8 +24,10 @@ class Hybrid_Providers_Vkontakte extends Hybrid_Provider_Model_OAuth2
 		parent::initialize();
 
 		// Provider api end-points
-		$this->api->authorize_url  = "http://api.vk.com/oauth/authorize";
-		$this->api->token_url      = "https://api.vk.com/oauth/token";
+		$this->api->authorize_url  = "https://oauth.vk.com/authorize";
+		$this->api->token_url      = "https://oauth.vk.com/access_token";
+
+		$this->api->curl_authenticate_method = "GET";
 		//$this->api->token_info_url
 	}
 
