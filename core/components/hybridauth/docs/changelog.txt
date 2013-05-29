@@ -1,5 +1,10 @@
 Changelog for HybridAuth.
 
+0.5.0 beta
+==============
+- Fixed login trough vk.com
+- Updated HybridAuth core to version 2.1.2
+
 0.4.0 beta
 ==============
 - Updated HybridAuth core to version 2.1.1

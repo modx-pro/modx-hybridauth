@@ -14,7 +14,7 @@ set_time_limit(0);
 /* define package */
 define('PKG_NAME','HybridAuth');
 define('PKG_NAME_LOWER',strtolower(PKG_NAME));
-define('PKG_VERSION','0.4.0');
+define('PKG_VERSION','0.5.0');
 define('PKG_RELEASE','beta');
 
 /* define sources */
@@ -42,6 +42,7 @@ require_once $sources['build'] . '/includes/functions.php';
 
 $modx= new modX();
 $modx->initialize('mgr');
+echo '<pre>'; /* used for nice formatting of log messages */
 $modx->setLogLevel(modX::LOG_LEVEL_INFO);
 $modx->setLogTarget('ECHO');
 
