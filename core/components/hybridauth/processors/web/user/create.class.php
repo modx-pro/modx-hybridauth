@@ -15,6 +15,10 @@ class haUserCreateProcessor extends modUserCreateProcessor {
 	 * @return boolean
 	 */
 	public function beforeSet() {
+		if (!$this->modx->getOption('ha.register_users', null, true)) {
+			return $this->modx->lexicon('ha_register_disabled');
+		}
+
 		$this->setProperty('passwordnotifymethod', 's');
 
 		if (!$this->getProperty('username')) {

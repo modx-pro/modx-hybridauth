@@ -8,6 +8,7 @@
 $_lang['hybridauth'] = 'HybridAuth';
 $_lang['ha_err_no_providers'] = 'You must specify at least one provider.';
 $_lang['ha_err_no_provider_keys'] = 'Could not retrieve keys for provider [[+provider]] from system settings. [[+provider]] was not activated.';
+$_lang['ha_register_disabled'] = 'Creation of new users is disabled.';
 
 /* Chunks */
 $_lang['ha.username'] = 'Username';

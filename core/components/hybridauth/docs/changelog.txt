@@ -1,5 +1,9 @@
 Changelog for HybridAuth.
 
+0.6.0 pl
+==============
+- Added ability to disable new user registrations. See system setting "ha.register_users".
+
 0.5.0 beta
 ==============
 - Fixed login trough vk.com

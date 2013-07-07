@@ -34,4 +34,13 @@ $settings[2]->fromArray(array(
 	'area' => '',
 ),'',true,true);
 
+$settings[3]= $modx->newObject('modSystemSetting');
+$settings[3]->fromArray(array(
+	'key' => 'ha.register_users',
+	'value' => true,
+	'xtype' => 'combo-boolean',
+	'namespace' => 'hybridauth',
+	'area' => '',
+),'',true,true);
+
 return $settings;
