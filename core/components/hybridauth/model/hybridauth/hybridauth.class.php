@@ -104,37 +104,6 @@ class HybridAuth {
 	}
 
 
-	/**
-	 * Initializes HybridAuth into different contexts.
-	 *
-	 * @access public
-	 * @param string $ctx The context to load. Defaults to web.
-	 * @return bool|mixed|object
-	 */
-	public function initialize($ctx = 'web') {
-		switch ($ctx) {
-			case 'mgr':
-				if (!$this->modx->loadClass('hybridauth.request.HybridAuthControllerRequest',$this->config['modelPath'],true,true)) {
-					return 'Could not load controller request handler.';
-				}
-				/* @var HybridAuthControllerRequest $request */
-				$this->request = new HybridAuthControllerRequest($this);
-				return $this->request->handleRequest();
-			break;
-			/*
-			case 'connector':
-				if (!$this->modx->loadClass('hybridauth.request.HybridAuthConnectorRequest',$this->config['modelPath'],true,true)) {
-					return 'Could not load connector request handler.';
-				}
-				$this->request = new HybridAuthConnectorRequest($this);
-				return $this->request->handle();
-			break;
-			*/
-			default: return false;
-		}
-	}
-
-
 	/*
 	 * Process Hybrid_Auth endpoint
 	 *
