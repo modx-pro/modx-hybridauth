@@ -1,5 +1,9 @@
 Changelog for HybridAuth.
 
+0.7.0 pl
+==============
+- Extension package is removed from system settings when you uninstall component.
+
 0.6.0 pl
 ==============
 - Added ability to disable new user registrations. See system setting "ha.register_users".

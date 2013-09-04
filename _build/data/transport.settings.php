@@ -1,46 +1,38 @@
 <?php
-/**
- * Loads system settings into build
- *
- * @package hybridauth
- * @subpackage build
- */
 $settings = array();
 
-$settings[0]= $modx->newObject('modSystemSetting');
-$settings[0]->fromArray(array(
-	'key' => 'ha.keys.Yandex',
-	'value' => '{"id":"12345","secret":"12345"}',
-	'xtype' => 'textfield',
-	'namespace' => 'hybridauth',
-	'area' => '',
-),'',true,true);
+$tmp = array(
+	'keys.Yandex' => array(
+		'xtype' => 'textfield',
+		'value' => '{"id":"12345","secret":"12345"}',
+	),
+	'keys.Twitter' => array(
+		'xtype' => 'textfield',
+		'value' => '{"key":"12345","secret":"12345"}',
+	),
+	'keys.Google' => array(
+		'xtype' => 'textfield',
+		'value' => '{"id":"12345","secret":"12345"}',
+	),
+	'register_users' => array(
+		'xtype' => 'combo-boolean',
+		'value' => true,
+	),
+);
 
-$settings[1]= $modx->newObject('modSystemSetting');
-$settings[1]->fromArray(array(
-	'key' => 'ha.keys.Twitter',
-	'value' => '{"key":"12345","secret":"12345"}',
-	'xtype' => 'textfield',
-	'namespace' => 'hybridauth',
-	'area' => '',
-),'',true,true);
+foreach ($tmp as $k => $v) {
+	/* @var modSystemSetting $setting */
+	$setting = $modx->newObject('modSystemSetting');
+	$setting->fromArray(array_merge(
+		array(
+			'key' => 'ha.'.$k,
+			'namespace' => PKG_NAME_LOWER.':default',
+			'area' => '',
+		), $v
+	),'',true,true);
 
-$settings[2]= $modx->newObject('modSystemSetting');
-$settings[2]->fromArray(array(
-	'key' => 'ha.keys.Google',
-	'value' => '{"id":"12345","secret":"12345"}',
-	'xtype' => 'textfield',
-	'namespace' => 'hybridauth',
-	'area' => '',
-),'',true,true);
+	$settings[] = $setting;
+}
 
-$settings[3]= $modx->newObject('modSystemSetting');
-$settings[3]->fromArray(array(
-	'key' => 'ha.register_users',
-	'value' => true,
-	'xtype' => 'combo-boolean',
-	'namespace' => 'hybridauth',
-	'area' => '',
-),'',true,true);
-
+unset($tmp);
 return $settings;

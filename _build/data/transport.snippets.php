@@ -1,21 +1,31 @@
 <?php
-/**
- * Add snippets to build
- * 
- * @package hybridauth
- * @subpackage build
- */
 $snippets = array();
 
-$snippets[0]= $modx->newObject('modSnippet');
-$snippets[0]->fromArray(array(
-	'id' => 0,
-	'name' => 'HybridAuth',
-	'description' => 'Social sign on',
-	'snippet' => getSnippetContent($sources['source_core'].'/elements/snippets/hybridauth.php'),
-),'',true,true);
-$properties = include $sources['build'].'properties/hybridauth.php';
-$snippets[0]->setProperties($properties);
-unset($properties);
+$tmp = array(
+	'HybridAuth' => array(
+		'file' => 'hybridauth',
+		'description' => 'Social sign on',
+	)
+);
 
+foreach ($tmp as $k => $v) {
+	/* @avr modSnippet $snippet */
+	$snippet = $modx->newObject('modSnippet');
+	$snippet->fromArray(array(
+		'id' => 0,
+		'name' => $k,
+		'description' => @$v['description'],
+		'snippet' => getSnippetContent($sources['source_core'].'/elements/snippets/snippet.'.$v['file'].'.php'),
+		'static' => BUILD_SNIPPET_STATIC,
+		'source' => 1,
+		'static_file' => 'core/components/'.PKG_NAME_LOWER.'/elements/snippets/'.$v['file'].'.php',
+	),'',true,true);
+
+	$properties = include $sources['build'].'properties/properties.'.$v['file'].'.php';
+	$snippet->setProperties($properties);
+
+	$snippets[] = $snippet;
+}
+
+unset($tmp, $properties);
 return $snippets;

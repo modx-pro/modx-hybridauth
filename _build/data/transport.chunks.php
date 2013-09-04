@@ -1,34 +1,36 @@
 <?php
-/**
- * Add chunks to build
- * 
- * @package hybridauth
- * @subpackage build
- */
 $chunks = array();
 
-$chunks[0]= $modx->newObject('modChunk');
-$chunks[0]->fromArray(array(
-	'id' => 0,
-	'name' => 'tpl.HybridAuth.login',
-	'description' => 'Chunk for guest',
-	'snippet' => getSnippetContent($sources['source_core'].'/elements/chunks/login.tpl'),
-),'',true,true);
+$tmp = array(
+	'tpl.HybridAuth.login' => array(
+		'file' => 'login',
+		'description' => 'Chunk for guest',
+	),
+	'tpl.HybridAuth.logout' => array(
+		'file' => 'logout',
+		'description' => 'Chunk for logged in',
+	),
+	'tpl.HybridAuth.profile' => array(
+		'file' => 'profile',
+		'description' => 'Chunk for profile update',
+	),
+);
 
-$chunks[1]= $modx->newObject('modChunk');
-$chunks[1]->fromArray(array(
-	'id' => 0,
-	'name' => 'tpl.HybridAuth.logout',
-	'description' => 'Chunk for logged in',
-	'snippet' => getSnippetContent($sources['source_core'].'/elements/chunks/logout.tpl'),
-),'',true,true);
+foreach ($tmp as $k => $v) {
+	/* @avr modChunk $chunk */
+	$chunk = $modx->newObject('modChunk');
+	$chunk->fromArray(array(
+		'id' => 0,
+		'name' => $k,
+		'description' => @$v['description'],
+		'snippet' => file_get_contents($sources['source_core'].'/elements/chunks/chunk.'.$v['file'].'.tpl'),
+		'static' => BUILD_CHUNK_STATIC,
+		'source' => 1,
+		'static_file' => 'core/components/'.PKG_NAME_LOWER.'/elements/chunks/chunk.'.$v['file'].'.tpl',
+	),'',true,true);
 
-$chunks[2]= $modx->newObject('modChunk');
-$chunks[2]->fromArray(array(
-	'id' => 0,
-	'name' => 'tpl.HybridAuth.profile',
-	'description' => 'Chunk for profile update',
-	'snippet' => getSnippetContent($sources['source_core'].'/elements/chunks/profile.tpl'),
-),'',true,true);
+	$chunks[] = $chunk;
+}
 
+unset($tmp);
 return $chunks;
