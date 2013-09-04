@@ -29,30 +29,27 @@ class HybridAuth {
 				,'siteUrl' => $modx->getOption('site_url')
 
 				,'connectorUrl' => $connectorUrl
-
 				,'corePath' => $corePath
 				,'modelPath' => $corePath.'model/'
-				,'chunksPath' => $corePath.'elements/chunks/'
-				,'templatesPath' => $corePath.'elements/templates/'
-				,'chunkSuffix' => '.chunk.tpl'
-				,'snippetsPath' => $corePath.'elements/snippets/'
 				,'processorsPath' => $corePath.'processors/'
 
 				,'rememberme' => true
 				,'loginTpl' => 'tpl.HybridAuth.login'
 				,'logoutTpl' => 'tpl.HybridAuth.logout'
 				,'profileTpl' => 'tpl.HybridAuth.profile'
-				,'saltName' => ''
-				,'saltPass' => ''
 				,'groups' => ''
 				,'loginContext' => ''
 				,'addContexts' => ''
 				,'updateProfile' => true
 				,'profileFields' => 'username:25,email:50,fullname:50,phone:12,mobilephone:12,dob:10,gender,address,country,city,state,zip,fax,photo,comment,website'
 				,'requiredFields' => 'username,email,fullname'
-				,'loginResourceId' => null
-				,'logoutResourceId' => null
+				,'loginResourceId' => 0
+				,'logoutResourceId' => 0
 			),$config);
+
+			$this->modx->addPackage('hybridauth',$this->config['modelPath']);
+			$this->modx->lexicon->load('hybridauth:default');
+			$this->modx->lexicon->load('core:user');
 
 			$providers = explode(',', $this->config['providers']);
 			if (!empty($providers[0])) {
@@ -78,17 +75,12 @@ class HybridAuth {
 			}
 			else {
 				$error = '[HybridAuth] ' . $this->modx->lexicon('ha_err_no_providers');
-				$this->modx->log(modX::LOG_LEVEL_ERROR, $error);
+				//$this->modx->log(modX::LOG_LEVEL_ERROR, $error);
 				$this->modx->error->failure($error);
 			}
 		}
 
 		$_SESSION['HybridAuth'] = $this->config;
-
-		$this->modx->addPackage('hybridauth',$this->config['modelPath']);
-		$this->modx->lexicon->load('hybridauth:default');
-		$this->modx->lexicon->load('core:user');
-
 		if (!empty($this->config['HA'])) {
 			require_once 'lib/Auth.php';
 			$this->Hybrid_Auth = new Hybrid_Auth($this->config['HA']);
@@ -347,6 +339,7 @@ class HybridAuth {
 			$id = $this->modx->getOption('unauthorized_page');
 			if ($id != $this->modx->resource->id) {
 				$this->modx->sendForward($id);
+				exit();
 			}
 			else {
 				header('HTTP/1.0 401 Unauthorized');
@@ -363,11 +356,13 @@ class HybridAuth {
 			$arr = $data;
 		}
 
-		$profiles = $this->modx->user->getMany('Services');
 		/* @var haUserService $v */
 		$add = array();
-		foreach ($profiles as $v) {
-			$add = array_merge($add, $v->toArray(strtolower($v->get('provider').'.')));
+		if ($this->modx->user instanceof haUser) {
+			$profiles = $this->modx->user->getMany('Services');
+			foreach ($profiles as $v) {
+				$add = array_merge($add, $v->toArray(strtolower($v->get('provider').'.')));
+			}
 		}
 
 		$url = $this->getUrl();
@@ -470,16 +465,17 @@ class HybridAuth {
 		}
 
 		if ($this->modx->user->isAuthenticated()) {
-			$profiles = $this->modx->user->getMany('Services');
-
-			/* @var haUserService $v */
 			$add = array();
-			foreach ($profiles as $v) {
-				$add = array_merge($add, $v->toArray(strtolower($v->get('provider').'.')));
+			if ($this->modx->user instanceof haUser) {
+				/* @var haUserService $v */
+				$profiles = $this->modx->user->getMany('Services');
+				foreach ($profiles as $v) {
+					$add = array_merge($add, $v->toArray(strtolower($v->get('provider').'.')));
+				}
 			}
+
 			$user = $this->modx->user->toArray();
 			$profile = $this->modx->user->getOne('Profile')->toArray();
-
 			$arr = array_merge($user,$profile,$add, array(
 				'login_url' => $url.'login'
 				,'logout_url' => $url.'logout'

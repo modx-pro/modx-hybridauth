@@ -7,6 +7,7 @@ Changelog for HybridAuth.
 0.6.0 pl
 ==============
 - Added ability to disable new user registrations. See system setting "ha.register_users".
+- [#3] Fixed "No foreign key definition for parentClass: modUser using relation alias: Services" log entries.
 
 0.5.0 beta
 ==============
