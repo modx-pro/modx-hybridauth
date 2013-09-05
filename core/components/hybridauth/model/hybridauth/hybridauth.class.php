@@ -212,23 +212,28 @@ class HybridAuth {
 						,'provider' => $profile
 						,'groups' => $this->config['groups']
 					);
-					$response = $this->runProcessor('web/user/create', $arr);
-					if ($response->isError()) {
-						$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] Unable to create user '.print_r($arr,1).'. Message: '.implode(', ',$response->getAllErrors()));
-						$_SESSION['HA']['error'] = implode(', ',$response->getAllErrors());
+					if (!$this->modx->getOption('ha.register_users', null, true)) {
+						$_SESSION['HA']['error'] = $this->modx->lexicon('ha_register_disabled');
 					}
 					else {
-						$login_data = array(
-							'username' => $response->response['object']['username'],
-							'password' => md5(rand()),
-							'rememberme' => $this->config['rememberme']
-						);
-						$uid = $response->response['object']['id'];
-						$profile['internalKey'] = $uid;
-						$response = $this->runProcessor('web/service/create', $profile);
+						$response = $this->runProcessor('web/user/create', $arr);
 						if ($response->isError()) {
-							$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] unable to save service profile for user '.$uid.'. Message: '.implode(', ',$response->getAllErrors()));
+							$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] Unable to create user '.print_r($arr,1).'. Message: '.implode(', ',$response->getAllErrors()));
 							$_SESSION['HA']['error'] = implode(', ',$response->getAllErrors());
+						}
+						else {
+							$login_data = array(
+								'username' => $response->response['object']['username'],
+								'password' => md5(rand()),
+								'rememberme' => $this->config['rememberme']
+							);
+							$uid = $response->response['object']['id'];
+							$profile['internalKey'] = $uid;
+							$response = $this->runProcessor('web/service/create', $profile);
+							if ($response->isError()) {
+								$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] unable to save service profile for user '.$uid.'. Message: '.implode(', ',$response->getAllErrors()));
+								$_SESSION['HA']['error'] = implode(', ',$response->getAllErrors());
+							}
 						}
 					}
 				}
@@ -267,8 +272,6 @@ class HybridAuth {
 				else {
 					$service->remove();
 					$this->Login($provider);
-					//$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] Could not find user with id = '.$uid);
-					//$_SESSION['HA']['error'] = $this->modx->lexicon('user_profile_err_nf');
 				}
 			}
 
