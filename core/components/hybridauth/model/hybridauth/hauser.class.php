@@ -1,13 +1,7 @@
 <?php
 class haUser extends modUser {
 
-	/**
-	 * Determines if the provided password matches the hashed password stored for the user.
-	 *
-	 * @param string $password The password to determine if it matches.
-	 * @param array $options Optional settings for the hashing process.
-	 * @return boolean True if the provided password matches the stored password for the user.
-	 */
+	/** {inheritDoc} */
 	public function passwordMatches($password, array $options = array()) {
 		if (!empty($_SESSION['HA']['verified'])) {
 			$match = true;
@@ -22,5 +16,25 @@ class haUser extends modUser {
 			}
 		}
 		return $match;
+	}
+
+
+	/** {inheritDoc} */
+	public function get($k, $format = null, $formatTemplate= null) {
+		if (is_string($k) && strtolower($k) == 'gravatar') {
+			return 'http://gravatar.com/avatar/' . md5(strtolower($this->Profile->get('email')));
+		}
+		else {
+			return parent::get($k, $format, $formatTemplate);
+		}
+	}
+
+
+	/** {inheritDoc} */
+	public function toArray($keyPrefix= '', $rawValues= false, $excludeLazy= false, $includeRelated= false) {
+		$array = parent::toArray($keyPrefix, $rawValues, $excludeLazy, $includeRelated);
+		$array['gravatar'] = $this->get('gravatar');
+
+		return $array;
 	}
 }

@@ -1,4 +1,13 @@
 <form action="[[~[[*id]]]]" method="post" class="form-horizontal">
+
+	<div class="control-group">
+		<label class="control-label">[[%ha.gravatar]]</label>
+		<div class="controls">
+			<img src="[[+gravatar]]?s=100" alt="[[+email]]" title="[[+email]]"  style="margin-left:40px;" />
+			<br/><small>[[%ha.gravatar_desc]]</small>
+		</div>
+	</div>
+
 	<div class="control-group[[+error.username:notempty=` error`]]">
 		<label class="control-label">[[%ha.username]]</label>
 		<div class="controls">

@@ -22,4 +22,5 @@ $_lang['ha.logout'] = 'Logout';
 $_lang['ha.greeting'] = 'Welcome, ';
 $_lang['ha.providers_available'] = 'Available providers are ';
 $_lang['ha.login_intro'] = 'You can authorize on site with: ';
-/*--------*/
+$_lang['ha.gravatar'] = 'Avatar';
+$_lang['ha.gravatar_desc'] = 'Image loads from <a href="http://gravatar.com/" target="_blank">Gravatar</a>';

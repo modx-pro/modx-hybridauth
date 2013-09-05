@@ -1,4 +1,4 @@
-[[+photo:notempty=`<img src="[[+photo]]" align="left" alt="username"/>`]]
+<img src="[[+gravatar]]?s=50" align="left" alt="username"/>
 [[%ha.greeting]] <b>[[+username]]</b> ([[+fullname]])!
 <br/>
 <a href="[[+logout_url]]">[[%ha.logout]]</a>

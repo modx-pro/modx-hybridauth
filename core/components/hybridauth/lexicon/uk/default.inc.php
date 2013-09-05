@@ -22,4 +22,5 @@ $_lang['ha.logout'] = 'Вийти';
 $_lang['ha.greeting'] = 'Привіт, ';
 $_lang['ha.providers_available'] = 'Доступні провайдери ';
 $_lang['ha.login_intro'] = 'Ви можете авторизуватись на сайті за допомоги: ';
-/*--------*/
+$_lang['ha.gravatar'] = 'Аватар';
+$_lang['ha.gravatar_desc'] = 'Картинка завантажується з <a href="http://gravatar.com/" target="_blank">Gravatar</a>';

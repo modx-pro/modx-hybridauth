@@ -3,6 +3,7 @@ Changelog for HybridAuth.
 0.7.0 pl
 ==============
 - New snippet "haProfile" for update user profile.
+- Added virtual field "gravatar" to class "haUser". You can get it with $modx->user->get('gravatar');.
 - Extension package is removed from system settings when you uninstall component.
 - Replaced file "action.php" to plugin "HybridAuth".
 - [#3] Fixed "No foreign key definition for parentClass: modUser using relation alias: Services" log entries.
