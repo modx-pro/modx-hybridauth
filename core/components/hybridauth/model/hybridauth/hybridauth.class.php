@@ -15,7 +15,7 @@ class HybridAuth {
 		$corePath = $this->modx->getOption('hybridauth.core_path',$config,$this->modx->getOption('core_path').'components/hybridauth/');
 		$assetsUrl = $this->modx->getOption('hybridauth.assets_url',$config,$this->modx->getOption('assets_url').'components/hybridauth/');
 		$connectorUrl = $assetsUrl.'connector.php';
-		$actionUrl = $modx->getOption('site_url') . substr($assetsUrl.'action.php', 1);
+		//$actionUrl = $modx->getOption('site_url') . substr($assetsUrl.'action.php', 1);
 
 		if (empty($config) && !empty($_SESSION['HybridAuth'])) {
 			$this->config = $_SESSION['HybridAuth'];
@@ -51,32 +51,9 @@ class HybridAuth {
 			$this->modx->lexicon->load('hybridauth:default');
 			$this->modx->lexicon->load('core:user');
 
-			$providers = explode(',', $this->config['providers']);
-			if (!empty($providers[0])) {
-				$this->config['HA'] = array(
-					'base_url' => $actionUrl
-					,'debug_mode' => !empty($config['debug']) && ($config['debug'] == 'true' || $config['debug'] == 1) ? 1 : 0
-					,'debug_file' => MODX_CORE_PATH . 'cache/logs/error.log'
-					,'providers' => array()
-				);
-				foreach ($providers as $provider) {
-					$provider = ucfirst(trim($provider));
-					$keys = $this->modx->fromJSON($this->modx->getOption('ha.keys.' . $provider));
-					if (is_array($keys)) {
-						$this->config['HA']['providers'][$provider] = array(
-							'enabled' => true
-							,'keys' => $keys
-						);
-					}
-					else {
-						$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] ' . $this->modx->lexicon('ha_err_no_provider_keys', array('provider' => $provider)));
-					}
-				}
-			}
-			else {
-				$error = '[HybridAuth] ' . $this->modx->lexicon('ha_err_no_providers');
-				//$this->modx->log(modX::LOG_LEVEL_ERROR, $error);
-				$this->modx->error->failure($error);
+			$response = $this->loadHybridAuth();
+			if ($response !== true) {
+				$this->modx->error->failure('[HybridAuth] ' . $response);
 			}
 		}
 
@@ -104,12 +81,58 @@ class HybridAuth {
 	}
 
 
+	/**
+	 * Loads settings for Hybrid_Auth class
+	 *
+	 * @return bool|null|string
+	 */
+	public function loadHybridAuth() {
+		$keys = array();
+		$tmp = array_map('trim', explode(',', $this->config['providers']));
+		foreach ($tmp as $v) {
+			if (!empty($v)) {
+				$keys[] = 'ha.keys.'.$v;
+			}
+		}
+
+		$providers = array();
+		$q = $this->modx->newQuery('modSystemSetting');
+		$q->select('key,value');
+		$condition = !empty($keys)
+			? array('key:IN' => $keys)
+			: array('key:LIKE' => 'ha.keys.%');
+		$q->where($condition);
+		if ($q->prepare() && $q->stmt->execute()) {
+			while ($row = $q->stmt->fetch(PDO::FETCH_ASSOC)) {
+				$providers[ucfirst(substr($row['key'],8))] = array(
+					'enabled' => true,
+					'keys' => $this->modx->fromJSON($row['value'])
+				);
+			}
+		}
+
+		if (empty($providers)) {
+			return $this->modx->lexicon('ha_err_no_providers');
+		}
+
+		$this->config['HA'] = array(
+			'base_url' => $this->modx->makeUrl($this->modx->getOption('site_start'), $this->modx->context->key, '', 'full'),
+			'debug_mode' => !empty($config['debug']) && ($config['debug'] == 'true' || $config['debug'] == 1) ? 1 : 0,
+			'debug_file' => MODX_CORE_PATH . 'cache/logs/error.log',
+			'providers' => $providers,
+		);
+
+
+
+		return true;
+	}
+
 	/*
 	 * Process Hybrid_Auth endpoint
 	 *
 	 * @return void
 	 * */
-	function process() {
+	function processAuth() {
 		require 'lib/Endpoint.php';
 		Hybrid_Endpoint::process();
 	}
@@ -265,7 +288,9 @@ class HybridAuth {
 	 * @return void
 	 * */
 	function Logout() {
-		$this->Hybrid_Auth->logoutAllProviders();
+		if (is_object($this->Hybrid_Auth)) {
+			$this->Hybrid_Auth->logoutAllProviders();
+		}
 		$response = $this->modx->runProcessor('security/logout');
 		if ($response->isError()) {
 			$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] logout error. Username: '.$this->modx->user->get('username').', uid: '.$this->modx->user->get('id').'. Message: '.implode(', ',$response->getAllErrors()));
@@ -304,7 +329,9 @@ class HybridAuth {
 	 * @return mixed $chunk
 	 * */
 	function getProfile($data = array()) {
+
 		if (!$this->modx->user->isAuthenticated()) {
+			/*
 			$id = $this->modx->getOption('unauthorized_page');
 			if ($id != $this->modx->resource->id) {
 				$this->modx->sendForward($id);
@@ -314,7 +341,10 @@ class HybridAuth {
 				header('HTTP/1.0 401 Unauthorized');
 				return 'HybridAuth error: 401 Unauthorized';
 			}
+			*/
+			return 'Not logged in';
 		}
+
 		/* @var modUser $user */
 		/* @var modUserProfile $profile */
 		if (empty($data) && $user = $this->modx->getObject('modUser', $this->modx->user->id)) {
@@ -472,10 +502,10 @@ class HybridAuth {
 		$url = $this->config['siteUrl'] . substr($_SERVER['REQUEST_URI'], 1);
 
 		if ($pos = strpos($url,'?')) {
-			$url .= '&action=';
+			$url .= '&hauth_action=';
 		}
 		else {
-			$url .= '?action=';
+			$url .= '?hauth_action=';
 		}
 		return $url;
 	}

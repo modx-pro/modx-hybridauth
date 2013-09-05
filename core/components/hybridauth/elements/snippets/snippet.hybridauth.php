@@ -9,23 +9,19 @@ if ($modx->error->hasError()) {
 }
 
 // If user sends action
-if (!empty($_REQUEST['action'])) {
-	// And it is login or logout - it will override any action
-	if (in_array($_REQUEST['action'], array('login','logout'))) {$action = $_REQUEST['action'];}
+if (!empty($_REQUEST['hauth_action'])) {
 	// And he wants to update his profile - it will be handled only by snippet that called with action getProfile
-	else if ($_REQUEST['action'] == 'updateProfile' && $modx->getOption('action', $scriptProperties) == 'getProfile') {$action = 'updateProfile';}
+	if ($_REQUEST['hauth_action'] == 'updateProfile' && $modx->getOption('action', $scriptProperties) == 'getProfile') {$action = 'updateProfile';}
 }
 
 if (empty($action)) {$action = $modx->getOption('action', $scriptProperties, 'loadTpl');}
 
 $output = '';
 switch ($action) {
-	case 'login': $output = $HybridAuth->Login(@$_REQUEST['provider']); break;
-	case 'logout': $HybridAuth->Logout(); break;
-	case 'getProfile': return $HybridAuth->getProfile(); break;
-	case 'updateProfile': return $HybridAuth->updateProfile($_POST); break;
+	case 'getProfile': $output = $HybridAuth->getProfile(); break;
+	case 'updateProfile': $output = $HybridAuth->updateProfile($_POST); break;
 	case 'loadTpl':
-	default: $output =  $HybridAuth->loadTpl(); break;
+	default: $output = $HybridAuth->loadTpl(); break;
 }
 
 return $output;
