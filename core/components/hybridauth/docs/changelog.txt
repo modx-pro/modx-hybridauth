@@ -5,6 +5,7 @@ Changelog for HybridAuth.
 - New snippet "haProfile" for update user profile.
 - Automatic generation of links of providers.
 - Improved chunks, added icons for some providers.
+- Automatic logout of users that was been blocked by administrator.
 - Added virtual field "gravatar" to class "haUser". You can get it with $modx->user->get('gravatar');.
 - Extension package is removed from system settings when you uninstall component.
 - Replaced file "action.php" to plugin "HybridAuth".
