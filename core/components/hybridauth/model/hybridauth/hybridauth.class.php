@@ -2,9 +2,9 @@
 
 class HybridAuth {
 
-	/* @var Hybrid_Auth $Hybrid_Auth */
+	/** @var Hybrid_Auth $Hybrid_Auth */
 	var $Hybrid_Auth;
-	/* @var HybridAuthControllerRequest $request*/
+	/** @var HybridAuthControllerRequest $request */
 	var $request;
 
 	function __construct(modX &$modx,array $config = array()) {
@@ -65,12 +65,12 @@ class HybridAuth {
 	}
 
 
-	/*
+	/**
 	 * Custom exception handler for Hybrid_Auth
 	 *
 	 * @param Exception $e Exception object
 	 * @return void;
-	 * */
+	 */
 	public function exceptionHandler(Exception $e) {
 		$code = $e->getCode();
 		if ($code < 5) {$level = modX::LOG_LEVEL_ERROR;}
@@ -127,23 +127,23 @@ class HybridAuth {
 		return true;
 	}
 
-	/*
+	/**
 	 * Process Hybrid_Auth endpoint
 	 *
 	 * @return void
-	 * */
+	 */
 	function processAuth() {
 		require 'lib/Endpoint.php';
 		Hybrid_Endpoint::process();
 	}
 
 
-	/*
+	/**
 	 * Checks and login user. Also creates/updated user services profiles
 	 *
 	 * @param string $provider Remote service to login
 	 * @return void
-	 * */
+	 */
 	function Login($provider = '') {
 		$this->Hybrid_Auth->authenticate($provider);
 		unset($_SESSION['HA']['error']);
@@ -282,11 +282,11 @@ class HybridAuth {
 	}
 
 
-	/*
+	/**
 	 * Destroys all sessions
 	 *
 	 * @return void
-	 * */
+	 */
 	function Logout() {
 		if (is_object($this->Hybrid_Auth)) {
 			$this->Hybrid_Auth->logoutAllProviders();
@@ -301,11 +301,11 @@ class HybridAuth {
 	}
 
 
-	/*
+	/**
 	 * Gets user profile from service
 	 *
 	 * @param string $provider Service provider, like Google, Twitter etc.
-	 * */
+	 */
 	function getServiceProfile($provider = '') {
 		$providers = $this->Hybrid_Auth->getConnectedProviders();
 		$providerId = ucfirst($provider);
@@ -322,12 +322,12 @@ class HybridAuth {
 	}
 
 
-	/*
+	/**
 	 * Return form for update user profile
 	 *
 	 * @param array $data Array with user fields
 	 * @return mixed $chunk
-	 * */
+	 */
 	function getProfile($data = array()) {
 
 		if (!$this->modx->user->isAuthenticated()) {
@@ -373,11 +373,11 @@ class HybridAuth {
 	}
 
 
-	/*
+	/**
 	 * Updates user profile
 	 *
 	 * $param array $fields Array with new values
-	 * */
+	 */
 	function updateProfile($fields = array()) {
 		if (!$this->modx->user->isAuthenticated()) {
 			$this->Refresh();
@@ -412,12 +412,12 @@ class HybridAuth {
 	}
 
 
-	/*
+	/**
 	 * Refreshes the current page. If set, can redirects user to logout/login resource.
 	 *
 	 * @param string $action The action to do
 	 * @return void
-	 * */
+	 */
 	function Refresh($action = '') {
 		if ($action == 'login' && $this->config['loginResourceId']) {
 			$url = $this->modx->makeUrl($this->config['loginResourceId'],'','','full');
@@ -449,11 +449,11 @@ class HybridAuth {
 	}
 
 
-	/*
+	/**
 	 * Loads separate chunks for guest and user
 	 *
 	 * @return mixed $chunk
-	 * */
+	 */
 	function loadTpl() {
 		$url = $this->getUrl();
 		$error = '';
@@ -493,11 +493,11 @@ class HybridAuth {
 	}
 
 
-	/*
+	/**
 	 * Returns working url
 	 *
 	 * @return mixed $url
-	 * */
+	 */
 	function getUrl() {
 		$url = $this->config['siteUrl'] . substr($_SERVER['REQUEST_URI'], 1);
 
@@ -511,13 +511,13 @@ class HybridAuth {
 	}
 
 
-	/*
+	/**
 	 * Sanitizes a string
 	 *
 	 * @param string $string The string to sanitize
 	 * @param integer $length The length of sanitized string
 	 * @return string The sanitized string.
-	 * */
+	 */
 	function Sanitize($string = '', $length = 0) {
 		$expr = '/[^-_a-zа-яё0-9@\s\.\,\:\/\\\]+/iu';
 		$sanitized = trim(preg_replace($expr, '', $string));
@@ -526,11 +526,11 @@ class HybridAuth {
 	}
 
 
-	/*
+	/**
 	 * Shorthand for load and run an processor in this component
 	 *
 	 * {@inheritdoc}
-	 * */
+	 */
 	function runProcessor($action = '',$scriptProperties = array()) {
 		$this->modx->error->errors = $this->modx->error->message = null;
 

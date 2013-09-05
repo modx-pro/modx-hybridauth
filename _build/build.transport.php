@@ -225,10 +225,12 @@ if (defined('BUILD_PLUGIN_UPDATE')) {
 $vehicle = $builder->createVehicle($category,$attr);
 
 /* now pack in resolvers */
+/*
 $vehicle->resolve('file',array(
 	'source' => $sources['source_assets'],
 	'target' => "return MODX_ASSETS_PATH . 'components/';",
 ));
+*/
 $vehicle->resolve('file',array(
 	'source' => $sources['source_core'],
 	'target' => "return MODX_CORE_PATH . 'components/';",
@@ -248,11 +250,11 @@ $builder->putVehicle($vehicle);
 
 /* now pack in the license file, readme and setup options */
 $builder->setPackageAttributes(array(
-	'changelog' => file_get_contents($sources['docs'] . 'changelog.txt')
-,'license' => file_get_contents($sources['docs'] . 'license.txt')
-,'readme' => file_get_contents($sources['docs'] . 'readme.txt')
+	'changelog' => file_get_contents($sources['docs'] . 'changelog.txt'),
+	'license' => file_get_contents($sources['docs'] . 'license.txt'),
+	'readme' => file_get_contents($sources['docs'] . 'readme.txt'),
 	/*
-	,'setup-options' => array(
+	'setup-options' => array(
 		'source' => $sources['build'].'setup.options.php',
 	),
 	*/
