@@ -4,8 +4,12 @@ $snippets = array();
 $tmp = array(
 	'HybridAuth' => array(
 		'file' => 'hybridauth',
-		'description' => 'Social sign on',
-	)
+		'description' => 'Social authorization',
+	),
+	'haProfile' => array(
+		'file' => 'haprofile',
+		'description' => 'Update your profile',
+	),
 );
 
 foreach ($tmp as $k => $v) {

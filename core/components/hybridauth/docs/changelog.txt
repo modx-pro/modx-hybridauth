@@ -2,14 +2,16 @@ Changelog for HybridAuth.
 
 0.7.0 pl
 ==============
+- New snippet "haProfile" for update user profile.
 - Extension package is removed from system settings when you uninstall component.
+- Replaced file "action.php" to plugin "HybridAuth".
+- [#3] Fixed "No foreign key definition for parentClass: modUser using relation alias: Services" log entries.
+- Added new providers: "Draugiem" and "Xing".
+
 
 0.6.0 pl
 ==============
-- Replaced file "action.php" to plugin "HybridAuth".
 - Added ability to disable new user registrations. See system setting "ha.register_users".
-- [#3] Fixed "No foreign key definition for parentClass: modUser using relation alias: Services" log entries.
-- Added new providers: "Draugiem" and "Xing".
 
 0.5.0 beta
 ==============

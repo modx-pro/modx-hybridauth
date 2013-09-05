@@ -22,10 +22,10 @@
 			<span class="help-inline">[[+error.email]]</span>
 		</div>
 	</div>
-	<input type="hidden" name="action" value="updateProfile" />
+	<input type="hidden" name="hauth_action" value="updateProfile" />
 	<div class="form-actions">
 		<button type="submit" class="btn btn-primary">[[%ha.updateProfile]]</button>
 	</div>
 </form>
 [[+success:is=`1`:then=`<div class="alert alert-block">[[%ha.profile_update_success]]</div>`]]
-[[+success:is=`0`:then=`<div class="alert alert-block alert-error">[[%ha.profile_update_error]]</div>`]]
+[[+success:is=`0`:then=`<div class="alert alert-block alert-error">[[%ha.profile_update_error]] [[+error.message]]</div>`]]

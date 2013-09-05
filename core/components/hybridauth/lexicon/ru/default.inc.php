@@ -8,6 +8,7 @@
 $_lang['hybridauth'] = 'HybridAuth';
 $_lang['ha_err_no_providers'] = 'Вы должны указать хотя бы одного провайдера.';
 $_lang['ha_err_no_provider_keys'] = 'Не могу получить ключи [[+provider]] из системных настроек. [[+provider]] не был активирован.';
+$_lang['ha_err_not_logged_in'] = 'Вы должны быть авторизованы для редактирования своего профиля.';
 $_lang['ha_register_disabled'] = 'Регистрация новых пользователей отключена.';
 
 /* Chunks */

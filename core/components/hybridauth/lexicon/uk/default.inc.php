@@ -8,6 +8,7 @@
 */
 $_lang['hybridauth'] = 'HybridAuth';
 $_lang['ha_err_no_providers'] = 'Ви повинні вказати хоча б одного провайдера.';
+$_lang['ha_err_not_logged_in'] = 'Ви повинні бути авторизовані для редагування свого профілю';
 $_lang['ha_err_no_provider_keys'] = 'Не можу отримати ключі [[+provider]] з системних налаштувань. [[+provider]] не було активовано.';
 
 /* Chunks */

@@ -10,7 +10,6 @@ $_lang['ha.groups'] = 'Comma separated list of existing user groups for joining 
 $_lang['ha.rememberme'] = 'If true, user will be remembered for a long time.';
 $_lang['ha.loginContext'] = 'Main context for authentication. By default - it is current context.';
 $_lang['ha.addContexts'] = 'Comma separated list of additional contexts for authentication. For example &addContexts=`web,ru,en`';
-$_lang['ha.action'] = 'Mode of work. By default it loads chunks for user according to his status.';
 
 $_lang['ha.loginResourceId'] = 'Resource id to redirect to on successful login. By default, it is 0 - redirect to self.';
 $_lang['ha.logoutResourceId'] = 'Resource id to redirect to on successful logout. By default, it is 0 - redirect to self.';

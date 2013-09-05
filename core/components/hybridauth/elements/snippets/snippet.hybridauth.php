@@ -1,27 +1,61 @@
 <?php
-$modx->error->message = null;
+/** @var array $scriptProperties */
 
-$HybridAuth = $modx->getService('hybridauth','HybridAuth',$modx->getOption('hybridauth.core_path',null,$modx->getOption('core_path').'components/hybridauth/').'model/hybridauth/',$scriptProperties);
-if (!($HybridAuth instanceof HybridAuth)) return '';
+$modx->error->message = null;
+if (!$modx->loadClass('hybridauth', MODX_CORE_PATH . 'components/hybridauth/model/hybridauth/', false, true)) {return;}
+$HybridAuth = new HybridAuth($modx, $scriptProperties);
 
 if ($modx->error->hasError()) {
 	return $modx->error->message;
 }
-
-// If user sends action
-if (!empty($_REQUEST['hauth_action'])) {
-	// And he wants to update his profile - it will be handled only by snippet that called with action getProfile
-	if ($_REQUEST['hauth_action'] == 'updateProfile' && $modx->getOption('action', $scriptProperties) == 'getProfile') {$action = 'updateProfile';}
+// For compatibility with old snippet
+elseif (!empty($action)) {
+	$tmp = strtolower($action);
+	if ($tmp == 'getprofile' || $tmp == 'updateprofile') {
+		return $modx->runSnippet('haProfile', $scriptProperties);
+	}
 }
 
-if (empty($action)) {$action = $modx->getOption('action', $scriptProperties, 'loadTpl');}
+if (empty($loginTpl)) {$loginTpl = 'tpl.HybridAuth.login';}
+if (empty($logoutTpl)) {$logoutTpl = 'tpl.HybridAuth.logout';}
 
-$output = '';
-switch ($action) {
-	case 'getProfile': $output = $HybridAuth->getProfile(); break;
-	case 'updateProfile': $output = $HybridAuth->updateProfile($_POST); break;
-	case 'loadTpl':
-	default: $output = $HybridAuth->loadTpl(); break;
+$url = $HybridAuth->getUrl();
+$error = '';
+if (!empty($_SESSION['HA']['error'])) {
+	$error = $_SESSION['HA']['error'];
+	unset($_SESSION['HA']['error']);
 }
 
-return $output;
+if ($modx->user->isAuthenticated()) {
+	$add = array();
+	if ($modx->user instanceof haUser) {
+		/* @var haUserService $v */
+		$profiles = $modx->user->getMany('Services');
+		foreach ($profiles as $v) {
+			$add = array_merge($add, $v->toArray(strtolower($v->get('provider').'.')));
+		}
+	}
+
+	$user = $modx->user->toArray();
+	$profile = $modx->user->Profile->toArray();
+	unset($profile['id']);
+	$arr = array_merge(
+		$user,
+		$profile,
+		$add,
+		array(
+			'login_url' => $url.'login',
+			'logout_url' => $url.'logout',
+			'error' => $error,
+		)
+	);
+	return $modx->getChunk($logoutTpl, $arr);
+}
+else {
+	$arr = array(
+		'login_url' => $url.'login',
+		'logout_url' => $url.'logout',
+		'error' => $error,
+	);
+	return $modx->getChunk($loginTpl, $arr);
+}
