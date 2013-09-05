@@ -4,6 +4,7 @@
 $modx->error->message = null;
 if (!$modx->loadClass('hybridauth', MODX_CORE_PATH . 'components/hybridauth/model/hybridauth/', false, true)) {return;}
 $HybridAuth = new HybridAuth($modx, $scriptProperties);
+$HybridAuth->initialize($modx->context->key);
 
 if ($modx->error->hasError()) {
 	return $modx->error->message;
@@ -18,6 +19,8 @@ elseif (!empty($action)) {
 
 if (empty($loginTpl)) {$loginTpl = 'tpl.HybridAuth.login';}
 if (empty($logoutTpl)) {$logoutTpl = 'tpl.HybridAuth.logout';}
+if (empty($providerTpl)) {$providerTpl = 'tpl.HybridAuth.provider';}
+if (empty($activeProviderTpl)) {$activeProviderTpl = 'tpl.HybridAuth.provider.active';}
 
 $url = $HybridAuth->getUrl();
 $error = '';
@@ -46,6 +49,7 @@ if ($modx->user->isAuthenticated()) {
 		array(
 			'login_url' => $url.'login',
 			'logout_url' => $url.'logout',
+			'providers' => $HybridAuth->getProvidersLinks($providerTpl, $activeProviderTpl),
 			'error' => $error,
 		)
 	);
@@ -55,6 +59,7 @@ else {
 	$arr = array(
 		'login_url' => $url.'login',
 		'logout_url' => $url.'logout',
+		'providers' => $HybridAuth->getProvidersLinks($providerTpl, $activeProviderTpl),
 		'error' => $error,
 	);
 	return $modx->getChunk($loginTpl, $arr);

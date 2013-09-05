@@ -18,6 +18,14 @@ $tmp = array(
 		'type' => 'textfield',
 		'value' => 'tpl.HybridAuth.logout',
 	),
+	'providerTpl' => array(
+		'type' => 'textfield',
+		'value' => 'tpl.HybridAuth.provider',
+	),
+	'activeProviderTpl' => array(
+		'type' => 'textfield',
+		'value' => 'tpl.HybridAuth.provider.active',
+	),
 	'groups' => array(
 		'type' => 'textfield',
 		'value' => '',

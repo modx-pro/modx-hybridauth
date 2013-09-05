@@ -14,6 +14,14 @@ $tmp = array(
 		'type' => 'textfield',
 		'value' => 'username,email,fullname',
 	),
+	'providerTpl' => array(
+		'type' => 'textfield',
+		'value' => 'tpl.HybridAuth.provider',
+	),
+	'activeProviderTpl' => array(
+		'type' => 'textfield',
+		'value' => 'tpl.HybridAuth.provider.active',
+	),
 );
 
 foreach ($tmp as $k => $v) {

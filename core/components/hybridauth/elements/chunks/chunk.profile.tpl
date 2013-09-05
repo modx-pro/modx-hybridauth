@@ -31,9 +31,19 @@
 			<span class="help-inline">[[+error.email]]</span>
 		</div>
 	</div>
+
+	<div class="control-group">
+		<label class="control-label">[[%ha.providers_available]]</label>
+		<div class="controls">
+			[[+providers]]
+		</div>
+	</div>
+
 	<input type="hidden" name="hauth_action" value="updateProfile" />
 	<div class="form-actions">
-		<button type="submit" class="btn btn-primary">[[%ha.updateProfile]]</button>
+		<button type="submit" class="btn btn-primary">[[%ha.save_profile]]</button>
+		&nbsp;&nbsp;
+		<a href="[[+logout_url]]" class="btn btn-danger">[[%ha.logout]]</a>
 	</div>
 </form>
 [[+success:is=`1`:then=`<div class="alert alert-block">[[%ha.profile_update_success]]</div>`]]

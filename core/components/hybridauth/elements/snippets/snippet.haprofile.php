@@ -4,6 +4,7 @@
 $modx->error->message = null;
 if (!$modx->loadClass('hybridauth', MODX_CORE_PATH . 'components/hybridauth/model/hybridauth/', false, true)) {return;}
 $HybridAuth = new HybridAuth($modx, $scriptProperties);
+$HybridAuth->initialize($modx->context->key);
 
 if ($modx->error->hasError()) {
 	return $modx->error->message;
@@ -15,6 +16,8 @@ elseif (!$modx->user->isAuthenticated()) {
 if (empty($profileTpl)) {$profileTpl = 'tpl.HybridAuth.profile';}
 if (empty($profileFields)) {$profileFields = 'username:25,email:50,fullname:50,phone:12,mobilephone:12,dob:10,gender,address,country,city,state,zip,fax,photo,comment,website';}
 if (empty($requiredFields)) {$requiredFields = 'username,email,fullname';}
+if (empty($providerTpl)) {$providerTpl = 'tpl.HybridAuth.provider';}
+if (empty($activeProviderTpl)) {$activeProviderTpl = 'tpl.HybridAuth.provider.active';}
 $data = array();
 
 // Update of profile
@@ -57,13 +60,6 @@ if ((!empty($_REQUEST['action']) && strtolower($_REQUEST['action']) == 'updatepr
 	$data['success'] = (integer) !$response->isError();
 }
 
-if (empty($data)) {
-	$data = array_merge(
-		$modx->user->toArray()
-		,$modx->user->Profile->toArray()
-	);
-}
-
 /* @var haUserService $service */
 $add = array();
 if ($modx->user instanceof haUser) {
@@ -75,11 +71,14 @@ if ($modx->user instanceof haUser) {
 
 $url = $HybridAuth->getUrl();
 $data = array_merge(
-	$data,
+	$modx->user->toArray(),
+	$modx->user->Profile->toArray(),
 	$add,
+	$data,
 	array(
 		'login_url' => $url.'login',
 		'logout_url' => $url.'logout',
+		'providers' => $HybridAuth->getProvidersLinks($providerTpl, $activeProviderTpl),
 	)
 );
 

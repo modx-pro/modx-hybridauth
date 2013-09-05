@@ -14,6 +14,14 @@ $tmp = array(
 		'file' => 'profile',
 		'description' => 'Chunk for profile update',
 	),
+	'tpl.HybridAuth.provider' => array(
+		'file' => 'provider',
+		'description' => 'Chunk for authorization provider',
+	),
+	'tpl.HybridAuth.provider.active' => array(
+		'file' => 'provider_active',
+		'description' => 'Chunk for active authorization provider',
+	),
 );
 
 foreach ($tmp as $k => $v) {

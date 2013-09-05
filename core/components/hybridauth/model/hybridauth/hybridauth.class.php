@@ -4,8 +4,8 @@ class HybridAuth {
 
 	/** @var Hybrid_Auth $Hybrid_Auth */
 	var $Hybrid_Auth;
-	/** @var HybridAuthControllerRequest $request */
-	var $request;
+	/** @var array $initialized */
+	public $initialized = array();
 
 	function __construct(modX &$modx,array $config = array()) {
 		$this->modx =& $modx;
@@ -13,6 +13,7 @@ class HybridAuth {
 		set_exception_handler(array($this, 'exceptionHandler'));
 
 		$corePath = $this->modx->getOption('hybridauth.core_path',$config,$this->modx->getOption('core_path').'components/hybridauth/');
+		$assetsUrl = $this->modx->getOption('hybridauth.assets_url',$config,$this->modx->getOption('assets_url').'components/hybridauth/');
 		$this->modx->lexicon->load('hybridauth:default');
 		$this->modx->lexicon->load('core:user');
 
@@ -22,6 +23,7 @@ class HybridAuth {
 		else {
 			$this->config = array_merge(array(
 				'corePath' => $corePath,
+				'assetsUrl' => $assetsUrl,
 				'modelPath' => $corePath.'model/',
 				'processorsPath' => $corePath.'processors/',
 
@@ -64,6 +66,31 @@ class HybridAuth {
 		$this->Refresh();
 	}
 
+
+	/**
+	 * Initializes component into different contexts.
+	 *
+	 * @access public
+	 * @param string $ctx The context to load. Defaults to web.
+	 * @param array $scriptProperties Properties for initialization.
+	 */
+	public function initialize($ctx = 'web', $scriptProperties = array()) {
+		$this->config = array_merge($this->config, $scriptProperties);
+		$this->config['ctx'] = $ctx;
+		if (!empty($this->initialized[$ctx])) {
+			return true;
+		}
+		switch ($ctx) {
+			case 'mgr': break;
+			default:
+				$config = $this->makePlaceholders($this->config);
+				if ($css = $this->modx->getOption('ha.frontend_css')) {
+					$this->modx->regClientCSS(str_replace($config['pl'], $config['vl'], $css));
+				}
+				$this->initialized[$ctx] = true;
+		}
+		return true;
+	}
 
 	/**
 	 * Loads settings for Hybrid_Auth class
@@ -360,6 +387,42 @@ class HybridAuth {
 	}
 
 
+
+	function getProvidersLinks($tpl1 = 'tpl.HybridAuth.provider', $tpl2 = 'tpl.HybridAuth.provider.active') {
+		if (empty($this->config['HA']['providers'])) {return '';}
+
+		$output = '';
+		$url = $this->getUrl();
+		$active = array();
+
+		if ($this->modx->user->isAuthenticated()) {
+			$q = $this->modx->newQuery('haUserService', array('internalKey' => $this->modx->user->id));
+			$q->select('provider');
+			if ($q->prepare() && $q->stmt->execute()) {
+				while ($row = $q->stmt->fetch(PDO::FETCH_COLUMN)) {
+					$active[] = strtolower($row);
+				};
+			}
+		}
+
+		$providers = array_keys($this->config['HA']['providers']);
+		sort($providers);
+		foreach ($providers as $provider) {
+			$pls = array(
+				'login_url' => $url.'login',
+				'logout_url' => $url.'logout',
+				'provider' => strtolower($provider),
+				'title' => ucfirst($provider),
+			);
+
+			$output .= !in_array($pls['provider'], $active)
+				? $this->modx->getChunk($tpl1, $pls)
+				: $this->modx->getChunk($tpl2, $pls);
+		}
+
+		return $output;
+	}
+
 	/**
 	 * Sanitizes a string
 	 *
@@ -389,6 +452,30 @@ class HybridAuth {
 				'processors_path' => $this->config['processorsPath']
 			)
 		);
+	}
+
+
+	/**
+	 * Method for transform array to placeholders
+	 *
+	 * @var array $array With keys and values
+	 * @return array $array Two nested arrays With placeholders and values
+	 */
+	public function makePlaceholders(array $array = array(), $prefix = '') {
+		$result = array(
+			'pl' => array(),
+			'vl' => array(),
+		);
+		foreach ($array as $k => $v) {
+			if (is_array($v)) {
+				$result = array_merge_recursive($result, $this->makePlaceholders($v, $k.'.'));
+			}
+			else {
+				$result['pl'][$prefix.$k] = '[[+'.$prefix.$k.']]';
+				$result['vl'][$prefix.$k] = $v;
+			}
+		}
+		return $result;
 	}
 
 }
