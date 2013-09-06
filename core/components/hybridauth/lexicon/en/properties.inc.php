@@ -17,6 +17,8 @@ $_lang['ha.logoutResourceId'] = 'Resource id to redirect to on successful logout
 $_lang['ha.loginTpl'] = 'This chunk will see any anonymous user.';
 $_lang['ha.logoutTpl'] = 'This chunk will see any authenticated user.';
 $_lang['ha.profileTpl'] = 'Chunk for display and edit user profile.';
+$_lang['ha.providerTpl'] = 'Chunk to display a link for authorization or linking a service to your account.';
+$_lang['ha.activeProviderTpl'] = 'Chunk for output icon of linked service.';
 
 $_lang['ha.profileFields'] = 'Comma separated list of allowed user fields for update with maximum length of sended values. For example, &profileFields=`username:25,fullname:50,email`.';
 $_lang['ha.requiredFields'] = 'Comma separated list of required user fields when update. This fields must be filled for successful update of profile. For example, &requiredFields=`username,fullname,email`.';

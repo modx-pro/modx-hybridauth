@@ -1,6 +1,6 @@
 Changelog for HybridAuth.
 
-0.7.0 pl
+0.7.0 pl1
 ==============
 - New snippet "haProfile" for update user profile.
 - Automatic generation of links of providers.
