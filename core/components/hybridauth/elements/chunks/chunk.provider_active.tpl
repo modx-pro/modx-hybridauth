@@ -1,1 +1,1 @@
-<span class="ha-icon active [[+provider]]">[[+title]]</span>
+<span class="ha-icon active [[+provider]]" title="[[+title]]">[[+title]]</span>
