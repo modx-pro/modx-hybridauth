@@ -1,6 +1,6 @@
 Changelog for HybridAuth.
 
-0.7.0 pl1
+0.7.0 pl2
 ==============
 - New snippet "haProfile" for update user profile.
 - Automatic generation of links of providers.
@@ -11,6 +11,7 @@ Changelog for HybridAuth.
 - Replaced file "action.php" to plugin "HybridAuth".
 - Added new providers: "Draugiem" and "Xing".
 - [#3] Fixed "No foreign key definition for parentClass: modUser using relation alias: Services" log entries.
+- Fixed order of links to providers, specified in the parameter "&providers".
 
 0.6.0 pl
 ==============

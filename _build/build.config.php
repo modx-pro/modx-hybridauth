@@ -5,7 +5,7 @@ define('PKG_NAME','HybridAuth');
 define('PKG_NAME_LOWER',strtolower(PKG_NAME));
 
 define('PKG_VERSION','0.7.0');
-define('PKG_RELEASE','pl1');
+define('PKG_RELEASE','pl2');
 define('PKG_AUTO_INSTALL', true);
 
 /* define paths */

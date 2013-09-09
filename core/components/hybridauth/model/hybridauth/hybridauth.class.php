@@ -102,7 +102,7 @@ class HybridAuth {
 		$tmp = array_map('trim', explode(',', $this->config['providers']));
 		foreach ($tmp as $v) {
 			if (!empty($v)) {
-				$keys[] = 'ha.keys.'.$v;
+				$keys[$v] = 'ha.keys.'.$v;
 			}
 		}
 
@@ -124,6 +124,15 @@ class HybridAuth {
 
 		if (empty($providers)) {
 			return $this->modx->lexicon('ha_err_no_providers');
+		}
+		elseif (!empty($keys)) {
+			$tmp = array();
+			foreach ($keys as $k => $v) {
+				if (!empty($providers[$k])) {
+					$tmp[$k] = $providers[$k];
+				}
+			}
+			$providers = $tmp;
 		}
 
 		$this->config['HA'] = array(
@@ -409,7 +418,7 @@ class HybridAuth {
 		}
 
 		$providers = array_keys($this->config['HA']['providers']);
-		sort($providers);
+		//sort($providers);
 		foreach ($providers as $provider) {
 			$pls = array(
 				'login_url' => $url.'login',
