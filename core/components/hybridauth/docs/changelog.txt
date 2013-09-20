@@ -1,5 +1,9 @@
 Changelog for HybridAuth.
 
+0.7.1 pl
+==============
+- [#7] Fixed generation of links for sites in subfolder.
+
 0.7.0 pl2
 ==============
 - New snippet "haProfile" for update user profile.

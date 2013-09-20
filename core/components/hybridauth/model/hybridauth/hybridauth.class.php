@@ -358,7 +358,8 @@ class HybridAuth {
 			$url = $this->modx->makeUrl($this->config['logoutResourceId'],'','','full');
 		}
 		else {
-			$url = $this->modx->getOption('site_url') . substr($_SERVER['REQUEST_URI'],1);
+			$request = preg_replace('#^'.$this->modx->getOption('base_url').'#', '', $_SERVER['REQUEST_URI']);
+			$url = $this->modx->getOption('site_url') . ltrim($request, '/');
 
 			if ($pos = strpos($url, '?')) {
 				$arr = explode('&',substr($url, $pos+1));
@@ -387,14 +388,13 @@ class HybridAuth {
 	 * @return mixed $url
 	 */
 	function getUrl() {
-		$url = $this->modx->getOption('site_url') . substr($_SERVER['REQUEST_URI'], 1);
+		$request = preg_replace('#^'.$this->modx->getOption('base_url').'#', '', $_SERVER['REQUEST_URI']);
+		$url = $this->modx->getOption('site_url') . ltrim($request, '/');
 
-		if ($pos = strpos($url,'?')) {
-			$url .= '&hauth_action=';
-		}
-		else {
-			$url .= '?hauth_action=';
-		}
+		$url .= strpos($url,'?')
+			? '&hauth_action='
+			: '?hauth_action=';
+
 		return $url;
 	}
 
