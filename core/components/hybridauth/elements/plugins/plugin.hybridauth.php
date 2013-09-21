@@ -2,7 +2,7 @@
 switch ($modx->event->name) {
 
 	case 'OnHandleRequest':
-		if ($modx->user->isAuthenticated()) {
+		if ($modx->user->isAuthenticated($modx->context->key)) {
 			if (!$modx->user->active || $modx->user->Profile->blocked) {
 				$modx->runProcessor('security/logout');
 				$modx->sendRedirect($modx->makeUrl($modx->getOption('site_start'),'','','full'));

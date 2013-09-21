@@ -29,7 +29,7 @@ if (!empty($_SESSION['HA']['error'])) {
 	unset($_SESSION['HA']['error']);
 }
 
-if ($modx->user->isAuthenticated()) {
+if ($modx->user->isAuthenticated($modx->context->key)) {
 	$add = array();
 	if ($modx->user instanceof haUser) {
 		/* @var haUserService $v */

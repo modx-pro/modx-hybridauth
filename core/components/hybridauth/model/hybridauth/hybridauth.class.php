@@ -176,7 +176,7 @@ class HybridAuth {
 			/* @var haUserService $service */
 			if (!$service = $this->modx->getObject('haUserService', array('identifier' => $profile['identifier'], 'provider' => $profile['provider']))) {
 				// Adding new record to current user
-				if ($this->modx->user->isAuthenticated()) {
+				if ($this->modx->user->isAuthenticated($this->modx->context->key)) {
 					$uid = $this->modx->user->id;
 					$profile['internalKey'] = $uid;
 
@@ -249,7 +249,7 @@ class HybridAuth {
 			}
 			else {
 				// Find and use linked MODX user
-				if ($this->modx->user->isAuthenticated()) {
+				if ($this->modx->user->isAuthenticated($this->modx->context->key)) {
 					$uid = $this->modx->user->id;
 				}
 				else {
@@ -285,7 +285,7 @@ class HybridAuth {
 			}
 
 			$this->modx->error->errors = $this->modx->error->message = null;
-			if (empty($_SESSION['HA']['error']) && !$this->modx->user->isAuthenticated() && !empty($login_data)) {
+			if (empty($_SESSION['HA']['error']) && !$this->modx->user->isAuthenticated($this->modx->context->key) && !empty($login_data)) {
 
 				$_SESSION['HA']['verified'] = 1;
 				if (!empty($this->config['loginContext'])) {$login_data['login_context'] = $this->config['loginContext'];}
@@ -407,7 +407,7 @@ class HybridAuth {
 		$url = $this->getUrl();
 		$active = array();
 
-		if ($this->modx->user->isAuthenticated()) {
+		if ($this->modx->user->isAuthenticated($this->modx->context->key)) {
 			$q = $this->modx->newQuery('haUserService', array('internalKey' => $this->modx->user->id));
 			$q->select('provider');
 			if ($q->prepare() && $q->stmt->execute()) {

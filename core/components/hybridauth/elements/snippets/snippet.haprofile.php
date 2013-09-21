@@ -9,7 +9,7 @@ $HybridAuth->initialize($modx->context->key);
 if ($modx->error->hasError()) {
 	return $modx->error->message;
 }
-elseif (!$modx->user->isAuthenticated()) {
+elseif (!$modx->user->isAuthenticated($modx->context->key)) {
 	return $modx->lexicon('ha_err_not_logged_in');
 }
 
