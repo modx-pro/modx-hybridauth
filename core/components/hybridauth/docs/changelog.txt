@@ -1,8 +1,10 @@
 Changelog for HybridAuth.
 
-0.7.1 pl
+0.8.0 pl
 ==============
 - [#7] Fixed generation of links for sites in subfolder.
+- [#4] Fixed login to separate contexts.
+- Improved support of multiple contexts.
 
 0.7.0 pl2
 ==============

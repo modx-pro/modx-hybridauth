@@ -5,6 +5,7 @@ $modx->error->message = null;
 if (!$modx->loadClass('hybridauth', MODX_CORE_PATH . 'components/hybridauth/model/hybridauth/', false, true)) {return;}
 $HybridAuth = new HybridAuth($modx, $scriptProperties);
 $HybridAuth->initialize($modx->context->key);
+$_SESSION['HybridAuth'][$modx->context->key] = $HybridAuth->config;
 
 if ($modx->error->hasError()) {
 	return $modx->error->message;

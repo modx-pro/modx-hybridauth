@@ -7,7 +7,9 @@ $tmp = array(
 		'file' => 'hybridauth',
 		'description' => '',
 		'events' => array(
-			'OnHandleRequest',
+			'OnHandleRequest' => array(
+				'priority' => 10,
+			),
 		)
 	)
 );
@@ -31,11 +33,13 @@ foreach ($tmp as $k => $v) {
 		foreach ($v['events'] as $k2 => $v2) {
 			/* @var modPluginEvent $event */
 			$event = $modx->newObject('modPluginEvent');
-			$event->fromArray(array(
-				'event' => $v2,
-				'priority' => 0,
-				'propertyset' => 0,
-			),'',true,true);
+			$event->fromArray(array_merge(
+				array(
+					'event' => $k2,
+					'priority' => 0,
+					'propertyset' => 0,
+				), $v2)
+			, '', true, true);
 			$events[] = $event;
 		}
 		unset($v['events']);

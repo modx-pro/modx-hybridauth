@@ -9,7 +9,6 @@ class HybridAuth {
 
 	function __construct(modX &$modx,array $config = array()) {
 		$this->modx =& $modx;
-
 		set_exception_handler(array($this, 'exceptionHandler'));
 
 		$corePath = $this->modx->getOption('hybridauth.core_path',$config,$this->modx->getOption('core_path').'components/hybridauth/');
@@ -17,33 +16,26 @@ class HybridAuth {
 		$this->modx->lexicon->load('hybridauth:default');
 		$this->modx->lexicon->load('core:user');
 
-		if (empty($config) && !empty($_SESSION['HybridAuth'])) {
-			$this->config = $_SESSION['HybridAuth'];
-		}
-		else {
-			$this->config = array_merge(array(
-				'corePath' => $corePath,
-				'assetsUrl' => $assetsUrl,
-				'modelPath' => $corePath.'model/',
-				'processorsPath' => $corePath.'processors/',
+		$this->config = array_merge(array(
+			'corePath' => $corePath,
+			'assetsUrl' => $assetsUrl,
+			'modelPath' => $corePath.'model/',
+			'processorsPath' => $corePath.'processors/',
 
-				'rememberme' => true,
-				'groups' => '',
-				'loginContext' => '',
-				'addContexts' => '',
-				'loginResourceId' => 0,
-				'logoutResourceId' => 0,
-			),$config);
+			'rememberme' => true,
+			'groups' => '',
+			'loginContext' => '',
+			'addContexts' => '',
+			'loginResourceId' => 0,
+			'logoutResourceId' => 0,
+		), $config);
 
-			$response = $this->loadHybridAuth();
-			if ($response !== true) {
-				$this->modx->error->failure('[HybridAuth] ' . $response);
-			}
+		$response = $this->loadHybridAuth();
+		if ($response !== true) {
+			$this->modx->error->failure('[HybridAuth] ' . $response);
 		}
 
 		$this->modx->addPackage('hybridauth',$this->config['modelPath']);
-
-		$_SESSION['HybridAuth'] = $this->config;
 		if (!empty($this->config['HA'])) {
 			require_once 'lib/Auth.php';
 			$this->Hybrid_Auth = new Hybrid_Auth($this->config['HA']);
@@ -313,7 +305,12 @@ class HybridAuth {
 		if (is_object($this->Hybrid_Auth)) {
 			$this->Hybrid_Auth->logoutAllProviders();
 		}
-		$response = $this->modx->runProcessor('security/logout');
+
+		$logout_data = array();
+		if (!empty($this->config['loginContext'])) {$logout_data['login_context'] = $this->config['loginContext'];}
+		if (!empty($this->config['addContexts'])) {$logout_data['add_contexts'] = $this->config['addContexts'];}
+
+		$response = $this->modx->runProcessor('security/logout', $logout_data);
 		if ($response->isError()) {
 			$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] logout error. Username: '.$this->modx->user->get('username').', uid: '.$this->modx->user->get('id').'. Message: '.implode(', ',$response->getAllErrors()));
 			$_SESSION['HA']['error'] = implode(', ',$response->getAllErrors());
