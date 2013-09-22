@@ -348,11 +348,12 @@ class HybridAuth {
 	 * @return void
 	 */
 	function Refresh($action = '') {
-		if ($action == 'login' && $this->config['loginResourceId']) {
-			$url = $this->modx->makeUrl($this->config['loginResourceId'],'','','full');
+		/* @var modResource $resource */
+		if ($action == 'login' && $this->config['loginResourceId'] && $resource = $this->modx->getObject('modResource', $this->config['loginResourceId'])) {
+			$url = $this->modx->makeUrl($resource->id, $resource->context_key, '','full');
 		}
-		else if ($action == 'logout' && $this->config['logoutResourceId']) {
-			$url = $this->modx->makeUrl($this->config['logoutResourceId'],'','','full');
+		else if ($action == 'logout' && $this->config['logoutResourceId'] && $resource = $this->modx->getObject('modResource', $this->config['logoutResourceId'])) {
+			$url = $this->modx->makeUrl($resource->id, $resource->context_key, '','full');
 		}
 		else {
 			$request = preg_replace('#^'.$this->modx->getOption('base_url').'#', '', $_SERVER['REQUEST_URI']);
