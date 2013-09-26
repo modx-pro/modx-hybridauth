@@ -1,5 +1,9 @@
 Changelog for HybridAuth.
 
+0.8.1 pl
+==============
+- Fixed bug with saving parameters to $_SESSION.
+
 0.8.0 pl
 ==============
 - [#7] Fixed generation of links for sites in subfolder.

@@ -40,6 +40,8 @@ class HybridAuth {
 			require_once 'lib/Auth.php';
 			$this->Hybrid_Auth = new Hybrid_Auth($this->config['HA']);
 		}
+
+		$_SESSION['HybridAuth'][$this->modx->context->key] = $this->config;
 	}
 
 
@@ -324,6 +326,8 @@ class HybridAuth {
 	 * Gets user profile from service
 	 *
 	 * @param string $provider Service provider, like Google, Twitter etc.
+	 *
+	 * @return array|boolean
 	 */
 	function getServiceProfile($provider = '') {
 		$providers = $this->Hybrid_Auth->getConnectedProviders();
@@ -469,6 +473,7 @@ class HybridAuth {
 	 * Method for transform array to placeholders
 	 *
 	 * @var array $array With keys and values
+	 * @var string $prefix
 	 * @return array $array Two nested arrays With placeholders and values
 	 */
 	public function makePlaceholders(array $array = array(), $prefix = '') {
