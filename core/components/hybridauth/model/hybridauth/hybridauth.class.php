@@ -101,11 +101,27 @@ class HybridAuth {
 		}
 
 		$providers = array();
-		$q = $this->modx->newQuery('modSystemSetting');
-		$q->select('key,value');
 		$condition = !empty($keys)
 			? array('key:IN' => $keys)
 			: array('key:LIKE' => 'ha.keys.%');
+
+		// Get main providers settings
+		$q = $this->modx->newQuery('modSystemSetting');
+		$q->select('key,value');
+		$q->where($condition);
+		if ($q->prepare() && $q->stmt->execute()) {
+			while ($row = $q->stmt->fetch(PDO::FETCH_ASSOC)) {
+				$providers[ucfirst(substr($row['key'],8))] = array(
+					'enabled' => true,
+					'keys' => $this->modx->fromJSON($row['value'])
+				);
+			}
+		}
+
+		// Context can override main settings
+		$condition['context_key'] = $this->modx->context->key;
+		$q = $this->modx->newQuery('modContextSetting');
+		$q->select('key,value');
 		$q->where($condition);
 		if ($q->prepare() && $q->stmt->execute()) {
 			while ($row = $q->stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -118,15 +134,6 @@ class HybridAuth {
 
 		if (empty($providers)) {
 			return $this->modx->lexicon('ha_err_no_providers');
-		}
-		elseif (!empty($keys)) {
-			$tmp = array();
-			foreach ($keys as $k => $v) {
-				if (!empty($providers[$k])) {
-					$tmp[$k] = $providers[$k];
-				}
-			}
-			$providers = $tmp;
 		}
 
 		$this->config['HA'] = array(

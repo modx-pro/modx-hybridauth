@@ -3,6 +3,7 @@ Changelog for HybridAuth.
 0.8.2 pl
 ==============
 - Added parameter "&redirectUri=``" for solve issue "redirect_uri_mismatch" when using multiple contexts.
+- Context settings now can override providers keys in system settings. Very helpful for multiple contexts.
 
 0.8.1 pl
 ==============
