@@ -22,3 +22,4 @@ $_lang['ha.activeProviderTpl'] = 'Chunk for output icon of linked service.';
 
 $_lang['ha.profileFields'] = 'Comma separated list of allowed user fields for update with maximum length of sended values. For example, &profileFields=`username:25,fullname:50,email`.';
 $_lang['ha.requiredFields'] = 'Comma separated list of required user fields when update. This fields must be filled for successful update of profile. For example, &requiredFields=`username,fullname,email`.';
+$_lang['ha.redirectUri'] = 'You can specify "redirect_uri" to which remote service will redirect you. By default, this is the root of the current context.';

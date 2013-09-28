@@ -130,13 +130,13 @@ class HybridAuth {
 		}
 
 		$this->config['HA'] = array(
-			'base_url' => $this->modx->makeUrl($this->modx->getOption('site_start'), $this->modx->context->key, '', 'full'),
+			'base_url' => !empty($this->config['redirectUri'])
+				? $this->config['redirectUri']
+				: $this->modx->makeUrl($this->modx->getOption('site_start'), $this->modx->context->key, '', 'full'),
 			'debug_mode' => !empty($config['debug']) && ($config['debug'] == 'true' || $config['debug'] == 1) ? 1 : 0,
 			'debug_file' => MODX_CORE_PATH . 'cache/logs/error.log',
 			'providers' => $providers,
 		);
-
-
 
 		return true;
 	}
@@ -163,7 +163,6 @@ class HybridAuth {
 		unset($_SESSION['HA']['error']);
 		/* @var Hybrid_User_Profile $service */
 		if ($profile = $this->getServiceProfile($provider)) {
-
 			$profile['provider'] = $provider;
 
 			// Checking for existing provider record in database

@@ -46,6 +46,10 @@ $tmp = array(
 		'type' => 'numberfield',
 		'value' => 0,
 	),
+	'redirectUri' => array(
+		'type' => 'textfield',
+		'value' => '',
+	),
 );
 
 foreach ($tmp as $k => $v) {
