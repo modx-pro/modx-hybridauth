@@ -1,5 +1,9 @@
 Changelog for HybridAuth.
 
+0.8.3 pl
+==============
+- Improved generation of providers links.
+
 0.8.2 pl
 ==============
 - Added parameter "&redirectUri=``" for solve issue "redirect_uri_mismatch" when using multiple contexts.
