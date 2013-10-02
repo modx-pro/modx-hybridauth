@@ -4,12 +4,15 @@
 define('PKG_NAME','HybridAuth');
 define('PKG_NAME_LOWER',strtolower(PKG_NAME));
 
-define('PKG_VERSION','0.8.2');
+define('PKG_VERSION','0.8.3');
 define('PKG_RELEASE','pl');
 define('PKG_AUTO_INSTALL', true);
 
 /* define paths */
-if (file_exists(dirname(dirname(dirname(__FILE__))) . '/core')) {
+if (isset($_SERVER['MODX_BASE_PATH'])) {
+	define('MODX_BASE_PATH', $_SERVER['MODX_BASE_PATH']);
+}
+elseif (file_exists(dirname(dirname(dirname(__FILE__))) . '/core')) {
 	define('MODX_BASE_PATH', dirname(dirname(dirname(__FILE__))) . '/');
 }
 else {
