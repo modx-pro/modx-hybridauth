@@ -17,7 +17,16 @@ $tmp = array(
 		'value' => '{"id":"12345","secret":"12345"}',
 		'area' => 'ha.keys',
 	),
-
+    'keys.Facebook' => array(
+        'xtype' => 'textfield',
+        'value' => '{"id":"12345","secret":"12345"}',
+        'area' => 'ha.keys',
+    ),
+    'keys.Vkontakte' => array(
+        'xtype' => 'textfield',
+        'value' => '{"id":"12345","secret":"12345"}',
+        'area' => 'ha.keys',
+    ),
 	'register_users' => array(
 		'xtype' => 'combo-boolean',
 		'value' => true,
