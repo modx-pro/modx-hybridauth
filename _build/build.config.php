@@ -1,6 +1,5 @@
 <?php
 /* define package */
-/* define package */
 define('PKG_NAME','HybridAuth');
 define('PKG_NAME_LOWER',strtolower(PKG_NAME));
 
