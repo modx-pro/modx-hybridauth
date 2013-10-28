@@ -1,5 +1,9 @@
 Changelog for HybridAuth.
 
+0.8.4 pl
+==============
+- Added rel="nofollow" into chunk with link to provider.
+
 0.8.3 pl
 ==============
 - Improved generation of providers links.
