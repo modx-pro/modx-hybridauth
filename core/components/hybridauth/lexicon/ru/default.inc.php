@@ -27,6 +27,17 @@ $_lang['ha.gravatar_desc'] = 'Картинка загружается с <a href
 
 $_lang['area_ha.main'] = 'Основные';
 $_lang['area_ha.keys'] = 'Ключи';
+$_lang['setting_ha.keys.Google'] = 'Ключи для Google';
+$_lang['setting_ha.keys.Google_desc'] = 'Добавить приложение и сгенерировать ключи можно по этой ссылке: <a target="_blank" href="https://code.google.com/apis/console/">https://code.google.com/apis/console/</a>. О настройке других провайдеров можно прочитать в документации: <a target="_blank" href="http://hybridauth.sourceforge.net/userguide.html">http://hybridauth.sourceforge.net/userguide.html</a>.';
+$_lang['setting_ha.keys.Twitter'] = 'Ключи для Twitter';
+$_lang['setting_ha.keys.Twitter_desc'] = 'Добавить приложение и сгенерировать ключи можно по этой ссылке: <a target="_blank" href="https://dev.twitter.com/apps/new">https://dev.twitter.com/apps/new</a>. О настройке других провайдеров можно прочитать в документации: <a target="_blank" href="http://hybridauth.sourceforge.net/userguide.html">http://hybridauth.sourceforge.net/userguide.html</a>.';
+$_lang['setting_ha.keys.Yandex'] = 'Ключи для Yandex';
+$_lang['setting_ha.keys.Yandex_desc'] = 'Добавить приложение и сгенерировать ключи можно по этой ссылке: <a target="_blank" href="https://oauth.yandex.ru/client/new">https://oauth.yandex.ru/client/new</a>. О настройке других провайдеров можно прочитать в документации: <a target="_blank" href="http://hybridauth.sourceforge.net/userguide.html">http://hybridauth.sourceforge.net/userguide.html</a>.';
+$_lang['setting_ha.keys.Facebook'] = 'Ключи для Facebook';
+$_lang['setting_ha.keys.Facebook_desc'] = 'Добавить приложение и сгенерировать ключи можно по этой ссылке: <a target="_blank" href="https://developers.facebook.com/apps">https://developers.facebook.com/apps</a>. О настройке других провайдеров можно прочитать в документации: <a target="_blank" href="http://hybridauth.sourceforge.net/userguide.html">http://hybridauth.sourceforge.net/userguide.html</a>.';
+$_lang['setting_ha.keys.Vkontakte'] = 'Ключи для Vkontakte';
+$_lang['setting_ha.keys.Vkontakte_desc'] = 'Добавить приложение и сгенерировать ключи можно по этой ссылке: <a target="_blank" href="http://vk.com/editapp?act=create">http://vk.com/editapp?act=create</a>. О настройке других провайдеров можно прочитать в документации: <a target="_blank" href="http://hybridauth.sourceforge.net/userguide.html">http://hybridauth.sourceforge.net/userguide.html</a>.';
+
 $_lang['setting_ha.frontend_css'] = 'Стили фронтенда';
 $_lang['setting_ha.frontend_css_desc'] = 'Путь к файлу со стилями компонента. Если вы хотите использовать собственные стили - укажите путь к ним здесь, или очистите параметр и загрузите их вручную через шаблон сайта.';
 $_lang['setting_ha.register_users'] = 'Регистрировать новых';

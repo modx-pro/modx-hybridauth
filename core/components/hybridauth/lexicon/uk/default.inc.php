@@ -4,7 +4,7 @@
  *
  * @package hybridauth
  * @subpackage lexicon
- * @translation Viktorminator
+ * @translation Viktorminator, dmi3yy <dmi3yy@gmail.com>
 */
 $_lang['hybridauth'] = 'HybridAuth';
 $_lang['ha_err_no_providers'] = 'Ви повинні вказати хоча б одного провайдера.';
@@ -27,6 +27,17 @@ $_lang['ha.gravatar_desc'] = 'Картинка завантажується з <
 
 $_lang['area_ha.main'] = 'Основні';
 $_lang['area_ha.keys'] = 'Ключі';
+$_lang['setting_ha.keys.Google'] = 'Ключі для Google';
+$_lang['setting_ha.keys.Google_desc'] = 'Додати додаток та згенерувати ключі можна за цим посиланням: <a target="_blank" href="https://code.google.com/apis/console/">https://code.google.com/apis/console/</a>. Про налаштування інших провайдерів можна прочитати в документації: <a target="_blank" href="http://hybridauth.sourceforge.net/userguide.html">http://hybridauth.sourceforge.net/userguide.html</a>.';
+$_lang['setting_ha.keys.Twitter'] = 'Ключі для Twitter';
+$_lang['setting_ha.keys.Twitter_desc'] = 'Додати додаток та згенерувати ключі можна за цим посиланням: <a target="_blank" href="https://dev.twitter.com/apps/new">https://dev.twitter.com/apps/new</a>. Про налаштування інших провайдерів можна прочитати в документації: <a target="_blank" href="http://hybridauth.sourceforge.net/userguide.html">http://hybridauth.sourceforge.net/userguide.html</a>.';
+$_lang['setting_ha.keys.Yandex'] = 'Ключі для Yandex';
+$_lang['setting_ha.keys.Yandex_desc'] = 'Додати додаток та згенерувати ключі можна за цим посиланням: <a target="_blank" href="https://oauth.yandex.ru/client/new">https://oauth.yandex.ru/client/new</a>. Про налаштування інших провайдерів можна прочитати в документації: <a target="_blank" href="http://hybridauth.sourceforge.net/userguide.html">http://hybridauth.sourceforge.net/userguide.html</a>.';
+$_lang['setting_ha.keys.Facebook'] = 'Ключі для Facebook';
+$_lang['setting_ha.keys.Facebook_desc'] = 'Додати додаток та згенерувати ключі можна за цим посиланням: <a target="_blank" href="https://developers.facebook.com/apps">https://developers.facebook.com/apps</a>. Про налаштування інших провайдерів можна прочитати в документації: <a target="_blank" href="http://hybridauth.sourceforge.net/userguide.html">http://hybridauth.sourceforge.net/userguide.html</a>.';
+$_lang['setting_ha.keys.Vkontakte'] = 'Ключі для Vkontakte';
+$_lang['setting_ha.keys.Vkontakte_desc'] = 'Додати додаток та згенерувати ключі можна за цим посиланням: <a target="_blank" href="http://vk.com/editapp?act=create">http://vk.com/editapp?act=create</a>. Про налаштування інших провайдерів можна прочитати в документації: <a target="_blank" href="http://hybridauth.sourceforge.net/userguide.html">http://hybridauth.sourceforge.net/userguide.html</a>.';
+
 $_lang['setting_ha.frontend_css'] = 'Стилі фронтенда';
 $_lang['setting_ha.frontend_css_desc'] = 'Шлях до файлу зі стилями компонента. Якщо ви хочете використовувати власні стилі - вкажіть шлях до них тут, або очистіть параметр і завантажте їх вручну через шаблон сайту.';
 $_lang['setting_ha.register_users'] = 'Реєструвати нових';
