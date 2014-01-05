@@ -1,6 +1,6 @@
 Changelog for HybridAuth.
 
-0.8.5 pl
+0.8.5 pl1
 ==============
 - Improved package uninstall and reinstall.
 
