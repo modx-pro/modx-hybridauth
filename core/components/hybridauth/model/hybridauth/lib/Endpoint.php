@@ -68,6 +68,7 @@ class Hybrid_Endpoint {
 	{
 		$output = file_get_contents( dirname(__FILE__) . "/resources/openid_policy.html" ); 
 		print $output;
+		@session_write_close();
 		die();
 	}
 
@@ -103,6 +104,7 @@ class Hybrid_Endpoint {
 			file_get_contents( dirname(__FILE__) . "/resources/openid_realm.html" )
 		); 
 		print $output;
+		@session_write_close();
 		die();
 	}
 
@@ -120,6 +122,7 @@ class Hybrid_Endpoint {
 			Hybrid_Logger::error( "Endpoint: hauth_endpoint parameter is not defined on hauth_start, halt login process!" );
 
 			header( "HTTP/1.0 404 Not Found" );
+			@session_write_close();
 			die( "You cannot access this page directly." );
 		}
 
@@ -131,6 +134,7 @@ class Hybrid_Endpoint {
 			Hybrid_Logger::error( "Endpoint: Invalid parameter on hauth_start!" );
 
 			header( "HTTP/1.0 404 Not Found" );
+			@session_write_close();
 			die( "Invalid parameter! Please return to the login page and try again." );
 		}
 
@@ -146,6 +150,7 @@ class Hybrid_Endpoint {
 			$hauth->returnToCallbackUrl();
 		}
 
+		@session_write_close();
 		die();
 	}
 
@@ -165,7 +170,8 @@ class Hybrid_Endpoint {
 
 			$hauth->adapter->setUserUnconnected();
 
-			header("HTTP/1.0 404 Not Found"); 
+			header("HTTP/1.0 404 Not Found");
+			@session_write_close();
 			die( "Invalid parameter! Please return to the login page and try again." );
 		}
 
@@ -184,6 +190,7 @@ class Hybrid_Endpoint {
 		Hybrid_Logger::info( "Endpoint: job done. retrun to callback url." );
 
 		$hauth->returnToCallbackUrl();
+		@session_write_close();
 		die();
 	}
 
@@ -201,6 +208,7 @@ class Hybrid_Endpoint {
 				// Check if Hybrid_Auth session already exist
 				if ( ! $storage->config( "CONFIG" ) ) { 
 					header( "HTTP/1.0 404 Not Found" );
+					@session_write_close();
 					die( "You cannot access this page directly." );
 				}
 
@@ -210,6 +218,7 @@ class Hybrid_Endpoint {
 				Hybrid_Logger::error( "Endpoint: Error while trying to init Hybrid_Auth" ); 
 
 				header( "HTTP/1.0 404 Not Found" );
+				@session_write_close();
 				die( "Oophs. Error!" );
 			}
 		}

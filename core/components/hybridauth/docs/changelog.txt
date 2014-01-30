@@ -1,8 +1,9 @@
 Changelog for HybridAuth.
 
-0.8.5 pl1
+0.8.5 pl2
 ==============
 - Improved package uninstall and reinstall.
+- [#17] Fixed work with enabled php-apc.
 
 0.8.4 pl
 ==============
