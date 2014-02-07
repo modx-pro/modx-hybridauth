@@ -34,7 +34,7 @@ $tmp = array(
 	)
 	,'frontend_css' => array(
 		'xtype' => 'textfield',
-		'value' => '[[+assetsUrl]]css/web/default.css',
+		'value' => '[[+assetsUrl]]components/hybridauth/css/web/default.css',
 		'area' => 'ha.main',
 	),
 
