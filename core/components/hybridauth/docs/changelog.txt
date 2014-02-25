@@ -1,10 +1,11 @@
 Changelog for HybridAuth.
 
-0.8.5 pl3
+0.8.5 pl4
 ==============
 - Improved package uninstall and reinstall.
 - [#17] Fixed work with enabled php-apc.
 - Added Foursquare icon.
+- Fixed possible E_WARNING on initialization.
 
 0.8.4 pl
 ==============

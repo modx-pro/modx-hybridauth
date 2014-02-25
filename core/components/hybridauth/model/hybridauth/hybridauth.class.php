@@ -471,27 +471,32 @@ class HybridAuth {
 
 
 	/**
-	 * Method for transform array to placeholders
+	 * Transform array to placeholders
 	 *
-	 * @var array $array With keys and values
-	 * @var string $prefix
-	 * @return array $array Two nested arrays With placeholders and values
+	 * @param array $array
+	 * @param string $plPrefix
+	 * @param string $prefix
+	 * @param string $suffix
+	 *
+	 * @return array
 	 */
-	public function makePlaceholders(array $array = array(), $prefix = '') {
-		$result = array(
-			'pl' => array(),
-			'vl' => array(),
-		);
+	public function makePlaceholders(array $array = array(), $plPrefix = '', $prefix = '[[+', $suffix = ']]') {
+		$result = array('pl' => array(), 'vl' => array());
+
+		$uncached_prefix = str_replace('[[', '[[!', $prefix);
 		foreach ($array as $k => $v) {
 			if (is_array($v)) {
-				$result = array_merge_recursive($result, $this->makePlaceholders($v, $k.'.'));
+				$result = array_merge_recursive($result, $this->makePlaceholders($v, $plPrefix . $k.'.', $prefix, $suffix));
 			}
 			else {
-				$result['pl'][$prefix.$k] = '[[+'.$prefix.$k.']]';
-				$result['vl'][$prefix.$k] = $v;
+				$pl = $plPrefix.$k;
+				$result['pl'][$pl] = $prefix.$pl.$suffix;
+				$result['vl'][$pl] = $v;
 			}
 		}
+
 		return $result;
 	}
+
 
 }
