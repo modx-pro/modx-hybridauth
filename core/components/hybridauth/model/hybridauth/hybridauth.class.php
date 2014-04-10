@@ -7,6 +7,7 @@ class HybridAuth {
 	/** @var array $initialized */
 	public $initialized = array();
 
+
 	function __construct(modX &$modx,array $config = array()) {
 		$this->modx =& $modx;
 		set_exception_handler(array($this, 'exceptionHandler'));
@@ -67,6 +68,8 @@ class HybridAuth {
 	 * @access public
 	 * @param string $ctx The context to load. Defaults to web.
 	 * @param array $scriptProperties Properties for initialization.
+	 *
+	 * @return boolean
 	 */
 	public function initialize($ctx = 'web', $scriptProperties = array()) {
 		$this->config = array_merge($this->config, $scriptProperties);
@@ -421,7 +424,6 @@ class HybridAuth {
 	}
 
 
-
 	function getProvidersLinks($tpl1 = 'tpl.HybridAuth.provider', $tpl2 = 'tpl.HybridAuth.provider.active') {
 		if (empty($this->config['HA']['providers'])) {return '';}
 
@@ -496,25 +498,29 @@ class HybridAuth {
 	 * @param string $plPrefix
 	 * @param string $prefix
 	 * @param string $suffix
+	 * @param bool $uncacheable
 	 *
 	 * @return array
 	 */
-	public function makePlaceholders(array $array = array(), $plPrefix = '', $prefix = '[[+', $suffix = ']]') {
+	public function makePlaceholders(array $array = array(), $plPrefix = '', $prefix = '[[+', $suffix = ']]', $uncacheable = true) {
 		$result = array('pl' => array(), 'vl' => array());
 
 		$uncached_prefix = str_replace('[[', '[[!', $prefix);
 		foreach ($array as $k => $v) {
 			if (is_array($v)) {
-				$result = array_merge_recursive($result, $this->makePlaceholders($v, $plPrefix . $k.'.', $prefix, $suffix));
+				$result = array_merge_recursive($result, $this->makePlaceholders($v, $plPrefix . $k.'.', $prefix, $suffix, $uncacheable));
 			}
 			else {
 				$pl = $plPrefix.$k;
 				$result['pl'][$pl] = $prefix.$pl.$suffix;
 				$result['vl'][$pl] = $v;
+				if ($uncacheable) {
+					$result['pl']['!'.$pl] = $uncached_prefix.$pl.$suffix;
+					$result['vl']['!'.$pl] = $v;
+				}
 			}
 		}
 
 		return $result;
 	}
-
 }
