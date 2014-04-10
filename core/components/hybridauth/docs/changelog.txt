@@ -1,5 +1,9 @@
 Changelog for HybridAuth.
 
+0.8.6 pl
+==============
+- [#20] Improved work with context settings.
+
 0.8.5 pl4
 ==============
 - Improved package uninstall and reinstall.

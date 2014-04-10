@@ -101,10 +101,6 @@ class HybridAuth {
 		}
 
 		$providers = array();
-		$condition = !empty($keys)
-			? array('key:IN' => $keys)
-			: array('key:LIKE' => 'ha.keys.%');
-
 		// Get providers settings
 		foreach ($this->modx->config as $k => $v) {
 			if (strpos($k, 'ha.keys.') === 0) {
@@ -114,6 +110,29 @@ class HybridAuth {
 					'enabled' => true,
 					'keys' => $tmp
 				);
+			}
+		}
+
+		// Get context providers settings due to MODX bug with JSON in context settings
+		$condition = !empty($keys)
+			? array('key:IN' => $keys)
+			: array('key:LIKE' => 'ha.keys.%');
+		$condition['context_key'] = $this->modx->context->key;
+		$q = $this->modx->newQuery('modContextSetting', $condition);
+		$q->select('key,value');
+		$tstart = microtime(true);
+		if ($q->prepare() && $q->stmt->execute()) {
+			$this->modx->queryTime += time('microtime') - $tstart;
+			$this->modx->executedQueries++;
+			while ($row = $q->stmt->fetch(PDO::FETCH_ASSOC)) {
+				$tmp = $this->modx->fromJSON($row['value']);
+				$name = ucfirst(substr($row['key'], 8));
+				if (is_array($tmp)) {
+					$providers[$name] = array(
+						'enabled' => true,
+						'keys' => $tmp
+					);
+				}
 			}
 		}
 
@@ -497,6 +516,5 @@ class HybridAuth {
 
 		return $result;
 	}
-
 
 }
