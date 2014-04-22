@@ -211,7 +211,7 @@ class HybridAuth {
 				}
 				// Creating new user and adding this record to him
 				else {
-					$username = !empty($profile['displayName']) ? $profile['displayName'] : $profile['identifier'];
+					$username = !empty($profile['identifier']) ? trim($profile['identifier']) : rand(8,10);
 					if ($exists = $this->modx->getCount('haUser', array('username' => $username))) {
 						for ($i = 1; $i <= 10; $i++) {
 							$tmp = $username . $i;
