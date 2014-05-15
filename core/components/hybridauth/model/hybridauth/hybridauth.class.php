@@ -157,7 +157,7 @@ class HybridAuth {
 			'base_url' => !empty($this->config['redirectUri'])
 				? $this->config['redirectUri']
 				: $this->modx->makeUrl($this->modx->getOption('site_start'), $this->modx->context->key, '', 'full'),
-			'debug_mode' => !empty($this->config['debug']) && ($this->config['debug'] == 'true' || $this->config['debug'] == 1) ? 1 : 0,
+			'debug_mode' => (integer) !empty($this->config['debug']),
 			'debug_file' => MODX_CORE_PATH . 'cache/logs/error.log',
 			'providers' => $providers,
 		);
@@ -211,7 +211,7 @@ class HybridAuth {
 				}
 				// Creating new user and adding this record to him
 				else {
-					$username = !empty($profile['identifier']) ? trim($profile['identifier']) : rand(8,10);
+					$username = !empty($profile['identifier']) ? trim($profile['identifier']) : md5(rand(8,10));
 					if ($exists = $this->modx->getCount('haUser', array('username' => $username))) {
 						for ($i = 1; $i <= 10; $i++) {
 							$tmp = $username . $i;

@@ -1,5 +1,10 @@
 Changelog for HybridAuth.
 
+0.8.7 pl
+==============
+- [#23] Fixed parameter "debug" for HybridAuth.
+- [#21] Improved usernames.
+
 0.8.6 pl
 ==============
 - [#20] Improved work with context settings.
