@@ -125,7 +125,7 @@ class HybridAuth {
 		$q->select('key,value');
 		$tstart = microtime(true);
 		if ($q->prepare() && $q->stmt->execute()) {
-			$this->modx->queryTime += time('microtime') - $tstart;
+			$this->modx->queryTime += microtime(true) - $tstart;
 			$this->modx->executedQueries++;
 			while ($row = $q->stmt->fetch(PDO::FETCH_ASSOC)) {
 				$tmp = $this->modx->fromJSON($row['value']);
