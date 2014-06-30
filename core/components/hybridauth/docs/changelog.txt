@@ -1,5 +1,9 @@
 Changelog for HybridAuth.
 
+0.8.8 pl
+==============
+- [#26] Fixed calculation of time of the queries.
+
 0.8.7 pl
 ==============
 - [#23] Fixed parameter "debug" for HybridAuth.
