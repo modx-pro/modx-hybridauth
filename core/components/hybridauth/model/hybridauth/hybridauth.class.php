@@ -29,6 +29,7 @@ class HybridAuth {
 			'addContexts' => '',
 			'loginResourceId' => 0,
 			'logoutResourceId' => 0,
+			'providers' => '',
 		), $config);
 
 		$response = $this->loadHybridAuth();

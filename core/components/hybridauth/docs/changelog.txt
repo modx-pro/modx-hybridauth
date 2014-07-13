@@ -1,8 +1,9 @@
 Changelog for HybridAuth.
 
-0.8.8 pl
+0.8.8 pl1
 ==============
 - [#26] Fixed calculation of time of the queries.
+- Fixed E_NOTICE on line 99 of hybridauth.class.php.
 
 0.8.7 pl
 ==============
