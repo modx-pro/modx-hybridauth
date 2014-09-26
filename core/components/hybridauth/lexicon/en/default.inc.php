@@ -24,6 +24,14 @@ $_lang['ha.providers_available'] = 'Available providers are ';
 $_lang['ha.login_intro'] = 'You can authorize on site with: ';
 $_lang['ha.gravatar'] = 'Avatar';
 $_lang['ha.gravatar_desc'] = 'Image loads from <a href="http://gravatar.com/" target="_blank">Gravatar</a>';
+$_lang['ha.services'] = 'Auth Providers';
+$_lang['ha.services_tip'] = 'Here you can see what providers were used by this user to login on the website.';
+$_lang['ha.service_avatar'] = 'Avatar';
+$_lang['ha.service_createdon'] = 'Created';
+$_lang['ha.service_provider'] = 'Provider';
+$_lang['ha.service_identifier'] = 'Identifier';
+$_lang['ha.service_displayname'] = 'Display Name';
+$_lang['ha.service_email'] = 'Email';
 
 $_lang['area_ha.main'] = 'Main';
 $_lang['area_ha.keys'] = 'Keys';

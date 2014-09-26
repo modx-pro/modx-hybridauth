@@ -10,6 +10,7 @@ $tmp = array(
 			'OnHandleRequest' => array(
 				'priority' => 10,
 			),
+			'OnUserFormPrerender' => array(),
 		)
 	)
 );

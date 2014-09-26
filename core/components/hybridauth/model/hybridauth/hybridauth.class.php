@@ -22,6 +22,8 @@ class HybridAuth {
 			'assetsUrl' => $assetsUrl,
 			'modelPath' => $corePath.'model/',
 			'processorsPath' => $corePath.'processors/',
+			'jsUrl' => $assetsUrl . 'js/',
+			'connectorUrl' => $assetsUrl . 'connector.php',
 
 			'rememberme' => true,
 			'groups' => '',
