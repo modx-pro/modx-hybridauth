@@ -1,4 +1,4 @@
-HybridAuth.grid.Services = function(config) {
+HybridAuth.grid.Services = function (config) {
 	config = config || {};
 	var baseParams = {
 		action: 'mgr/service/getlist'
@@ -6,7 +6,7 @@ HybridAuth.grid.Services = function(config) {
 	if (config.userId) {
 		baseParams.user_id = config.userId;
 	}
-	Ext.applyIf(config , {
+	Ext.applyIf(config, {
 		url: HybridAuth.config.connectorUrl,
 		baseParams: baseParams,
 		remoteSort: true,
@@ -65,10 +65,10 @@ Ext.extend(HybridAuth.grid.Services, MODx.grid.Grid, {
 		if (url === '') {
 			return v;
 		}
-		return '<a href="' + url + '" target="_blank">' + v + '</a>';
+		return '<a href="' + url + '" target="_blank" style="color:#428bca;">' + v + '</a>';
 	},
 	renderEmail: function (v) {
-		return '<a href="mailto:' + v + '">' + v + '</a>';
+		return '<a href="mailto:' + v + '" style="color:#428bca;">' + v + '</a>';
 	}
 });
 Ext.reg('hybridauth-grid-services', HybridAuth.grid.Services);

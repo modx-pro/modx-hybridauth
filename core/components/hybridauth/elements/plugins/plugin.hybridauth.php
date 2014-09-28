@@ -44,39 +44,72 @@ switch ($modx->event->name) {
 		break;
 
 	case 'OnUserFormPrerender':
-		if (!isset($scriptProperties['user']) || $scriptProperties['user']->get('id') < 1) {
+		/** @var modUser $user */
+		if (!isset($user) || $user->get('id') < 1) {
 			return;
 		}
 		$HybridAuth = new HybridAuth($modx);
-		$controller = $modx->controller;
-		$controller->addLexiconTopic('hybridauth:default');
-		$jsUrl = $HybridAuth->config['jsUrl'];
-		$controller->addJavascript($jsUrl . 'mgr/hybridauth.js');
-		$controller->addJavascript($jsUrl . 'mgr/service/grids.js');
-		$modx->regClientStartupScript('<script type="text/javascript">
-Ext.onReady(function() {
-	HybridAuth.config = ' . $modx->toJSON($HybridAuth->config) . ';
-	var tab = Ext.getCmp("modx-user-tabs");
-	if (!tab) {
-		return;
-	}
-	tab.add({
-		title: _("ha.services"),
-		items: [{
-			layout: "anchor",
-			border: false,
-			items: [{
-				html: _("ha.services_tip"),
-				bodyCssClass: "panel-desc"
-			}, {
-				xtype: "hybridauth-grid-services",
-				anchor: "100%",
-				cls: "main-wrapper",
-				userId: ' . intval($scriptProperties['user']->get('id')) . '
-			}]
-		}]
-	});
-});
-		</script>');
+		$modx->controller->addJavascript($HybridAuth->config['jsUrl'] . 'mgr/hybridauth.js');
+		$modx->controller->addJavascript($HybridAuth->config['jsUrl'] . 'mgr/service/grids.js');
+		$modx->controller->addLexiconTopic('hybridauth:default');
+
+		if ($modx->getCount('modPlugin', array('name' => 'AjaxManager', 'disabled' => false))) {
+			$modx->controller->addHtml('
+			<script type="text/javascript">
+				HybridAuth.config = ' . $modx->toJSON($HybridAuth->config) . ';
+				Ext.onReady(function() {
+					window.setTimeout(function() {
+						var tab = Ext.getCmp("modx-user-tabs");
+						if (!tab) {return;}
+						tab.add({
+							title: _("ha.services"),
+							border: false,
+							items: [{
+								layout: "anchor",
+								border: false,
+								items: [{
+									html: _("ha.services_tip"),
+									border: false,
+									bodyCssClass: "panel-desc"
+								}, {
+									xtype: "hybridauth-grid-services",
+									anchor: "100%",
+									cls: "main-wrapper",
+									userId: ' . intval($user->get('id')) . '
+								}]
+							}]
+						});
+					}, 10);
+				});
+			</script>');
+		}
+		else {
+			$modx->controller->addHtml('
+			<script type="text/javascript">
+				HybridAuth.config = ' . $modx->toJSON($HybridAuth->config) . ';
+				Ext.ComponentMgr.onAvailable("modx-user-tabs", function() {
+					this.on("beforerender", function() {
+						this.add({
+							title: _("ha.services"),
+							border: false,
+							items: [{
+								layout: "anchor",
+								border: false,
+								items: [{
+									html: _("ha.services_tip"),
+									border: false,
+									bodyCssClass: "panel-desc"
+								}, {
+									xtype: "hybridauth-grid-services",
+									anchor: "100%",
+									cls: "main-wrapper",
+									userId: ' . intval($user->get('id')) . '
+								}]
+							}]
+						});
+					});
+				});
+			</script>');
+		}
 		break;
 }

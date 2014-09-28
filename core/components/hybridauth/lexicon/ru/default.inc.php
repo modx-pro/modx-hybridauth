@@ -25,6 +25,15 @@ $_lang['ha.login_intro'] = 'Вы можете авторизоваться на 
 $_lang['ha.gravatar'] = 'Аватар';
 $_lang['ha.gravatar_desc'] = 'Картинка загружается с <a href="http://gravatar.com/" target="_blank">Gravatar</a>';
 
+$_lang['ha.services'] = 'Провайдеры авторизации';
+$_lang['ha.services_tip'] = 'Здесь вы можете видеть, какие провайдеры используются для авторизации пользователя на сайте.';
+$_lang['ha.service_avatar'] = 'Аватарка';
+$_lang['ha.service_createdon'] = 'Дата создания';
+$_lang['ha.service_provider'] = 'Провайдер';
+$_lang['ha.service_identifier'] = 'Идентификатор';
+$_lang['ha.service_displayname'] = 'Имя';
+$_lang['ha.service_email'] = 'Email';
+
 $_lang['area_ha.main'] = 'Основные';
 $_lang['area_ha.keys'] = 'Ключи';
 $_lang['setting_ha.keys.Google'] = 'Ключи для Google';
