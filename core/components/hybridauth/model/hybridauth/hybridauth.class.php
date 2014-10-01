@@ -200,12 +200,6 @@ class HybridAuth {
 					$uid = $this->modx->user->id;
 					$profile['internalKey'] = $uid;
 
-					// Changing class for existing user
-					if ($this->modx->user->class_key != 'haUser') {
-						$this->modx->user->set('class_key', 'haUser');
-						$this->modx->user->save();
-					}
-
 					$response = $this->runProcessor('web/service/create', $profile);
 					if ($response->isError()) {
 						$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] unable to save service profile for user '.$uid.'. Message: '.implode(', ',$response->getAllErrors()));
@@ -215,10 +209,10 @@ class HybridAuth {
 				// Creating new user and adding this record to him
 				else {
 					$username = !empty($profile['identifier']) ? trim($profile['identifier']) : md5(rand(8,10));
-					if ($exists = $this->modx->getCount('haUser', array('username' => $username))) {
+					if ($exists = $this->modx->getCount('modUser', array('username' => $username))) {
 						for ($i = 1; $i <= 10; $i++) {
 							$tmp = $username . $i;
-							if (!$this->modx->getCount('haUser', array('username' => $tmp))) {
+							if (!$this->modx->getCount('modUser', array('username' => $tmp))) {
 								$username = $tmp;
 								break;
 							}
@@ -276,14 +270,8 @@ class HybridAuth {
 					$uid = $service->get('internalKey');
 				}
 
-				/* @var haUser $user */
+				/* @var modUser $user */
 				if ($user = $this->modx->getObject('modUser', $uid)) {
-					// Changing class for existing user
-					if ($user->class_key != 'haUser') {
-						$user->set('class_key', 'haUser');
-						$user->save();
-					}
-
 					$login_data = array(
 						'username' => $user->get('username'),
 						'password' => md5(rand()),
@@ -312,6 +300,7 @@ class HybridAuth {
 				if (!empty($this->config['addContexts'])) {$login_data['add_contexts'] = $this->config['addContexts'];}
 
 				// Login
+				$_SESSION['HybridAuth']['verified'] = true;
 				$response = $this->modx->runProcessor('security/login', $login_data);
 				if ($response->isError()) {
 					$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] error login for user '.$login_data['username'].'. Message: '.implode(', ',$response->getAllErrors()));

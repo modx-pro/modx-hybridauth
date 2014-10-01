@@ -16,12 +16,11 @@ switch ($modx->event->name) {
 		if ($modx->user->isAuthenticated($modx->context->key)) {
 			if (!$modx->user->active || $modx->user->Profile->blocked) {
 				$modx->runProcessor('security/logout');
-				$modx->sendRedirect($modx->makeUrl($modx->getOption('site_start'),'','','full'));
+				$modx->sendRedirect($modx->makeUrl($modx->getOption('site_start'), '', '', 'full'));
 			}
 		}
 
 		if (!empty($_REQUEST['hauth_action']) || !empty($_REQUEST['hauth_start']) || !empty($_REQUEST['hauth_done'])) {
-
 			$config = !empty($_SESSION['HybridAuth'][$modx->context->key])
 				? $_SESSION['HybridAuth'][$modx->context->key]
 				: array();
@@ -41,6 +40,11 @@ switch ($modx->event->name) {
 				$HybridAuth->processAuth();
 			}
 		}
+		break;
+
+	case 'OnWebAuthentication':
+		$modx->event->_output = !empty($_SESSION['HybridAuth']['verified']);
+		unset($_SESSION['HybridAuth']['verified']);
 		break;
 
 	case 'OnUserFormPrerender':
@@ -81,7 +85,8 @@ switch ($modx->event->name) {
 						});
 					}, 10);
 				});
-			</script>');
+			</script>'
+			);
 		}
 		else {
 			$modx->controller->addHtml('
@@ -109,7 +114,8 @@ switch ($modx->event->name) {
 						});
 					});
 				});
-			</script>');
+			</script>'
+			);
 		}
 		break;
 }

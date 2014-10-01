@@ -1,5 +1,9 @@
 Changelog for HybridAuth.
 
+1.0.0 pl
+==============
+- Removed object haUser. All existing users will be converted to modUser on package upgrade.
+
 0.9.0 pl
 ==============
 - Added possibility to view user's linked services in manager.

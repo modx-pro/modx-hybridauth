@@ -11,6 +11,7 @@ $tmp = array(
 				'priority' => 10,
 			),
 			'OnUserFormPrerender' => array(),
+			'OnWebAuthentication' => array(),
 		)
 	)
 );

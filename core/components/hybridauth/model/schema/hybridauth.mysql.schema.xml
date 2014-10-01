@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model package="hybridauth" version="1.0" baseClass="xPDOObject" platform="mysql" defaultEngine="MyISAM" phpdoc-package="hybridauth">
 
-	<object class="haUser" extends="modUser">
-		<composite alias="Services" local="id" class="haUserService" foreign="internalKey" cardinality="many" owner="local" />
-	</object>
-
 	<object class="haUserService" table="ha_user_services" extends="xPDOSimpleObject">
 		<field key="internalKey" dbtype="int" precision="10" phptype="integer" null="false" attributes="unsigned" index="unique" indexgrp="unique_fields" />
 		<field key="identifier" dbtype="varchar" precision="100" phptype="string" null="false" />
@@ -44,6 +40,6 @@
 			<column key="provider" length="" collation="A" null="false" />
 		</index>
 
-		<aggregate alias="User" class="haUser" local="internalKey" foreign="id" cardinality="one" owner="foreign" />
+		<aggregate alias="User" class="modUser" local="internalKey" foreign="id" cardinality="one" owner="foreign" />
 	</object>
 </model>

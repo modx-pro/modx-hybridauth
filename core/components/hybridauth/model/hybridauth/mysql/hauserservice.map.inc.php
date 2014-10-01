@@ -249,7 +249,7 @@ $xpdo_meta_map['haUserService']= array (
   array (
     'User' => 
     array (
-      'class' => 'haUser',
+      'class' => 'modUser',
       'local' => 'internalKey',
       'foreign' => 'id',
       'cardinality' => 'one',
