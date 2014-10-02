@@ -2,7 +2,7 @@
 
 class haUserServiceCreateProcessor extends modObjectCreateProcessor {
 	public $classKey = 'haUserService';
-	public $languageTopics = array('core:default','core:user');
+	public $languageTopics = array('core:default', 'core:user');
 	public $permission = '';
 	public $objectType = 'haservice';
 	//public $beforeSaveEvent = '';

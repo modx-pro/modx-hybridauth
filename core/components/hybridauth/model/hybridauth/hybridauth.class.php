@@ -8,38 +8,39 @@ class HybridAuth {
 	public $initialized = array();
 
 
-	function __construct(modX &$modx,array $config = array()) {
+	function __construct(modX &$modx, array $config = array()) {
 		$this->modx =& $modx;
 		set_exception_handler(array($this, 'exceptionHandler'));
 
-		$corePath = $this->modx->getOption('hybridauth.core_path',$config,$this->modx->getOption('core_path').'components/hybridauth/');
-		$assetsUrl = $this->modx->getOption('hybridauth.assets_url',$config,$this->modx->getOption('assets_url').'components/hybridauth/');
+		$corePath = $this->modx->getOption('hybridauth.core_path', $config, $this->modx->getOption('core_path') . 'components/hybridauth/');
+		$assetsUrl = $this->modx->getOption('hybridauth.assets_url', $config, $this->modx->getOption('assets_url') . 'components/hybridauth/');
 		$this->modx->lexicon->load('hybridauth:default');
 		$this->modx->lexicon->load('core:user');
 
 		$this->config = array_merge(array(
-			'corePath' => $corePath,
-			'assetsUrl' => $assetsUrl,
-			'modelPath' => $corePath.'model/',
-			'processorsPath' => $corePath.'processors/',
-			'jsUrl' => $assetsUrl . 'js/',
-			'connectorUrl' => $assetsUrl . 'connector.php',
+				'corePath' => $corePath,
+				'assetsUrl' => $assetsUrl,
+				'modelPath' => $corePath . 'model/',
+				'processorsPath' => $corePath . 'processors/',
+				'jsUrl' => $assetsUrl . 'js/',
+				'connectorUrl' => $assetsUrl . 'connector.php',
 
-			'rememberme' => true,
-			'groups' => '',
-			'loginContext' => '',
-			'addContexts' => '',
-			'loginResourceId' => 0,
-			'logoutResourceId' => 0,
-			'providers' => '',
-		), $config);
+				'rememberme' => true,
+				'groups' => '',
+				'loginContext' => '',
+				'addContexts' => '',
+				'loginResourceId' => 0,
+				'logoutResourceId' => 0,
+				'providers' => '',
+			), $config
+		);
 
 		$response = $this->loadHybridAuth();
 		if ($response !== true) {
 			$this->modx->error->failure('[HybridAuth] ' . $response);
 		}
 
-		$this->modx->addPackage('hybridauth',$this->config['modelPath']);
+		$this->modx->addPackage('hybridauth', $this->config['modelPath']);
 		if (!empty($this->config['HA'])) {
 			require_once 'lib/Auth.php';
 			$this->Hybrid_Auth = new Hybrid_Auth($this->config['HA']);
@@ -53,12 +54,17 @@ class HybridAuth {
 	 * Custom exception handler for Hybrid_Auth
 	 *
 	 * @param Exception $e Exception object
+	 *
 	 * @return void;
 	 */
 	public function exceptionHandler(Exception $e) {
 		$code = $e->getCode();
-		if ($code < 5) {$level = modX::LOG_LEVEL_ERROR;}
-		else {$level = modX::LOG_LEVEL_INFO;}
+		if ($code < 5) {
+			$level = modX::LOG_LEVEL_ERROR;
+		}
+		else {
+			$level = modX::LOG_LEVEL_INFO;
+		}
 
 		$this->modx->log($level, '[HybridAuth] ' . $e->getMessage());
 		$this->Refresh();
@@ -69,6 +75,7 @@ class HybridAuth {
 	 * Initializes component into different contexts.
 	 *
 	 * @access public
+	 *
 	 * @param string $ctx The context to load. Defaults to web.
 	 * @param array $scriptProperties Properties for initialization.
 	 *
@@ -81,7 +88,8 @@ class HybridAuth {
 			return true;
 		}
 		switch ($ctx) {
-			case 'mgr': break;
+			case 'mgr':
+				break;
 			default:
 				$config = $this->makePlaceholders($this->config);
 				if ($css = $this->modx->getOption('ha.frontend_css')) {
@@ -89,8 +97,10 @@ class HybridAuth {
 				}
 				$this->initialized[$ctx] = true;
 		}
+
 		return true;
 	}
+
 
 	/**
 	 * Loads settings for Hybrid_Auth class
@@ -102,7 +112,7 @@ class HybridAuth {
 		$tmp = array_map('trim', explode(',', $this->config['providers']));
 		foreach ($tmp as $v) {
 			if (!empty($v)) {
-				$keys[$v] = 'ha.keys.'.ucfirst($v);
+				$keys[$v] = 'ha.keys.' . ucfirst($v);
 			}
 		}
 
@@ -111,7 +121,9 @@ class HybridAuth {
 		foreach ($this->modx->config as $k => $v) {
 			if (strpos($k, 'ha.keys.') === 0) {
 				$tmp = $this->modx->fromJSON($v);
-				if (!is_array($tmp)) {continue;}
+				if (!is_array($tmp)) {
+					continue;
+				}
 				$providers[ucfirst(substr($k, 8))] = array(
 					'enabled' => true,
 					'keys' => $tmp
@@ -160,13 +172,14 @@ class HybridAuth {
 			'base_url' => !empty($this->config['redirectUri'])
 				? $this->config['redirectUri']
 				: $this->modx->makeUrl($this->modx->getOption('site_start'), $this->modx->context->key, '', 'full'),
-			'debug_mode' => (integer) !empty($this->config['debug']),
+			'debug_mode' => (integer)!empty($this->config['debug']),
 			'debug_file' => MODX_CORE_PATH . 'cache/logs/error.log',
 			'providers' => $providers,
 		);
 
 		return true;
 	}
+
 
 	/**
 	 * Process Hybrid_Auth endpoint
@@ -183,6 +196,7 @@ class HybridAuth {
 	 * Checks and login user. Also creates/updated user services profiles
 	 *
 	 * @param string $provider Remote service to login
+	 *
 	 * @return void
 	 */
 	function Login($provider = '') {
@@ -202,13 +216,13 @@ class HybridAuth {
 
 					$response = $this->runProcessor('web/service/create', $profile);
 					if ($response->isError()) {
-						$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] unable to save service profile for user '.$uid.'. Message: '.implode(', ',$response->getAllErrors()));
-						$_SESSION['HA']['error'] = implode(', ',$response->getAllErrors());
+						$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] unable to save service profile for user ' . $uid . '. Message: ' . implode(', ', $response->getAllErrors()));
+						$_SESSION['HA']['error'] = implode(', ', $response->getAllErrors());
 					}
 				}
 				// Creating new user and adding this record to him
 				else {
-					$username = !empty($profile['identifier']) ? trim($profile['identifier']) : md5(rand(8,10));
+					$username = !empty($profile['identifier']) ? trim($profile['identifier']) : md5(rand(8, 10));
 					if ($exists = $this->modx->getCount('modUser', array('username' => $username))) {
 						for ($i = 1; $i <= 10; $i++) {
 							$tmp = $username . $i;
@@ -219,21 +233,43 @@ class HybridAuth {
 						}
 					}
 					$arr = array(
-						'username' => $username
-						,'fullname' => !empty($profile['lastName']) ? $profile['firstName'] .' '. $profile['lastName'] : $profile['firstName']
-						,'dob' => !empty($profile['birthday']) && !empty($profile['birthmonth']) && !empty($profile['birthyear']) ? $profile['birthyear'].'-'.$profile['birthmonth'].'-'.$profile['birthday'] : ''
-						,'email' => !empty($profile['emailVerified']) ? $profile['emailVerified'] : $profile['email']
-						,'photo' => !empty($profile['photoURL']) ? $profile['photoURL'] : ''
-						,'website' => !empty($profile['webSiteURL']) ? $profile['webSiteURL'] : ''
-						,'phone' => !empty($profile['phone']) ? $profile['phone'] : ''
-						,'address' => !empty($profile['address']) ? $profile['address'] : ''
-						,'country' => !empty($profile['country']) ? $profile['country'] : ''
-						,'state' => !empty($profile['region']) ? $profile['region'] : ''
-						,'city' => !empty($profile['city']) ? $profile['city'] : ''
-						,'zip' => !empty($profile['zip']) ? $profile['zip'] : ''
-						,'active' => 1
-						,'provider' => $profile
-						,'groups' => $this->config['groups']
+						'username' => $username,
+						'fullname' => !empty($profile['lastName'])
+							? $profile['firstName'] . ' ' . $profile['lastName']
+							: $profile['firstName'],
+						'dob' => !empty($profile['birthday']) && !empty($profile['birthmonth']) && !empty($profile['birthyear'])
+							? $profile['birthyear'] . '-' . $profile['birthmonth'] . '-' . $profile['birthday']
+							: '',
+						'email' => !empty($profile['emailVerified'])
+							? $profile['emailVerified']
+							: $profile['email'],
+						'photo' => !empty($profile['photoURL'])
+							? $profile['photoURL']
+							: '',
+						'website' => !empty($profile['webSiteURL'])
+							? $profile['webSiteURL']
+							: '',
+						'phone' => !empty($profile['phone'])
+							? $profile['phone']
+							: '',
+						'address' => !empty($profile['address'])
+							? $profile['address']
+							: '',
+						'country' => !empty($profile['country'])
+							? $profile['country']
+							: '',
+						'state' => !empty($profile['region'])
+							? $profile['region']
+							: '',
+						'city' => !empty($profile['city'])
+							? $profile['city']
+							: '',
+						'zip' => !empty($profile['zip'])
+							? $profile['zip']
+							: '',
+						'active' => 1,
+						'provider' => $profile,
+						'groups' => $this->config['groups'],
 					);
 					if (!$this->modx->getOption('ha.register_users', null, true)) {
 						$_SESSION['HA']['error'] = $this->modx->lexicon('ha_register_disabled');
@@ -241,8 +277,8 @@ class HybridAuth {
 					else {
 						$response = $this->runProcessor('web/user/create', $arr);
 						if ($response->isError()) {
-							$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] Unable to create user '.print_r($arr,1).'. Message: '.implode(', ',$response->getAllErrors()));
-							$_SESSION['HA']['error'] = implode(', ',$response->getAllErrors());
+							$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] Unable to create user ' . print_r($arr, 1) . '. Message: ' . implode(', ', $response->getAllErrors()));
+							$_SESSION['HA']['error'] = implode(', ', $response->getAllErrors());
 						}
 						else {
 							$login_data = array(
@@ -254,8 +290,8 @@ class HybridAuth {
 							$profile['internalKey'] = $uid;
 							$response = $this->runProcessor('web/service/create', $profile);
 							if ($response->isError()) {
-								$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] unable to save service profile for user '.$uid.'. Message: '.implode(', ',$response->getAllErrors()));
-								$_SESSION['HA']['error'] = implode(', ',$response->getAllErrors());
+								$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] unable to save service profile for user ' . $uid . '. Message: ' . implode(', ', $response->getAllErrors()));
+								$_SESSION['HA']['error'] = implode(', ', $response->getAllErrors());
 							}
 						}
 					}
@@ -282,8 +318,8 @@ class HybridAuth {
 					$profile['internalKey'] = $uid;
 					$response = $this->runProcessor('web/service/update', $profile);
 					if ($response->isError()) {
-						$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] unable to update service profile for user '.$uid.'. Message: '.implode(', ',$response->getAllErrors()));
-						$_SESSION['HA']['error'] = implode(', ',$response->getAllErrors());
+						$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] unable to update service profile for user ' . $uid . '. Message: ' . implode(', ', $response->getAllErrors()));
+						$_SESSION['HA']['error'] = implode(', ', $response->getAllErrors());
 					}
 				}
 				else {
@@ -296,15 +332,19 @@ class HybridAuth {
 			if (empty($_SESSION['HA']['error']) && !$this->modx->user->isAuthenticated($this->modx->context->key) && !empty($login_data)) {
 
 				$_SESSION['HA']['verified'] = 1;
-				if (!empty($this->config['loginContext'])) {$login_data['login_context'] = $this->config['loginContext'];}
-				if (!empty($this->config['addContexts'])) {$login_data['add_contexts'] = $this->config['addContexts'];}
+				if (!empty($this->config['loginContext'])) {
+					$login_data['login_context'] = $this->config['loginContext'];
+				}
+				if (!empty($this->config['addContexts'])) {
+					$login_data['add_contexts'] = $this->config['addContexts'];
+				}
 
 				// Login
 				$_SESSION['HybridAuth']['verified'] = true;
 				$response = $this->modx->runProcessor('security/login', $login_data);
 				if ($response->isError()) {
-					$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] error login for user '.$login_data['username'].'. Message: '.implode(', ',$response->getAllErrors()));
-					$_SESSION['HA']['error'] = implode(', ',$response->getAllErrors());
+					$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] error login for user ' . $login_data['username'] . '. Message: ' . implode(', ', $response->getAllErrors()));
+					$_SESSION['HA']['error'] = implode(', ', $response->getAllErrors());
 				}
 			}
 
@@ -324,13 +364,17 @@ class HybridAuth {
 		}
 
 		$logout_data = array();
-		if (!empty($this->config['loginContext'])) {$logout_data['login_context'] = $this->config['loginContext'];}
-		if (!empty($this->config['addContexts'])) {$logout_data['add_contexts'] = $this->config['addContexts'];}
+		if (!empty($this->config['loginContext'])) {
+			$logout_data['login_context'] = $this->config['loginContext'];
+		}
+		if (!empty($this->config['addContexts'])) {
+			$logout_data['add_contexts'] = $this->config['addContexts'];
+		}
 
 		$response = $this->modx->runProcessor('security/logout', $logout_data);
 		if ($response->isError()) {
-			$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] logout error. Username: '.$this->modx->user->get('username').', uid: '.$this->modx->user->get('id').'. Message: '.implode(', ',$response->getAllErrors()));
-			$_SESSION['HA']['error'] = implode(', ',$response->getAllErrors());
+			$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] logout error. Username: ' . $this->modx->user->get('username') . ', uid: ' . $this->modx->user->get('id') . '. Message: ' . implode(', ', $response->getAllErrors()));
+			$_SESSION['HA']['error'] = implode(', ', $response->getAllErrors());
 		}
 		unset($_SESSION['HA::CONFIG']);
 		$this->Refresh('logout');
@@ -352,6 +396,7 @@ class HybridAuth {
 			$provider = $this->Hybrid_Auth->getAdapter($providerId);
 			$profile = $provider->getUserProfile();
 			$array = json_encode($profile);
+
 			return json_decode($array, true);
 		}
 		else {
@@ -364,33 +409,36 @@ class HybridAuth {
 	 * Refreshes the current page. If set, can redirects user to logout/login resource.
 	 *
 	 * @param string $action The action to do
+	 *
 	 * @return void
 	 */
 	function Refresh($action = '') {
 		/* @var modResource $resource */
 		if ($action == 'login' && $this->config['loginResourceId'] && $resource = $this->modx->getObject('modResource', $this->config['loginResourceId'])) {
-			$url = $this->modx->makeUrl($resource->id, $resource->context_key, '','full');
-		}
-		else if ($action == 'logout' && $this->config['logoutResourceId'] && $resource = $this->modx->getObject('modResource', $this->config['logoutResourceId'])) {
-			$url = $this->modx->makeUrl($resource->id, $resource->context_key, '','full');
+			$url = $this->modx->makeUrl($resource->id, $resource->context_key, '', 'full');
 		}
 		else {
-			$request = preg_replace('#^'.$this->modx->getOption('base_url').'#', '', $_SERVER['REQUEST_URI']);
-			$url = $this->modx->getOption('site_url') . ltrim($request, '/');
+			if ($action == 'logout' && $this->config['logoutResourceId'] && $resource = $this->modx->getObject('modResource', $this->config['logoutResourceId'])) {
+				$url = $this->modx->makeUrl($resource->id, $resource->context_key, '', 'full');
+			}
+			else {
+				$request = preg_replace('#^' . $this->modx->getOption('base_url') . '#', '', $_SERVER['REQUEST_URI']);
+				$url = $this->modx->getOption('site_url') . ltrim($request, '/');
 
-			if ($pos = strpos($url, '?')) {
-				$arr = explode('&',substr($url, $pos+1));
-				$url = substr($url, 0, $pos);
-				if (count($arr) > 1) {
-					foreach ($arr as $k => $v) {
-						if (preg_match('/(action|provider|hauth_action)+/i', $v, $matches)) {
-							unset($arr[$k]);
+				if ($pos = strpos($url, '?')) {
+					$arr = explode('&', substr($url, $pos + 1));
+					$url = substr($url, 0, $pos);
+					if (count($arr) > 1) {
+						foreach ($arr as $k => $v) {
+							if (preg_match('/(action|provider|hauth_action)+/i', $v, $matches)) {
+								unset($arr[$k]);
+							}
 						}
-					}
-					if (!empty($arr)) {
-						$url = $url . '?' . implode('&', $arr);
-					}
+						if (!empty($arr)) {
+							$url = $url . '?' . implode('&', $arr);
+						}
 
+					}
 				}
 			}
 		}
@@ -405,10 +453,10 @@ class HybridAuth {
 	 * @return mixed $url
 	 */
 	function getUrl() {
-		$request = preg_replace('#^'.$this->modx->getOption('base_url').'#', '', $_SERVER['REQUEST_URI']);
+		$request = preg_replace('#^' . $this->modx->getOption('base_url') . '#', '', $_SERVER['REQUEST_URI']);
 		$url = $this->modx->getOption('site_url') . ltrim($request, '/');
 
-		$url .= strpos($url,'?')
+		$url .= strpos($url, '?')
 			? '&hauth_action='
 			: '?hauth_action=';
 
@@ -417,7 +465,9 @@ class HybridAuth {
 
 
 	function getProvidersLinks($tpl1 = 'tpl.HybridAuth.provider', $tpl2 = 'tpl.HybridAuth.provider.active') {
-		if (empty($this->config['HA']['providers'])) {return '';}
+		if (empty($this->config['HA']['providers'])) {
+			return '';
+		}
 
 		$output = '';
 		$url = $this->getUrl();
@@ -437,8 +487,8 @@ class HybridAuth {
 		//sort($providers);
 		foreach ($providers as $provider) {
 			$pls = array(
-				'login_url' => $url.'login',
-				'logout_url' => $url.'logout',
+				'login_url' => $url . 'login',
+				'logout_url' => $url . 'logout',
 				'provider' => strtolower($provider),
 				'title' => ucfirst($provider),
 			);
@@ -451,11 +501,13 @@ class HybridAuth {
 		return $output;
 	}
 
+
 	/**
 	 * Sanitizes a string
 	 *
 	 * @param string $string The string to sanitize
 	 * @param integer $length The length of sanitized string
+	 *
 	 * @return string The sanitized string.
 	 */
 	function Sanitize($string = '', $length = 0) {
@@ -473,7 +525,7 @@ class HybridAuth {
 	 *
 	 * {@inheritdoc}
 	 */
-	function runProcessor($action = '',$scriptProperties = array()) {
+	function runProcessor($action = '', $scriptProperties = array()) {
 		$this->modx->error->errors = $this->modx->error->message = null;
 
 		return $this->modx->runProcessor($action, $scriptProperties, array(
@@ -500,15 +552,15 @@ class HybridAuth {
 		$uncached_prefix = str_replace('[[', '[[!', $prefix);
 		foreach ($array as $k => $v) {
 			if (is_array($v)) {
-				$result = array_merge_recursive($result, $this->makePlaceholders($v, $plPrefix . $k.'.', $prefix, $suffix, $uncacheable));
+				$result = array_merge_recursive($result, $this->makePlaceholders($v, $plPrefix . $k . '.', $prefix, $suffix, $uncacheable));
 			}
 			else {
-				$pl = $plPrefix.$k;
-				$result['pl'][$pl] = $prefix.$pl.$suffix;
+				$pl = $plPrefix . $k;
+				$result['pl'][$pl] = $prefix . $pl . $suffix;
 				$result['vl'][$pl] = $v;
 				if ($uncacheable) {
-					$result['pl']['!'.$pl] = $uncached_prefix.$pl.$suffix;
-					$result['vl']['!'.$pl] = $v;
+					$result['pl']['!' . $pl] = $uncached_prefix . $pl . $suffix;
+					$result['vl']['!' . $pl] = $v;
 				}
 			}
 		}
