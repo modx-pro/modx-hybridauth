@@ -4,6 +4,7 @@ Changelog for HybridAuth.
 ==============
 - Removed object haUser. All existing users will be converted to modUser on package upgrade.
 - Removed function filter_var() for email validation.
+- Returned back transparent images.
 
 0.9.0 pl
 ==============
