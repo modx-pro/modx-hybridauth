@@ -3,6 +3,7 @@ Changelog for HybridAuth.
 1.1.0 pl
 ==============
 - Updated HybridAuth core to version 2.3.0.
+- Shows more errors from HybridAuth in MODX log.
 
 1.0.0 pl
 ==============

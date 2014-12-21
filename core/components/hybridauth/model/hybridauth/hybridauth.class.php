@@ -59,7 +59,7 @@ class HybridAuth {
 	 */
 	public function exceptionHandler(Exception $e) {
 		$code = $e->getCode();
-		if ($code < 5) {
+		if ($code <= 6) {
 			$level = modX::LOG_LEVEL_ERROR;
 		}
 		else {
