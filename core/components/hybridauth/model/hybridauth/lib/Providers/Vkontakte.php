@@ -14,7 +14,7 @@
 class Hybrid_Providers_Vkontakte extends Hybrid_Provider_Model_OAuth2
 {
 	// default permissions 
-	public $scope = "";
+	public $scope = "email";
 
 	/**
 	* IDp wrappers initializer 
@@ -24,10 +24,8 @@ class Hybrid_Providers_Vkontakte extends Hybrid_Provider_Model_OAuth2
 		parent::initialize();
 
 		// Provider api end-points
-		$this->api->authorize_url  = "https://oauth.vk.com/authorize";
-		$this->api->token_url      = "https://oauth.vk.com/access_token";
-
-		$this->api->curl_authenticate_method = "GET";
+		$this->api->authorize_url  = "http://api.vk.com/oauth/authorize";
+		$this->api->token_url      = "https://api.vk.com/oauth/token";
 		//$this->api->token_info_url
 	}
 
@@ -40,7 +38,7 @@ class Hybrid_Providers_Vkontakte extends Hybrid_Provider_Model_OAuth2
 			throw new Exception( "Authentication failed! {$this->providerId} returned an error: $error", 5 );
 		}
 
-		// try to authenicate user
+		// try to authenticate user
 		$code = (array_key_exists('code',$_REQUEST))?$_REQUEST['code']:"";
 
 		try{
@@ -63,6 +61,7 @@ class Hybrid_Providers_Vkontakte extends Hybrid_Provider_Model_OAuth2
 
 		// store user id. it is required for api access to Vkontakte
 		Hybrid_Auth::storage()->set( "hauth_session.{$this->providerId}.user_id", $response->user_id );
+		Hybrid_Auth::storage()->set( "hauth_session.{$this->providerId}.user_email", $response->email );
 
 		// set user connected locally
 		$this->setUserConnected();
@@ -91,9 +90,10 @@ class Hybrid_Providers_Vkontakte extends Hybrid_Provider_Model_OAuth2
 		$this->user->profile->identifier    = (property_exists($response,'uid'))?$response->uid:"";
 		$this->user->profile->firstName     = (property_exists($response,'first_name'))?$response->first_name:"";
 		$this->user->profile->lastName      = (property_exists($response,'last_name'))?$response->last_name:"";
-		$this->user->profile->displayName   = (property_exists($response,'nickname'))?$response->nickname:"";
+		$this->user->profile->displayName   = (property_exists($response,'screen_name'))?$response->screen_name:"";
 		$this->user->profile->photoURL      = (property_exists($response,'photo_big'))?$response->photo_big:"";
 		$this->user->profile->profileURL    = (property_exists($response,'screen_name'))?"http://vk.com/" . $response->screen_name:"";
+		$this->user->profile->email         = Hybrid_Auth::storage()->get( "hauth_session.{$this->providerId}.user_email" );
 
 		if(property_exists($response,'sex')){
 			switch ($response->sex)
@@ -105,7 +105,15 @@ class Hybrid_Providers_Vkontakte extends Hybrid_Provider_Model_OAuth2
 		}
 
 		if( property_exists($response,'bdate') ){
-			list($birthday_year, $birthday_month, $birthday_day) = explode( '.', $response->bdate );
+			
+			$birthday = explode('.', $response->bdate);
+			
+			if (count($birthday) === 3) {
+				list($birthday_year, $birthday_month, $birthday_day) = $birthday;
+			} else {
+				$birthday_year = date('Y');
+				list($birthday_month, $birthday_day) = $birthday;
+			}
 
 			$this->user->profile->birthDay   = (int) $birthday_day;
 			$this->user->profile->birthMonth = (int) $birthday_month;
@@ -113,5 +121,33 @@ class Hybrid_Providers_Vkontakte extends Hybrid_Provider_Model_OAuth2
 		}
 
 		return $this->user->profile;
+	}
+		
+	/**
+	* load the user contacts
+	*/
+	function getUserContacts() 
+	{
+		$params=array(
+			'fields' => 'nickname, domain, sex, bdate, city, country, timezone, photo_200_orig'
+		);
+		
+		$response = $this->api->api('https://api.vk.com/method/friends.get','GET',$params);
+		
+		if(!$response || !count($response->response)){
+			return array();
+		}
+		
+		$contacts = array();
+		foreach( $response->response as $item ){
+			$uc = new Hybrid_User_Contact();
+			$uc->identifier  = $item->uid;
+			$uc->displayName = $item->first_name.' '.$item->last_name;
+			$uc->profileURL  = 'http://vk.com/'.$item->domain;
+			$uc->photoURL    = $item->photo_200_orig;
+			$contacts[] = $uc;
+		}
+		
+		return $contacts;
 	}
 }
