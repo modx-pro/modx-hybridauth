@@ -366,6 +366,7 @@ class Hybrid_Auth
 			echo '</html>'; 
 		}
 
+		@session_write_close();
 		die();
 	}
 
