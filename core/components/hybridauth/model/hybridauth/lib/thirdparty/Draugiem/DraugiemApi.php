@@ -538,6 +538,7 @@ class DraugiemApi {
 			<script type="text/javascript">document.cookieFix.submit();</script>
 		</body></html>
 	<?php
+			@session_write_close();
 			exit;
 		}
 

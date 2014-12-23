@@ -49,6 +49,7 @@ class Hybrid_Providers_Twitter extends Hybrid_Provider_Model_OAuth1
 			$response = json_encode($responseObj);
 			header( "Content-Type: application/json", true, 200 ) ;
 			echo $response;
+			@session_write_close();
 			die();
 		}
  		$tokens = $this->api->requestToken( $this->endpoint );
