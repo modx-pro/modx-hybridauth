@@ -1,5 +1,9 @@
 Changelog for HybridAuth.
 
+1.1.1 pl
+==============
+- [#17] Fixed work with enabled php-apc after updated HybridAuth core to version 2.3.0.
+
 1.1.0 pl
 ==============
 - Updated HybridAuth core to version 2.3.0.
