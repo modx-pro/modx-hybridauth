@@ -205,6 +205,9 @@ class HybridAuth {
 		/* @var Hybrid_User_Profile $service */
 		if ($profile = $this->getServiceProfile($provider)) {
 			$profile['provider'] = $provider;
+			$email = !empty($profile['emailVerified'])
+					? $profile['emailVerified']
+					: $profile['email'];
 
 			// Checking for existing provider record in database
 			/* @var haUserService $service */
