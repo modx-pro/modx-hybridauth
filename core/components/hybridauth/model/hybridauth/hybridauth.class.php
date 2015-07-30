@@ -205,6 +205,9 @@ class HybridAuth {
 		/* @var Hybrid_User_Profile $service */
 		if ($profile = $this->getServiceProfile($provider)) {
 			$profile['provider'] = $provider;
+			$email = !empty($profile['emailVerified'])
+					? $profile['emailVerified']
+					: $profile['email'];
 
 			// Checking for existing provider record in database
 			/* @var haUserService $service */
@@ -218,6 +221,29 @@ class HybridAuth {
 					if ($response->isError()) {
 						$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] unable to save service profile for user ' . $uid . '. Message: ' . implode(', ', $response->getAllErrors()));
 						$_SESSION['HA']['error'] = implode(', ', $response->getAllErrors());
+					}
+				}
+				// Assgn new provider to existing user by email address
+				else if ($email && $user_p = $this->modx->getObject('modUserProfile', array('email' => $email)))  {
+					$user = $user_p->getOne('User');
+					$this->modx->log(1, 'got you');
+					$uid = $user->get('id');
+					$profile['internalKey'] = $uid;
+
+					if (!$this->modx->getOption('ha.register_users', null, true)) {
+						$_SESSION['HA']['error'] = $this->modx->lexicon('ha_register_disabled');
+					}
+					else {
+						$login_data = array(
+							'username' => $user->get('username'),
+							'password' => md5(rand()),
+							'rememberme' => $this->config['rememberme']
+						);
+						$response = $this->runProcessor('web/service/create', $profile);
+						if ($response->isError()) {
+							$this->modx->log(modX::LOG_LEVEL_ERROR, '[HybridAuth] unable to save service profile for user ' . $uid . '. Message: ' . implode(', ', $response->getAllErrors()));
+							$_SESSION['HA']['error'] = implode(', ', $response->getAllErrors());
+						}
 					}
 				}
 				// Creating new user and adding this record to him
