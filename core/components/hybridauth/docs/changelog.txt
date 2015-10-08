@@ -1,5 +1,9 @@
 Changelog for HybridAuth.
 
+1.1.2 pl
+==============
+- Updated main oAuth providers, including Google and Facebook.
+
 1.1.1 pl
 ==============
 - [#17] Fixed work with enabled php-apc after updated HybridAuth core to version 2.3.0.
