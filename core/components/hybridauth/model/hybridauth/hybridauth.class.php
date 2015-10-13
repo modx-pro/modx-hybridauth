@@ -271,6 +271,9 @@ class HybridAuth {
 						'provider' => $profile,
 						'groups' => $this->config['groups'],
 					);
+					if (empty($arr['fullname']) && isset($profile['displayName'])) {
+					    $arr['fullname'] = $profile['displayName']; // Instagram
+					}
 					if (!$this->modx->getOption('ha.register_users', null, true)) {
 						$_SESSION['HA']['error'] = $this->modx->lexicon('ha_register_disabled');
 					}
