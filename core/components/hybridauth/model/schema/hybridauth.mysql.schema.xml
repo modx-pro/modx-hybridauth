@@ -9,7 +9,7 @@
 
 		<field key="websiteurl" dbtype="varchar" precision="100" phptype="string" null="true" />
 		<field key="profileurl" dbtype="varchar" precision="100" phptype="string" null="true" />
-		<field key="photourl" dbtype="varchar" precision="100" phptype="string" null="true" />
+		<field key="photourl" dbtype="varchar" precision="200" phptype="string" null="true" />
 		<field key="displayname" dbtype="varchar" precision="100" phptype="string" null="true" />
 		<field key="description" dbtype="text" phptype="string" null="true" />
 
