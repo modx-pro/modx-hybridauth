@@ -7,9 +7,9 @@
 		<field key="provider" dbtype="varchar" precision="50" phptype="string" null="false" index="unique" indexgrp="unique_fields" />
 		<field key="createdon" dbtype="datetime" phptype="datetime" />
 
-		<field key="websiteurl" dbtype="varchar" precision="100" phptype="string" null="true" />
-		<field key="profileurl" dbtype="varchar" precision="100" phptype="string" null="true" />
-		<field key="photourl" dbtype="varchar" precision="200" phptype="string" null="true" />
+		<field key="websiteurl" dbtype="varchar" precision="255" phptype="string" null="true" />
+		<field key="profileurl" dbtype="varchar" precision="255" phptype="string" null="true" />
+		<field key="photourl" dbtype="varchar" precision="255" phptype="string" null="true" />
 		<field key="displayname" dbtype="varchar" precision="100" phptype="string" null="true" />
 		<field key="description" dbtype="text" phptype="string" null="true" />
 

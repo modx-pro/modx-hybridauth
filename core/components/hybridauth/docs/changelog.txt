@@ -1,5 +1,9 @@
 Changelog for HybridAuth.
 
+1.1.3 pl
+==============
+- [#37] Increased length of some haUserService fields.
+
 1.1.2 pl
 ==============
 - Updated main oAuth providers, including Google and Facebook.
