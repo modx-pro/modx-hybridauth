@@ -1,5 +1,10 @@
 Changelog for HybridAuth.
 
+1.1.4 pl
+==============
+- [#34] Fixed scopes in Facebook provider.
+- Fixed possible E_WARNING in Vkontakte provider.
+
 1.1.3 pl
 ==============
 - [#37] Increased length of some haUserService fields.
