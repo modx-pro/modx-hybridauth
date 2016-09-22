@@ -20,7 +20,7 @@ $_lang['ha.profile_update_error'] = 'Ошибка при обновлении п
 $_lang['ha.logout'] = 'Выйти &rarr;';
 $_lang['ha.save_profile'] = 'Сохранить профиль';
 $_lang['ha.greeting'] = 'Вы авторизованы как ';
-$_lang['ha.providers_available'] = 'Доступны провайдеры ';
+$_lang['ha.providers_available'] = 'Доступные провайдеры ';
 $_lang['ha.login_intro'] = 'Вы можете авторизоваться на сайте через: ';
 $_lang['ha.gravatar'] = 'Аватар';
 $_lang['ha.gravatar_desc'] = 'Картинка загружается с <a href="http://gravatar.com/" target="_blank">Gravatar</a>';
