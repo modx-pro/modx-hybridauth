@@ -1,0 +1,20 @@
+/* Grid */
+.x-grid3-col-actions { padding: 3px 0 3px 5px; }
+.x-grid3-col-avatar { padding: 2px 0; }
+.x-grid3-col-avatar img { height: 36px; display: block; margin: auto; }
+/* Actions */
+.action-red { color: darkred !important; }
+.action-green { color: darkgreen !important; }
+.action-blue { color: cadetblue !important; }
+.action-yellow { color: goldenrod !important; }
+.action-gray { color: dimgray !important; }
+ul.ha-row-actions { margin: 0; padding: 0; list-style: none; }
+ul.ha-row-actions li { float: left; }
+ul.ha-row-actions .btn { padding: 5px; margin-right: 2px; min-width: 26px; font-size: inherit; }
+/* Action menu */
+a.x-menu-item .x-menu-item-text, a.x-menu-item .x-menu-item-text .icon { cursor: pointer; }
+a.x-menu-item .x-menu-item-text .icon { line-height: 16px; top: auto; }
+.x-menu-list .icon { min-width: 1em; text-align: center; }
+.x-menu-list-item:hover .icon { color: inherit !important; }
+ul.ha-row-actions .actions-menu { width: 40px; }
+ul.ha-row-actions .actions-menu:after { content: " \f107"; }

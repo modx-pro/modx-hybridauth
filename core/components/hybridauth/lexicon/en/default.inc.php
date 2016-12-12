@@ -34,6 +34,11 @@ $_lang['ha.service_identifier'] = 'Identifier';
 $_lang['ha.service_displayname'] = 'Display Name';
 $_lang['ha.service_email'] = 'Email';
 
+$_lang['ha.service_remove'] = 'Unbind provider';
+$_lang['ha.services_remove'] = 'Unbind providers';
+$_lang['ha.service_remove_confirm'] = 'Are you sure you want to unbind this provider from profile of the user?';
+$_lang['ha.services_remove_confirm'] = 'Are you sure you want to unbind this providers from profile of the user?';
+
 $_lang['area_ha.main'] = 'Main';
 $_lang['area_ha.keys'] = 'Keys';
 $_lang['setting_ha.keys.Google'] = 'Keys for Google';

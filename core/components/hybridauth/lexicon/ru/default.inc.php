@@ -34,6 +34,11 @@ $_lang['ha.service_identifier'] = 'Идентификатор';
 $_lang['ha.service_displayname'] = 'Имя';
 $_lang['ha.service_email'] = 'Email';
 
+$_lang['ha.service_remove'] = 'Отвязать провайдера';
+$_lang['ha.services_remove'] = 'Отвязать провайдеров';
+$_lang['ha.service_remove_confirm'] = 'Вы уверены, что хотите отвязать этого провайдера от профиля пользователя?';
+$_lang['ha.services_remove_confirm'] = 'Вы уверены, что хотите отвязать этих провайдеров от профиля пользователя?';
+
 $_lang['area_ha.main'] = 'Основные';
 $_lang['area_ha.keys'] = 'Ключи';
 $_lang['setting_ha.keys.Google'] = 'Ключи для Google';

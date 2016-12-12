@@ -1,2 +1,4 @@
 .idea
 config.core.php
+/core/components/hybridauth/vendor/
+/core/components/hybridauth/composer.lock

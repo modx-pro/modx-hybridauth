@@ -1,5 +1,13 @@
 Changelog for HybridAuth.
 
+2.0.0 pl
+==============
+- PSR-2
+- Updated HybridAuth library to version 2.8.2.
+- HybridAuth library integrated via composer.
+- Ability to unbind services from a profile of user.
+- If pdoTools is installed, the component will use it for the processing of a chunks.
+
 1.1.4 pl
 ==============
 - [#34] Fixed scopes in Facebook provider.

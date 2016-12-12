@@ -1,0 +1,6 @@
+{
+  "name": "bezumkin/modx-hybridauth",
+  "require": {
+    "hybridauth/hybridauth": "^2.8"
+  }
+}

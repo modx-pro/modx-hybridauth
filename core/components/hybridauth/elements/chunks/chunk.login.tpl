@@ -2,4 +2,5 @@
 <br/>
 [[+providers]]
 
-[[+error:notempty=`<div class="alert alert-block alert-error">[[+error]]</div>`]]
+[[+error:notempty=`
+<div class="alert alert-block alert-error">[[+error]]</div>`]]

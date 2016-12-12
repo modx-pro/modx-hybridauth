@@ -1,45 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model package="hybridauth" version="1.0" baseClass="xPDOObject" platform="mysql" defaultEngine="MyISAM" phpdoc-package="hybridauth">
+<model package="hybridauth" version="1.0" baseClass="xPDOObject" platform="mysql" defaultEngine="MyISAM"
+       phpdoc-package="hybridauth">
 
-	<object class="haUserService" table="ha_user_services" extends="xPDOSimpleObject">
-		<field key="internalKey" dbtype="int" precision="10" phptype="integer" null="false" attributes="unsigned" index="unique" indexgrp="unique_fields" />
-		<field key="identifier" dbtype="varchar" precision="100" phptype="string" null="false" />
-		<field key="provider" dbtype="varchar" precision="50" phptype="string" null="false" index="unique" indexgrp="unique_fields" />
-		<field key="createdon" dbtype="datetime" phptype="datetime" />
+    <object class="haUserService" table="ha_user_services" extends="xPDOSimpleObject">
+        <field key="internalKey" dbtype="int" precision="10" phptype="integer" null="false" attributes="unsigned"
+               index="unique" indexgrp="unique_fields"/>
+        <field key="identifier" dbtype="varchar" precision="100" phptype="string" null="false"/>
+        <field key="provider" dbtype="varchar" precision="50" phptype="string" null="false" index="unique"
+               indexgrp="unique_fields"/>
+        <field key="createdon" dbtype="datetime" phptype="datetime"/>
 
-		<field key="websiteurl" dbtype="varchar" precision="255" phptype="string" null="true" />
-		<field key="profileurl" dbtype="varchar" precision="255" phptype="string" null="true" />
-		<field key="photourl" dbtype="varchar" precision="255" phptype="string" null="true" />
-		<field key="displayname" dbtype="varchar" precision="100" phptype="string" null="true" />
-		<field key="description" dbtype="text" phptype="string" null="true" />
+        <field key="websiteurl" dbtype="varchar" precision="255" phptype="string" null="true"/>
+        <field key="profileurl" dbtype="varchar" precision="255" phptype="string" null="true"/>
+        <field key="photourl" dbtype="varchar" precision="255" phptype="string" null="true"/>
+        <field key="displayname" dbtype="varchar" precision="100" phptype="string" null="true"/>
+        <field key="description" dbtype="text" phptype="string" null="true"/>
 
-		<field key="firstname" dbtype="varchar" precision="100" phptype="string" null="true" />
-		<field key="lastname" dbtype="varchar" precision="100" phptype="string" null="true" />
-		<field key="gender" dbtype="varchar" precision="50" phptype="string" null="true" />
-		<field key="language" dbtype="varchar" precision="50" phptype="string" null="true" />
+        <field key="firstname" dbtype="varchar" precision="100" phptype="string" null="true"/>
+        <field key="lastname" dbtype="varchar" precision="100" phptype="string" null="true"/>
+        <field key="gender" dbtype="varchar" precision="50" phptype="string" null="true"/>
+        <field key="language" dbtype="varchar" precision="50" phptype="string" null="true"/>
 
-		<field key="age" dbtype="tinyint" precision="3" phptype="integer" null="true" />
-		<field key="birthday" dbtype="tinyint" precision="2" phptype="integer" null="true" />
-		<field key="birthmonth" dbtype="tinyint" precision="2" phptype="integer" null="true" />
-		<field key="birthyear" dbtype="smallint" precision="4" phptype="integer" null="true" />
+        <field key="age" dbtype="tinyint" precision="3" phptype="integer" null="true"/>
+        <field key="birthday" dbtype="tinyint" precision="2" phptype="integer" null="true"/>
+        <field key="birthmonth" dbtype="tinyint" precision="2" phptype="integer" null="true"/>
+        <field key="birthyear" dbtype="smallint" precision="4" phptype="integer" null="true"/>
 
-		<field key="email" dbtype="varchar" precision="100" phptype="string" null="true" />
-		<field key="emailverified" dbtype="varchar" precision="100" phptype="string" null="true" />
+        <field key="email" dbtype="varchar" precision="100" phptype="string" null="true"/>
+        <field key="emailverified" dbtype="varchar" precision="100" phptype="string" null="true"/>
 
-		<field key="phone" dbtype="varchar" precision="100" phptype="string" null="true" />
-		<field key="address" dbtype="varchar" precision="255" phptype="string" null="true" />
-		<field key="country" dbtype="varchar" precision="100" phptype="255" null="true" />
-		<field key="region" dbtype="varchar" precision="100" phptype="string" null="true" />
-		<field key="city" dbtype="varchar" precision="100" phptype="string" null="true" />
-		<field key="zip" dbtype="varchar" precision="25" phptype="string" null="true" />
+        <field key="phone" dbtype="varchar" precision="100" phptype="string" null="true"/>
+        <field key="address" dbtype="varchar" precision="255" phptype="string" null="true"/>
+        <field key="country" dbtype="varchar" precision="100" phptype="255" null="true"/>
+        <field key="region" dbtype="varchar" precision="100" phptype="string" null="true"/>
+        <field key="city" dbtype="varchar" precision="100" phptype="string" null="true"/>
+        <field key="zip" dbtype="varchar" precision="25" phptype="string" null="true"/>
 
-		<field key="extended" dbtype="text" phptype="json" null="true" index="fulltext" />
+        <field key="extended" dbtype="text" phptype="json" null="true" index="fulltext"/>
 
-		<index alias="unique_fields" name="unique_fields" primary="false" unique="true" type="BTREE">
-			<column key="internalKey" length="" collation="A" null="false" />
-			<column key="provider" length="" collation="A" null="false" />
-		</index>
+        <index alias="unique_fields" name="unique_fields" primary="false" unique="true" type="BTREE">
+            <column key="internalKey" length="" collation="A" null="false"/>
+            <column key="provider" length="" collation="A" null="false"/>
+        </index>
 
-		<aggregate alias="User" class="modUser" local="internalKey" foreign="id" cardinality="one" owner="foreign" />
-	</object>
+        <aggregate alias="User" class="modUser" local="internalKey" foreign="id" cardinality="one" owner="foreign"/>
+    </object>
 </model>

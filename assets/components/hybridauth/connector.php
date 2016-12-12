@@ -7,7 +7,9 @@ $corePath = $modx->getOption('hybridauth.core_path', null, $modx->getOption('cor
 require_once $corePath . 'model/hybridauth/hybridauth.class.php';
 $HybridAuth = new HybridAuth($modx);
 
-$modx->request->handleRequest(array(
-	'processors_path' => $HybridAuth->config['processorsPath'],
-	'location' => '',
+/** @var modConnectorRequest $request */
+$request = $modx->request;
+$request->handleRequest(array(
+    'processors_path' => $HybridAuth->config['processorsPath'],
+    'location' => '',
 ));

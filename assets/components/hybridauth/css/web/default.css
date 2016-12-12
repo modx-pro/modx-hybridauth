@@ -1,43 +1,59 @@
 .hybridauth .ha-avatar {
-	position: absolute;
-	width: 75px;
-	margin-top: 15px;
+    position: absolute;
+    width: 75px;
+    margin-top: 15px;
 }
+
 .hybridauth .ha-info {
-	margin-left: 90px;
-	display: inline-block;
+    margin-left: 90px;
+    display: inline-block;
 }
 
 .ha-icon,
 .ha-icon-active {
-	display: inline-block;
-	width: 48px;
-	height: 48px;
-	margin: 0 2px;
-	background-image: url('../../img/web/color-icons.png');
-	background-repeat: no-repeat;
-	text-indent: -9999px;
-	opacity: 1;
+    display: inline-block;
+    width: 48px;
+    height: 48px;
+    margin: 0 2px;
+    background-image: url('../../img/web/color-icons.png');
+    background-repeat: no-repeat;
+    text-indent: -9999px;
+    opacity: 1;
 }
-.ha-icon:hover {opacity: .8;}
+
+.ha-icon:hover { opacity: .8; }
 
 .ha-icon.active {
-	background-image: url('../../img/web/grayscale-icons.png');
-	opacity: .5 !important;
+    background-image: url('../../img/web/grayscale-icons.png');
+    opacity: .5 !important;
 }
 
-.ha-icon.facebook {background-position: 0 0;}
-.ha-icon.github {background-position: -48px 0;}
-.ha-icon.google {background-position: -96px 0;}
-.ha-icon.instagram {background-position: -144px 0;}
-.ha-icon.linkedin {background-position: -192px 0;}
-.ha-icon.livejournal {background-position: -240px 0;}
-.ha-icon.mailru {background-position: -288px 0;}
-.ha-icon.odnoklassniki {background-position: -336px 0;}
-.ha-icon.thumblr {background-position: -384px 0;}
-.ha-icon.twitter {background-position: -432px 0;}
-.ha-icon.vimeo {background-position: -480px 0;}
-.ha-icon.vkontakte {background-position: -528px 0;}
-.ha-icon.yandex {background-position: -576px 0;}
-.ha-icon.youtube {background-position: -624px 0;}
-.ha-icon.foursquare {background-position: -671px 0;}
+.ha-icon.facebook { background-position: 0 0; }
+
+.ha-icon.github { background-position: -48px 0; }
+
+.ha-icon.google { background-position: -96px 0; }
+
+.ha-icon.instagram { background-position: -144px 0; }
+
+.ha-icon.linkedin { background-position: -192px 0; }
+
+.ha-icon.livejournal { background-position: -240px 0; }
+
+.ha-icon.mailru { background-position: -288px 0; }
+
+.ha-icon.odnoklassniki { background-position: -336px 0; }
+
+.ha-icon.thumblr { background-position: -384px 0; }
+
+.ha-icon.twitter { background-position: -432px 0; }
+
+.ha-icon.vimeo { background-position: -480px 0; }
+
+.ha-icon.vkontakte { background-position: -528px 0; }
+
+.ha-icon.yandex { background-position: -576px 0; }
+
+.ha-icon.youtube { background-position: -624px 0; }
+
+.ha-icon.foursquare { background-position: -671px 0; }
