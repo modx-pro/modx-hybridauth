@@ -1,5 +1,9 @@
 Changelog for HybridAuth.
 
+2.0.1 pl
+==============
+- Removed error "You cannot access this page directly" from system log.
+
 2.0.0 pl
 ==============
 - PSR-2

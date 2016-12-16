@@ -194,7 +194,7 @@ class HybridAuth
      */
     public function processAuth()
     {
-        if (!empty($_SESSION['HA::CONFIG'])) {
+        if (!empty($_SESSION['HA::STORE'])) {
             if (!class_exists('Hybrid_Endpoint')) {
                 /** @noinspection PhpIncludeInspection */
                 require_once MODX_CORE_PATH . 'components/hybridauth/vendor/autoload.php';
