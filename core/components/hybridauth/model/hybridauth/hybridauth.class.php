@@ -178,7 +178,7 @@ class HybridAuth
             'base_url' => !empty($this->config['redirectUri'])
                 ? $this->config['redirectUri']
                 : $this->modx->makeUrl($this->modx->getOption('site_start'), $this->modx->context->key, '', 'full'),
-            'debug_mode' => (integer)!empty($this->config['debug']),
+            'debug_mode' => (boolean)!empty($this->config['debug']),
             'debug_file' => MODX_CORE_PATH . 'cache/logs/error.log',
             'providers' => $providers,
         );
