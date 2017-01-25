@@ -484,10 +484,11 @@ class HybridAuth
     public function getUrl()
     {
         $request = preg_replace('#^' . $this->modx->getOption('base_url') . '#', '', $_SERVER['REQUEST_URI']);
-        $url = $this->modx->getOption('site_url') . ltrim($request, '/');
+        $url = $this->modx->getOption('site_url') . ltrim(rawurldecode($request), '/');
+        $url = preg_replace('#["\']#', '', strip_tags($url));
 
         $url .= strpos($url, '?')
-            ? '&hauth_action='
+            ? '&amp;hauth_action='
             : '?hauth_action=';
 
         return $url;
