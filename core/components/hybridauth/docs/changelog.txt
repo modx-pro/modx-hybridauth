@@ -1,5 +1,9 @@
 Changelog for HybridAuth.
 
+2.0.3 pl
+==============
+- Improved the handling of exceptions.
+
 2.0.2 pl
 ==============
 - Fixed possible XSS in the authorization links.

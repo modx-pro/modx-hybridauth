@@ -12,7 +12,6 @@ class HybridAuth
     function __construct(modX &$modx, array $config = array())
     {
         $this->modx =& $modx;
-        set_exception_handler(array($this, 'exceptionHandler'));
 
         $corePath = $this->modx->getOption('hybridauth.core_path', $config, MODX_CORE_PATH . 'components/hybridauth/');
         $assetsUrl = $this->modx->getOption('hybridauth.assets_url', $config,
@@ -48,7 +47,11 @@ class HybridAuth
         if (!empty($this->config['HA'])) {
             /** @noinspection PhpIncludeInspection */
             require_once MODX_CORE_PATH . 'components/hybridauth/vendor/autoload.php';
-            $this->Hybrid_Auth = new Hybrid_Auth($this->config['HA']);
+            try {
+                $this->Hybrid_Auth = new Hybrid_Auth($this->config['HA']);
+            } catch (Exception $e) {
+                $this->exceptionHandler($e);
+            }
         }
 
         $_SESSION['HybridAuth'][$this->modx->context->key] = $this->config;
@@ -58,11 +61,11 @@ class HybridAuth
     /**
      * Custom exception handler for Hybrid_Auth
      *
-     * @param Exception|Error $e Exception object
+     * @param Throwable $e
      *
      * @return void;
      */
-    public function exceptionHandler($e)
+    public function exceptionHandler(Throwable $e)
     {
         $code = $e->getCode();
         if ($code <= 6) {
@@ -178,7 +181,7 @@ class HybridAuth
             'base_url' => !empty($this->config['redirectUri'])
                 ? $this->config['redirectUri']
                 : $this->modx->makeUrl($this->modx->getOption('site_start'), $this->modx->context->key, '', 'full'),
-            'debug_mode' => (integer)!empty($this->config['debug']),
+            'debug_mode' => !empty($this->config['debug']),
             'debug_file' => MODX_CORE_PATH . 'cache/logs/error.log',
             'providers' => $providers,
         );
@@ -199,7 +202,11 @@ class HybridAuth
                 /** @noinspection PhpIncludeInspection */
                 require_once MODX_CORE_PATH . 'components/hybridauth/vendor/autoload.php';
             }
-            Hybrid_Endpoint::process();
+            try {
+                Hybrid_Endpoint::process();
+            } catch (Exception $e) {
+                $this->exceptionHandler($e);
+            }
         }
     }
 
@@ -213,7 +220,11 @@ class HybridAuth
      */
     public function Login($provider = '')
     {
-        $this->Hybrid_Auth->authenticate($provider);
+        try {
+            $this->Hybrid_Auth->authenticate($provider);
+        } catch (Exception $e) {
+            $this->exceptionHandler($e);
+        }
         unset($_SESSION['HA']['error']);
         /** @var Hybrid_User_Profile $service */
         if ($profile = $this->getServiceProfile($provider)) {
@@ -383,7 +394,11 @@ class HybridAuth
     public function Logout()
     {
         if (is_object($this->Hybrid_Auth)) {
-            $this->Hybrid_Auth->logoutAllProviders();
+            try {
+                $this->Hybrid_Auth->logoutAllProviders();
+            } catch (Exception $e) {
+                $this->exceptionHandler($e);
+            }
         }
 
         $logout_data = array();
@@ -415,15 +430,19 @@ class HybridAuth
      */
     function getServiceProfile($provider)
     {
-        $providers = $this->Hybrid_Auth->getConnectedProviders();
-        $providerId = ucfirst($provider);
-        if (is_array($providers) && in_array($provider, $providers)) {
-            /** @var Hybrid_Provider_Model $provider */
-            $provider = $this->Hybrid_Auth->getAdapter($providerId);
-            $profile = $provider->getUserProfile();
-            $array = json_encode($profile);
+        try {
+            $providers = $this->Hybrid_Auth->getConnectedProviders();
+            $providerId = ucfirst($provider);
+            if (is_array($providers) && in_array($provider, $providers)) {
+                /** @var Hybrid_Provider_Model $provider */
+                $provider = $this->Hybrid_Auth->getAdapter($providerId);
+                $profile = $provider->getUserProfile();
+                $array = json_encode($profile);
 
-            return json_decode($array, true);
+                return json_decode($array, true);
+            }
+        } catch (Exception $e) {
+            $this->exceptionHandler($e);
         }
 
         return false;
