@@ -3,6 +3,7 @@ Changelog for HybridAuth.
 2.0.4 pl
 ==============
 - Fixed possible "No provider ID specified" message in the system log.
+- Updated HybridAuth library to version 2.9.1.
 
 2.0.3 pl
 ==============
