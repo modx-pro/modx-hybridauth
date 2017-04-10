@@ -28,15 +28,21 @@ switch ($modx->event->name) {
                 if (!empty($_REQUEST['hauth_action'])) {
                     switch ($_REQUEST['hauth_action']) {
                         case 'login':
-                            $HybridAuth->Login(@$_REQUEST['provider']);
+                            if (!empty($_REQUEST['provider'])) {
+                                $HybridAuth->Login($_REQUEST['provider']);
+                            } else {
+                                $HybridAuth->Refresh();
+                            }
                             break;
                         case 'logout':
                             $HybridAuth->Logout();
                             break;
                         case 'unbind':
-                            $HybridAuth->runProcessor('web/service/remove', array(
-                                'provider' => @$_REQUEST['provider'],
-                            ));
+                            if (!empty($_REQUEST['provider'])) {
+                                $HybridAuth->runProcessor('web/service/remove', array(
+                                    'provider' => $_REQUEST['provider'],
+                                ));
+                            }
                             $HybridAuth->Refresh();
                             break;
                     }
