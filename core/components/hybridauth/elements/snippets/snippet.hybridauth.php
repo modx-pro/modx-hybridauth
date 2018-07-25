@@ -33,9 +33,9 @@ if (empty($activeProviderTpl)) {
 
 $url = $HybridAuth->getUrl();
 $error = '';
-if (!empty($_SESSION['HA']['error'])) {
-    $error = $_SESSION['HA']['error'];
-    unset($_SESSION['HA']['error']);
+if (!empty($_SESSION['HybridAuth']['error'])) {
+    $error = $_SESSION['HybridAuth']['error'];
+    unset($_SESSION['HybridAuth']['error']);
 }
 
 if ($modx->user->isAuthenticated($modx->context->key)) {

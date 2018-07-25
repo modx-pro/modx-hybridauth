@@ -42,15 +42,17 @@ $_lang['ha.services_remove_confirm'] = 'Are you sure you want to unbind this pro
 $_lang['area_ha.main'] = 'Main';
 $_lang['area_ha.keys'] = 'Keys';
 $_lang['setting_ha.keys.Google'] = 'Keys for Google';
-$_lang['setting_ha.keys.Google_desc'] = 'Add the application and generate the keys at this link: <a target="_blank" href="https://code.google.com/apis/console/">https://code.google.com/apis/console/</a>. About configuring other providers can be found in the documentation: <a target="_blank" href="http://hybridauth.sourceforge.net/userguide.html">http://hybridauth.sourceforge.net/userguide.html</a>.';
+$_lang['setting_ha.keys.Google_desc'] = 'Add the application and generate the keys at this link: <a target="_blank" href="https://code.google.com/apis/console/">https://code.google.com/apis/console/</a>.';
+$_lang['setting_ha.keys.GitHub'] = 'Keys for GitHub';
+$_lang['setting_ha.keys.GitHub_desc'] = 'Add the application and generate the keys at this link: <a target="_blank" href="https://github.com/settings/applications/new">https://github.com/settings/applications/new</a>.';
 $_lang['setting_ha.keys.Twitter'] = 'Keys for Twitter';
-$_lang['setting_ha.keys.Twitter_desc'] = 'Add the application and generate the keys at this link: <a target="_blank" href="https://dev.twitter.com/apps/new">https://dev.twitter.com/apps/new</a>. About configuring other providers can be found in the documentation: <a target="_blank" href="http://hybridauth.sourceforge.net/userguide.html">http://hybridauth.sourceforge.net/userguide.html</a>.';
+$_lang['setting_ha.keys.Twitter_desc'] = 'Add the application and generate the keys at this link: <a target="_blank" href="https://dev.twitter.com/apps/new">https://dev.twitter.com/apps/new</a>.';
 $_lang['setting_ha.keys.Yandex'] = 'Keys for Yandex';
-$_lang['setting_ha.keys.Yandex_desc'] = 'Add the application and generate the keys at this link: <a target="_blank" href="https://oauth.yandex.ru/client/new">https://oauth.yandex.ru/client/new</a>. About configuring other providers can be found in the documentation: <a target="_blank" href="http://hybridauth.sourceforge.net/userguide.html">http://hybridauth.sourceforge.net/userguide.html</a>.';
+$_lang['setting_ha.keys.Yandex_desc'] = 'Add the application and generate the keys at this link: <a target="_blank" href="https://oauth.yandex.ru/client/new">https://oauth.yandex.ru/client/new</a>.';
 $_lang['setting_ha.keys.Facebook'] = 'Keys for Facebook';
-$_lang['setting_ha.keys.Facebook_desc'] = 'Add the application and generate the keys at this link: <a target="_blank" href="https://developers.facebook.com/apps">https://developers.facebook.com/apps</a>. About configuring other providers can be found in the documentation: <a target="_blank" href="http://hybridauth.sourceforge.net/userguide.html">http://hybridauth.sourceforge.net/userguide.html</a>.';
+$_lang['setting_ha.keys.Facebook_desc'] = 'Add the application and generate the keys at this link: <a target="_blank" href="https://developers.facebook.com/apps">https://developers.facebook.com/apps</a>.';
 $_lang['setting_ha.keys.Vkontakte'] = 'Keys for Vkontakte';
-$_lang['setting_ha.keys.Vkontakte_desc'] = 'Add the application and generate the keys at this link: <a target="_blank" href="http://vk.com/editapp?act=create">http://vk.com/editapp?act=create</a>. About configuring other providers can be found in the documentation: <a target="_blank" href="http://hybridauth.sourceforge.net/userguide.html">http://hybridauth.sourceforge.net/userguide.html</a>.';
+$_lang['setting_ha.keys.Vkontakte_desc'] = 'Add the application and generate the keys at this link: <a target="_blank" href="https://vk.com/editapp?act=create">https://vk.com/editapp?act=create</a>.';
 
 $_lang['setting_ha.frontend_css'] = 'Styles of frontend';
 $_lang['setting_ha.frontend_css_desc'] = 'Path to the file with styles of component. If you want to use your own styles - specify the path to it here, or clear and include them manually via the website template.';

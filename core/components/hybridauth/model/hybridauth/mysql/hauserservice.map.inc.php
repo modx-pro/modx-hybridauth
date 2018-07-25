@@ -4,6 +4,10 @@ $xpdo_meta_map['haUserService']= array (
   'version' => '1.0',
   'table' => 'ha_user_services',
   'extends' => 'xPDOSimpleObject',
+  'tableMeta' => 
+  array (
+    'engine' => 'InnoDB',
+  ),
   'fields' => 
   array (
     'internalKey' => NULL,

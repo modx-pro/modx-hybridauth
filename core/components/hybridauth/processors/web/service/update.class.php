@@ -3,7 +3,7 @@
 class haUserServiceUpdateProcessor extends modObjectUpdateProcessor
 {
     public $classKey = 'haUserService';
-    public $languageTopics = array('core:default', 'core:user');
+    public $languageTopics = ['core:default', 'core:user'];
     public $permission = '';
 
 
@@ -16,7 +16,14 @@ class haUserServiceUpdateProcessor extends modObjectUpdateProcessor
 
         foreach ($properties as $k => $v) {
             $k = strtolower($k);
-            $properties[$k] = $this->modx->stripTags($v);
+            if (is_array($v)) {
+                foreach ($v as &$v2) {
+                    $v2 = $this->modx->stripTags($v2);
+                }
+                $properties[$k] = $v;
+            } else {
+                $properties[$k] = $this->modx->stripTags($v);
+            }
         }
 
         if (empty($properties['internalKey'])) {

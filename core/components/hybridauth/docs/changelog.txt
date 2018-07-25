@@ -1,5 +1,10 @@
 Changelog for HybridAuth.
 
+3.0.0 rc
+==============
+- Refactored to use HybridAuth 3.
+- Updated default providers.
+
 2.1.0 pl
 ==============
 - Added modx.pro provider.

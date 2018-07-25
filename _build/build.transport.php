@@ -7,7 +7,6 @@ $tstart = $mtime;
 set_time_limit(0);
 
 require_once 'build.config.php';
-require_once 'build.prepare.php';
 
 /* define sources */
 $root = dirname(dirname(__FILE__)) . '/';

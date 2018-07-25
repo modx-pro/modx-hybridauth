@@ -17,7 +17,7 @@ switch ($modx->event->name) {
             }
         }
 
-        if (!empty($_REQUEST['hauth_action']) || !empty($_REQUEST['hauth_start']) || !empty($_REQUEST['hauth_done'])) {
+        if (!empty($_REQUEST['hauth_action']) || !empty($_REQUEST['hauth_done'])) {
             $config = !empty($_SESSION['HybridAuth'][$modx->context->key])
                 ? $_SESSION['HybridAuth'][$modx->context->key]
                 : array();
@@ -47,7 +47,7 @@ switch ($modx->event->name) {
                             break;
                     }
                 } else {
-                    $HybridAuth->processAuth();
+                    $HybridAuth->Login($_REQUEST['hauth_done']);
                 }
             }
         }

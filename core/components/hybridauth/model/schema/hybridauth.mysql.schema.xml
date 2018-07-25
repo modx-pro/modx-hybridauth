@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model package="hybridauth" version="1.0" baseClass="xPDOObject" platform="mysql" defaultEngine="MyISAM"
+<model package="hybridauth" version="1.0" baseClass="xPDOObject" platform="mysql" defaultEngine="InnoDB"
        phpdoc-package="hybridauth">
 
     <object class="haUserService" table="ha_user_services" extends="xPDOSimpleObject">
