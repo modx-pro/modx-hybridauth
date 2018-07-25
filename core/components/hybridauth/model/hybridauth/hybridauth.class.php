@@ -230,11 +230,13 @@ class HybridAuth
         if ($profile = $this->getServiceProfile($provider)) {
             $profile['provider'] = $provider;
 
-            // Checking for existing provider record in database
+            // Check for existing provider record in database
             /** @var haUserService $service */
-            if (!$service = $this->modx->getObject('haUserService',
-                array('identifier' => $profile['identifier'], 'provider' => $profile['provider']))
-            ) {
+            $service = $this->modx->getObject('haUserService', array(
+                'identifier' => $profile['identifier'],
+                'provider' => $profile['provider']
+            ));
+            if (!$service) {
                 // Adding new record to current user
                 if ($this->modx->user->isAuthenticated($this->modx->context->key)) {
                     $uid = $this->modx->user->id;
@@ -248,8 +250,8 @@ class HybridAuth
                         );
                         $_SESSION['HA']['error'] = $msg;
                     }
-                } // Create a new user and add this record to him
-                else {
+                } else {
+                    // Create a new user and add this record to him
                     $username = !empty($profile['identifier']) ?
                         trim($profile['identifier'])
                         : md5(rand(8, 10));
@@ -360,7 +362,7 @@ class HybridAuth
                 }
             }
 
-            $this->modx->error->errors = $this->modx->error->message = null;
+            $this->modx->error->reset();
             if (empty($_SESSION['HA']['error']) && !$this->modx->user->isAuthenticated($this->modx->context->key) && !empty($login_data)) {
                 $_SESSION['HA']['verified'] = 1;
                 if (!empty($this->config['loginContext'])) {
@@ -588,7 +590,7 @@ class HybridAuth
      */
     public function runProcessor($action = '', $scriptProperties = array())
     {
-        $this->modx->error->errors = $this->modx->error->message = null;
+        $this->modx->error->reset();
 
         return $this->modx->runProcessor($action, $scriptProperties, array(
                 'processors_path' => $this->config['processorsPath'],

@@ -152,11 +152,15 @@ Ext.extend(HybridAuth.grid.Services, MODx.grid.Grid, {
     },
 
     _renderProfileUrl: function (v, md, record) {
-        var url = record.get('profileurl').trim();
-        if (url === '') {
-            return v;
+        var url = record.get('profileurl');
+        if (typeof(url) == 'string') {
+            url = url.trim();
+            if (url != '') {
+                return '<a href="' + url + '" target="_blank" style="color:#428bca;">' + v + '</a>';
+            }
         }
-        return '<a href="' + url + '" target="_blank" style="color:#428bca;">' + v + '</a>';
+
+        return v;
     },
 
     _renderEmail: function (v) {

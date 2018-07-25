@@ -1,5 +1,11 @@
 Changelog for HybridAuth.
 
+2.1.0 pl
+==============
+- Added modx.pro provider.
+- Improved compatibility with PHP 7.2.
+- Improved ExtJs grid in manager.
+
 2.0.4 pl
 ==============
 - Fixed possible "No provider ID specified" message in the system log.

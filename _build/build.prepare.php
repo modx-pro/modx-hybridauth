@@ -24,5 +24,15 @@ if ($dirs = @scandir($add_providers)) {
         }
     }
 }
-
 removeDir($add_providers);
+
+$add_providers = $root . '_build/providers/';
+$to = $base . 'hybridauth/Hybrid/Providers/';
+if ($files = @scandir($add_providers)) {
+    foreach ($files as $file) {
+        if ($file[0] != '.') {
+            $from = "{$add_providers}{$file}";
+            shell_exec("cp -f $from $to");
+        }
+    }
+}
