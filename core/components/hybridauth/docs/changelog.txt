@@ -1,5 +1,10 @@
 Changelog for HybridAuth.
 
+3.0.1 pl
+==============
+- Updated HybridAuth core to 3.0.0 stable
+- Fixed php type of "country" in model map.
+
 3.0.0 pl
 ==============
 - Updated HybridAuth core.

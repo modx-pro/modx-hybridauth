@@ -192,7 +192,7 @@ $xpdo_meta_map['haUserService']= array (
     array (
       'dbtype' => 'varchar',
       'precision' => '100',
-      'phptype' => '255',
+      'phptype' => 'string',
       'null' => true,
     ),
     'region' => 
