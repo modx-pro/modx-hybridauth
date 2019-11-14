@@ -1,15 +1,19 @@
 Changelog for HybridAuth.
 
-3.0.1 pl
+3.0.2-pl
+==============
+- Fixed retrieving date of birth from remote profile.
+
+3.0.1-pl
 ==============
 - Updated HybridAuth core to 3.0.0 stable
 - Fixed php type of "country" in model map.
 
-3.0.0 pl
+3.0.0-pl
 ==============
 - Updated HybridAuth core.
 
-3.0.0 rc
+3.0.0-rc
 ==============
 - Refactored to use HybridAuth 3.
 - Updated default providers.

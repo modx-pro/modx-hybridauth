@@ -215,8 +215,8 @@ class HybridAuth
                     'fullname' => !empty($profile['lastName'])
                         ? $profile['firstName'] . ' ' . $profile['lastName']
                         : $profile['firstName'],
-                    'dob' => !empty($profile['birthday']) && !empty($profile['birthmonth']) && !empty($profile['birthyear'])
-                        ? $profile['birthyear'] . '-' . $profile['birthmonth'] . '-' . $profile['birthday']
+                    'dob' => !empty($profile['birthDay']) && !empty($profile['birthMonth']) && !empty($profile['birthYear'])
+                        ? $profile['birthYear'] . '-' . $profile['birthMonth'] . '-' . $profile['birthDay']
                         : '',
                     'email' => !empty($profile['emailVerified'])
                         ? $profile['emailVerified']
