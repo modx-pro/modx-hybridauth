@@ -46,7 +46,9 @@ if ((!empty($_REQUEST['action']) && strtolower($_REQUEST['action']) == 'updatepr
             if ($key == 'comment') {
                 $data[$key] = empty($length) ? $_REQUEST[$key] : substr($_REQUEST[$key], $length);
             } else if ($key == 'extended') {
-                $data[$key] = $_REQUEST[$key];
+                foreach ($_REQUEST[$key] as $k => $v){
+                    $data[$key][$k] = $HybridAuth->Sanitize($_REQUEST[$key][$k], $length);
+                }
             } else{
                 $data[$key] = $HybridAuth->Sanitize($_REQUEST[$key], $length);
             }
