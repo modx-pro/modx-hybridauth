@@ -45,13 +45,22 @@ if ((!empty($_REQUEST['action']) && strtolower($_REQUEST['action']) == 'updatepr
         if (isset($_REQUEST[$key])) {
             if ($key == 'comment') {
                 $data[$key] = empty($length) ? $_REQUEST[$key] : substr($_REQUEST[$key], $length);
-            } else {
+            } else if ($key == 'extended') {
+                $data[$key] = $_REQUEST[$key];
+            } else{
                 $data[$key] = $HybridAuth->Sanitize($_REQUEST[$key], $length);
             }
         }
     }
 
     $data['requiredFields'] = array_map('trim', explode(',', $requiredFields));
+
+    if ( isset($data['extended']) && !empty($data['extended']) ) {
+        $profile = $modx->user->getOne('Profile');
+        $extended = $profile->get('extended');
+        $new_extended = array_merge($extended, $data['extended']);
+        $data['extended'] = $new_extended;
+    }
 
     /** @var modProcessorResponse $response */
     $response = $HybridAuth->runProcessor('web/user/update', $data);
