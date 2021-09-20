@@ -1,11 +1,13 @@
 <?php
+
 /**
  * Default Ukrainian Lexicon Entries for HybridAuth
  *
  * @package hybridauth
  * @subpackage lexicon
  * @translation Viktorminator, dmi3yy <dmi3yy@gmail.com>
-*/
+ */
+
 $_lang['hybridauth'] = 'HybridAuth';
 $_lang['ha_err_no_providers'] = 'Ви повинні вказати хоча б одного провайдера.';
 $_lang['ha_err_not_logged_in'] = 'Ви повинні бути авторизовані для редагування свого профілю';

@@ -1,7 +1,7 @@
 <?php
 
+/** @var modX $modx */
 switch ($modx->event->name) {
-
     case 'OnHandleRequest':
         if ($modx->context->key != 'web' && !$modx->user->id) {
             if ($user = $modx->getAuthenticatedUser($modx->context->key)) {

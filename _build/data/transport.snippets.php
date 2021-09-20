@@ -1,4 +1,5 @@
 <?php
+
 $snippets = array();
 
 $tmp = array(
@@ -14,6 +15,8 @@ $tmp = array(
 
 foreach ($tmp as $k => $v) {
     /** @var modSnippet $snippet */
+    /** @var modX $modx */
+    /** @var array $sources */
     $snippet = $modx->newObject('modSnippet');
     $snippet->fromArray(array(
         'id' => 0,

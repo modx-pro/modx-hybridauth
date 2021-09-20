@@ -22,7 +22,7 @@ class ModxPro extends OAuth2
      * @throws \Hybridauth\Exception\HttpRequestFailedException
      * @throws \Hybridauth\Exception\InvalidAccessTokenException
      */
-    function getUserProfile()
+    public function getUserProfile()
     {
         $data = new Collection($this->apiRequest('profile', 'POST'));
 
@@ -45,6 +45,4 @@ class ModxPro extends OAuth2
 
         return $userProfile;
     }
-
 }
-

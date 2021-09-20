@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Properties English Lexicon Entries for HybridAuth
  *
  * @package hybridauth
  * @subpackage lexicon
  */
+
 $_lang['ha.providers'] = 'Comma separated list of a providers for authentification. All available providers are here {core_path}components/hybridauth/model/hybridauth/lib/Providers/. For example, &providers=`Google,Twitter,Facebook`.';
 $_lang['ha.groups'] = 'Comma separated list of existing user groups for joining by user at the first login. For example, &groups=`Users:1` will add new user to group "Users" with role "member"';
 $_lang['ha.rememberme'] = 'If true, user will be remembered for a long time.';

@@ -14,9 +14,9 @@ class HybridAuth
     public $initialized = [];
 
 
-    function __construct(modX &$modx, array $config = [])
+    public function __construct(modX $modx, array $config = [])
     {
-        $this->modx =& $modx;
+        $this->modx = $modx;
 
         $corePath = MODX_CORE_PATH . 'components/hybridauth/';
         $assetsUrl = MODX_ASSETS_URL . 'components/hybridauth/';
@@ -122,9 +122,7 @@ class HybridAuth
                     if (!isset($config['keys'])) {
                         $config = [
                             'keys' => [
-                                'id' => isset($config['key'])
-                                    ? $config['key']
-                                    : $config['id'],
+                                'id' => $config['key'] ?? $config['id'],
                                 'secret' => $config['secret'],
                             ],
                         ];
@@ -191,7 +189,8 @@ class HybridAuth
                 $response = $this->runProcessor('web/service/create', $profile);
                 if ($response->isError()) {
                     $msg = implode(', ', $response->getAllErrors());
-                    $this->modx->log(modX::LOG_LEVEL_ERROR,
+                    $this->modx->log(
+                        modX::LOG_LEVEL_ERROR,
                         '[HybridAuth] unable to save service profile for user ' . $uid . '. Message: ' . $msg
                     );
                     $_SESSION['HybridAuth']['error'] = $msg;
@@ -255,7 +254,8 @@ class HybridAuth
                     $response = $this->runProcessor('web/user/create', $arr);
                     if ($response->isError()) {
                         $msg = implode(', ', $response->getAllErrors());
-                        $this->modx->log(modX::LOG_LEVEL_ERROR,
+                        $this->modx->log(
+                            modX::LOG_LEVEL_ERROR,
                             '[HybridAuth] Unable to create user ' . print_r($arr, 1) . '. Message: ' . $msg
                         );
                         $_SESSION['HybridAuth']['error'] = $msg;
@@ -270,7 +270,8 @@ class HybridAuth
                         $response = $this->runProcessor('web/service/create', $profile);
                         if ($response->isError()) {
                             $msg = implode(', ', $response->getAllErrors());
-                            $this->modx->log(modX::LOG_LEVEL_ERROR,
+                            $this->modx->log(
+                                modX::LOG_LEVEL_ERROR,
                                 '[HybridAuth] unable to save service profile for user ' . $uid . '. Message: ' . $msg
                             );
                             $_SESSION['HybridAuth']['error'] = $msg;
@@ -298,8 +299,10 @@ class HybridAuth
                 $response = $this->runProcessor('web/service/update', $profile);
                 if ($response->isError()) {
                     $msg = implode(', ', $response->getAllErrors());
-                    $this->modx->log(modX::LOG_LEVEL_ERROR,
-                        '[HybridAuth] unable to update service profile for user ' . $uid . '. Message: ' . $msg);
+                    $this->modx->log(
+                        modX::LOG_LEVEL_ERROR,
+                        '[HybridAuth] unable to update service profile for user ' . $uid . '. Message: ' . $msg
+                    );
                     $_SESSION['HybridAuth']['error'] = $msg;
                 }
             } else {
@@ -309,7 +312,11 @@ class HybridAuth
         }
 
         $this->modx->error->reset();
-        if (empty($_SESSION['HybridAuth']['error']) && !$this->modx->user->isAuthenticated($this->modx->context->key) && !empty($login_data)) {
+        if (
+            empty($_SESSION['HybridAuth']['error'])
+            && !$this->modx->user->isAuthenticated($this->modx->context->key)
+            && !empty($login_data)
+        ) {
             $_SESSION['HA']['verified'] = 1;
             if (!empty($this->config['loginContext'])) {
                 $login_data['login_context'] = $this->config['loginContext'];
@@ -323,8 +330,10 @@ class HybridAuth
             $response = $this->modx->runProcessor('security/login', $login_data);
             if ($response->isError()) {
                 $msg = implode(', ', $response->getAllErrors());
-                $this->modx->log(modX::LOG_LEVEL_ERROR,
-                    '[HybridAuth] error login for user ' . $login_data['username'] . '. Message: ' . $msg);
+                $this->modx->log(
+                    modX::LOG_LEVEL_ERROR,
+                    '[HybridAuth] error login for user ' . $login_data['username'] . '. Message: ' . $msg
+                );
                 $_SESSION['HybridAuth']['error'] = $msg;
             }
         }
@@ -360,8 +369,10 @@ class HybridAuth
         $response = $this->modx->runProcessor('security/logout', $logout_data);
         if ($response->isError()) {
             $msg = implode(', ', $response->getAllErrors());
-            $this->modx->log(modX::LOG_LEVEL_ERROR,
-                '[HybridAuth] logout error. Username: ' . $this->modx->user->get('username') . ', uid: ' . $msg);
+            $this->modx->log(
+                modX::LOG_LEVEL_ERROR,
+                '[HybridAuth] logout error. Username: ' . $this->modx->user->get('username') . ', uid: ' . $msg
+            );
             $_SESSION['HybridAuth']['error'] = $msg;
         }
         $this->Refresh('logout');
@@ -398,7 +409,13 @@ class HybridAuth
                 $url = substr($url, 0, $pos);
                 if (count($arr) > 1) {
                     foreach ($arr as $k => $v) {
-                        if (preg_match('#(action|provider|hauth.action|hauth.done|state|code|error|error_description)+#i', $v, $matches)) {
+                        if (
+                            preg_match(
+                                '#(action|provider|hauth.action|hauth.done|state|code|error|error_description)+#i',
+                                $v,
+                                $matches
+                            )
+                        ) {
                             unset($arr[$k]);
                         }
                     }
@@ -508,7 +525,10 @@ class HybridAuth
     {
         $this->modx->error->reset();
 
-        return $this->modx->runProcessor($action, $scriptProperties, [
+        return $this->modx->runProcessor(
+            $action,
+            $scriptProperties,
+            [
                 'processors_path' => $this->config['processorsPath'],
             ]
         );
@@ -528,18 +548,21 @@ class HybridAuth
      */
     public function makePlaceholders(
         array $array = [],
-        $plPrefix = '',
-        $prefix = '[[+',
-        $suffix = ']]',
-        $uncacheable = true
-    ) {
+              $plPrefix = '',
+              $prefix = '[[+',
+              $suffix = ']]',
+              $uncacheable = true
+    )
+    {
         $result = ['pl' => [], 'vl' => []];
 
         $uncached_prefix = str_replace('[[', '[[!', $prefix);
         foreach ($array as $k => $v) {
             if (is_array($v)) {
-                $result = array_merge_recursive($result,
-                    $this->makePlaceholders($v, $plPrefix . $k . '.', $prefix, $suffix, $uncacheable));
+                $result = array_merge_recursive(
+                    $result,
+                    $this->makePlaceholders($v, $plPrefix . $k . '.', $prefix, $suffix, $uncacheable)
+                );
             } else {
                 $pl = $plPrefix . $k;
                 $result['pl'][$pl] = $prefix . $pl . $suffix;

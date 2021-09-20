@@ -1,7 +1,7 @@
 {
   "name": "bezumkin/modx-hybridauth",
   "require": {
-    "hybridauth/hybridauth": "3.*@rc"
+    "hybridauth/hybridauth": "3.7.*"
   },
   "autoload": {
     "classmap": [

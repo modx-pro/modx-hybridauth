@@ -18,6 +18,8 @@ $tmp = array(
 
 foreach ($tmp as $k => $v) {
     /** @var modPlugin $plugin */
+    /** @var modX $modx */
+    /** @var array $sources */
     $plugin = $modx->newObject('modPlugin');
     $plugin->fromArray(array(
         'id' => 0,

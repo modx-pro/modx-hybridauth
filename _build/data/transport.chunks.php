@@ -1,4 +1,5 @@
 <?php
+
 $chunks = array();
 
 $tmp = array(
@@ -26,6 +27,8 @@ $tmp = array(
 
 foreach ($tmp as $k => $v) {
     /** @var modChunk $chunk */
+    /** @var modX $modx */
+    /** @var array $sources */
     $chunk = $modx->newObject('modChunk');
     $chunk->fromArray(array(
         'id' => 0,

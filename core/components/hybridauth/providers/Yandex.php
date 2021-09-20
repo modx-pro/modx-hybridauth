@@ -22,7 +22,7 @@ class Yandex extends OAuth2
      * @throws \Hybridauth\Exception\HttpRequestFailedException
      * @throws \Hybridauth\Exception\InvalidAccessTokenException
      */
-    function getUserProfile()
+    public function getUserProfile()
     {
         $data = new Collection($this->apiRequest('', 'GET'));
         if (!$data->exists('id')) {
@@ -46,6 +46,5 @@ class Yandex extends OAuth2
 
         return $userProfile;
     }
-
 }
 

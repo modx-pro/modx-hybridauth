@@ -1,4 +1,5 @@
 <?php
+
 $settings = array();
 
 $tmp = array(
@@ -42,6 +43,7 @@ $tmp = array(
 
 foreach ($tmp as $k => $v) {
     /** @var modSystemSetting $setting */
+    /** @var modX $modx */
     $setting = $modx->newObject('modSystemSetting');
     $setting->fromArray(array_merge(
         array(

@@ -1,6 +1,7 @@
 <?php
-/** @var array $scriptProperties */
 
+/** @var array $scriptProperties */
+/** @var modX $modx */
 $modx->error->reset();
 if (!$modx->loadClass('hybridauth', MODX_CORE_PATH . 'components/hybridauth/model/hybridauth/', false, true)) {
     return;

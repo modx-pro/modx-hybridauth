@@ -1,4 +1,5 @@
 <?php
+
 require MODX_CORE_PATH . 'model/modx/processors/security/user/create.class.php';
 
 class haUserCreateProcessor extends modUserCreateProcessor

@@ -1,5 +1,10 @@
 Changelog for HybridAuth.
 
+3.1.0-pl
+==============
+- Refactoring PHP to PSR-12
+- Updated HybridAuth core to 3.7.1
+
 3.0.2-pl
 ==============
 - Fixed retrieving date of birth from remote profile.

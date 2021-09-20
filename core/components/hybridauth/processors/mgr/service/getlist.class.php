@@ -17,7 +17,8 @@ class haUserServiceGetListProcessor extends modObjectGetListProcessor
     {
         $userId = (int)$this->getProperty('user_id');
         if ($userId > 0) {
-            $c->where(array(
+            $c->where(
+                array(
                     'internalKey' => $userId,
                 )
             );
@@ -35,7 +36,8 @@ class haUserServiceGetListProcessor extends modObjectGetListProcessor
     public function prepareQueryAfterCount(xPDOQuery $c)
     {
         $c->select($this->modx->getSelectColumns($this->classKey, $this->classKey));
-        $c->select(array(
+        $c->select(
+            array(
                 'IF(emailverified IS NULL OR LENGTH(emailverified) = 0, email, emailverified) AS email',
             )
         );

@@ -1,6 +1,7 @@
 <?php
-/** @var array $scriptProperties */
 
+/** @var array $scriptProperties */
+/** @var modX $modx */
 $modx->error->reset();
 if (!$modx->loadClass('hybridauth', MODX_CORE_PATH . 'components/hybridauth/model/hybridauth/', false, true)) {
     return;
@@ -46,10 +47,10 @@ if ((!empty($_REQUEST['action']) && strtolower($_REQUEST['action']) == 'updatepr
             if ($key == 'comment') {
                 $data[$key] = empty($length) ? $_REQUEST[$key] : substr($_REQUEST[$key], $length);
             } else if ($key == 'extended') {
-                foreach ($_REQUEST[$key] as $k => $v){
+                foreach ($_REQUEST[$key] as $k => $v) {
                     $data[$key][$k] = $HybridAuth->Sanitize($_REQUEST[$key][$k], $length);
                 }
-            } else{
+            } else {
                 $data[$key] = $HybridAuth->Sanitize($_REQUEST[$key], $length);
             }
         }
@@ -57,7 +58,7 @@ if ((!empty($_REQUEST['action']) && strtolower($_REQUEST['action']) == 'updatepr
 
     $data['requiredFields'] = array_map('trim', explode(',', $requiredFields));
 
-    if ( isset($data['extended']) && !empty($data['extended']) ) {
+    if (isset($data['extended']) && !empty($data['extended'])) {
         $profile = $modx->user->getOne('Profile');
         $extended = $profile->get('extended');
         $new_extended = array_merge($extended, $data['extended']);
@@ -72,7 +73,7 @@ if ((!empty($_REQUEST['action']) && strtolower($_REQUEST['action']) == 'updatepr
             $data['error.' . $error->field] = $error->message;
         }
     }
-    $data['success'] = (integer)!$response->isError();
+    $data['success'] = (int)!$response->isError();
 }
 
 $add = array();

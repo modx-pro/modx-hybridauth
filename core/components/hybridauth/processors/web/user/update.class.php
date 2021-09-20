@@ -1,4 +1,5 @@
 <?php
+
 require MODX_CORE_PATH . 'model/modx/processors/security/user/update.class.php';
 
 class haUserUpdateProcessor extends modUserUpdateProcessor

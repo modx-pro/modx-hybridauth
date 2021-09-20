@@ -3,7 +3,7 @@
 if ($object->xpdo) {
     /** @var modX $modx */
     /** @var array $options */
-    $modx =& $object->xpdo;
+    $modx = $object->xpdo;
 
     switch ($options[xPDOTransport::PACKAGE_ACTION]) {
         case xPDOTransport::ACTION_INSTALL:
