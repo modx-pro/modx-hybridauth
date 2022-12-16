@@ -1,4 +1,6 @@
 .idea
+.vscode
+.DS_Store
 config.core.php
 /core/components/hybridauth/vendor/
 /core/components/hybridauth/composer.lock
