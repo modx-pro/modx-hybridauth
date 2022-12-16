@@ -15,7 +15,7 @@ $tmp = array(
     ),
     'keys.Google' => array(
         'xtype' => 'textfield',
-        'value' => '{"keys":{"id":"12345","secret":"12345"},"scope":"profile https://www.googleapis.com/auth/plus.profile.emails.read"}',
+        'value' => '{"keys":{"id":"12345","secret":"12345"},"scope":"https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email"}',
         'area' => 'ha.keys',
     ),
     'keys.Facebook' => array(
@@ -49,7 +49,8 @@ foreach ($tmp as $k => $v) {
         array(
             'key' => 'ha.' . $k,
             'namespace' => PKG_NAME_LOWER,
-        ), $v
+        ),
+        $v
     ), '', true, true);
 
     $settings[] = $setting;
