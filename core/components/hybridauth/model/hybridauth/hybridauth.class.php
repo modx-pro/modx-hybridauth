@@ -602,12 +602,12 @@ class HybridAuth
     public function regManagerTab($controller, $user)
     {
         $this->config['user_id'] = $user->id;
+        $controller->addLexiconTopic('hybridauth:default');
         $controller->addCss($this->config['cssUrl'] . 'mgr/main.css');
         $controller->addCss($this->config['cssUrl'] . 'mgr/bootstrap.buttons.css');
         $controller->addJavascript($this->config['jsUrl'] . 'mgr/hybridauth.js');
         $controller->addJavascript($this->config['jsUrl'] . 'mgr/misc/utils.js');
         $controller->addJavascript($this->config['jsUrl'] . 'mgr/widgets/service.grid.js');
         $controller->addHtml('<script>HybridAuth.config=' . json_encode($this->config) . '</script>');
-        $controller->addLexiconTopic('hybridauth:default');
     }
 }
