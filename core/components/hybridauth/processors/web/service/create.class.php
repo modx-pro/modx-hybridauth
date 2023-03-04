@@ -17,9 +17,9 @@ class haUserServiceCreateProcessor extends modObjectCreateProcessor
         foreach ($properties as $k => $v) {
             $k = strtolower($k);
             if (is_array($v)) {
-                foreach ($v as &$v2) {
-                    $v2 = $this->modx->stripTags($v2);
-                }
+                array_walk_recursive($v, function ($value, $key, $modx) {
+                    $value = $modx->stripTags($value);
+                }, $this->modx);
                 $properties[$k] = $v;
             } else {
                 $properties[$k] = $this->modx->stripTags($v);
