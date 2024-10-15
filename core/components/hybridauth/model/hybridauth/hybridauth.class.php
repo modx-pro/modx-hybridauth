@@ -441,6 +441,7 @@ class HybridAuth
         $request = preg_replace('#^' . $this->modx->getOption('base_url') . '#', '', $_SERVER['REQUEST_URI']);
         $url = $this->modx->getOption('site_url') . ltrim(rawurldecode($request), '/');
         $url = preg_replace('#["\']#', '', strip_tags($url));
+        $url = preg_replace('#\[\[.*?\]\]#', '', strip_tags($url));
 
         $url .= strpos($url, '?')
             ? '&amp;hauth_action='
