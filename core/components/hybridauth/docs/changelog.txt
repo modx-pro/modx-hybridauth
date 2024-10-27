@@ -1,5 +1,10 @@
 Changelog for HybridAuth.
 
+3.1.1-pl
+==============
+- #50 Fix position of lexicon in manager
+- #53 fix used modx tags in provider urls
+
 3.1.0-pl
 ==============
 - Refactoring PHP to PSR-12
