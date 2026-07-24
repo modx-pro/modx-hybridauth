@@ -6,14 +6,8 @@ Social login for MODX Revolution via [Hybridauth](https://github.com/hybridauth/
 
 ### Build
 
-Before building the transport package:
-
-```bash
-cd core/components/hybridauth
-composer install
-```
-
-`vendor/` is not committed; the package must include it after `composer install`.
+`vendor/` is gitignored. `_build/build.transport.php` runs `composer install --no-dev`
+and fails the build if `vendor/autoload.php` is missing (#54). `composer.lock` is committed.
 
 ### Providers
 

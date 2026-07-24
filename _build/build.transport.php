@@ -36,6 +36,9 @@ $modx->setLogLevel(modX::LOG_LEVEL_INFO);
 $modx->setLogTarget('ECHO');
 $modx->getService('error', 'error.modError');
 
+/* vendor/ is gitignored; transport must include it (#54) */
+ensureComposerVendor($sources['source_core'], $modx);
+
 $modx->loadClass('transport.modPackageBuilder', '', false, true);
 $builder = new modPackageBuilder($modx);
 $builder->createPackage(PKG_NAME_LOWER, PKG_VERSION, PKG_RELEASE);

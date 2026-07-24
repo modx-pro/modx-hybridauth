@@ -101,7 +101,16 @@ class HybridAuth
     public function loadHybridAuth()
     {
         if (!class_exists(\Hybridauth\Adapter\OAuth2::class)) {
-            require_once MODX_CORE_PATH . 'components/hybridauth/vendor/autoload.php';
+            $autoload = MODX_CORE_PATH . 'components/hybridauth/vendor/autoload.php';
+            if (!is_readable($autoload)) {
+                $this->modx->log(
+                    modX::LOG_LEVEL_ERROR,
+                    '[HybridAuth] Missing vendor/autoload.php. Reinstall the package built with ' .
+                    '`composer install` in core/components/hybridauth/ (see issue #54).'
+                );
+                return;
+            }
+            require_once $autoload;
         }
 
         if (!empty($this->config['providers'])) {

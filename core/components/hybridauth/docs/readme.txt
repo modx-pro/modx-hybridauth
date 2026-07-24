@@ -37,10 +37,13 @@ I recorded simple video with Twitter login http://www.youtube.com/watch?v=ron_VT
 --------------------
 Building from source
 --------------------
-Before building the transport package from this repository run:
-  cd core/components/hybridauth && composer install
+vendor/ is not committed. build.transport.php runs `composer install --no-dev`
+in core/components/hybridauth/ and aborts if vendor/autoload.php is still missing.
 
-vendor/ is not committed; the package must include dependencies after composer install.
+You can also install dependencies yourself:
+  cd core/components/hybridauth && composer install --no-dev
+
+composer.lock is committed so builds resolve the same Hybridauth version.
 
 MailRu is not shipped (removed upstream in Hybridauth 3.8.2); use VK ID for Mail.ru accounts.
 New VK apps should use VK ID — see https://github.com/modx-pro/modx-hybridauth/issues/56

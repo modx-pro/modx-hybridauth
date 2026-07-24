@@ -8,7 +8,8 @@ Changelog for HybridAuth.
 - #52 Fixed Odnoklassniki birthday parsing (YYYY-MM-DD) and documented keys id/key/secret
 - Added ha.keys.Odnoklassniki system setting
 - MailRu is not restored; use VK ID for Mail.ru accounts
-- Before building the transport package run: composer install in core/components/hybridauth/
+- #54 Build runs composer install so transport packages include vendor/autoload.php
+- composer.lock is committed for reproducible builds
 
 3.1.1-pl
 ==============
