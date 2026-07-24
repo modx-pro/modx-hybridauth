@@ -15,13 +15,14 @@ Built-in Hybridauth providers (Google, Facebook, GitHub, X, Yahoo, …) work thr
 
 - **Yahoo** — create an app at [developer.yahoo.com/apps](https://developer.yahoo.com/apps/), enable OpenID Connect Permissions, set `ha.keys.Yahoo` to `{"keys":{"id":"...","secret":"..."},"scope":"profile"}`, use `&providers=`Yahoo``.
 
-Local classmap providers (restored after Hybridauth 3.8.2 removed them):
+Local classmap providers:
 
+- **VkId** (OAuth 2.1 + PKCE) — register in [VK ID](https://id.vk.com/about/business/go), set `ha.keys.VkId` to `{"keys":{"id":"...","secret":"..."},"scope":"vkid.personal_info email"}`, use `&providers=`VkId``. See [#56](https://github.com/modx-pro/modx-hybridauth/issues/56).
 - **Yandex** — `{"keys":{"id":"...","secret":"..."}}`
-- **Vkontakte** (legacy OAuth) — `{"keys":{"id":"...","secret":"..."},"scope":"email"}`. New apps: [VK ID](https://dev.vk.com/ru/vkid) ([#56](https://github.com/modx-pro/modx-hybridauth/issues/56)).
+- **Vkontakte** (legacy `api.vk.com` OAuth) — only for old apps; prefer **VkId**.
 - **Odnoklassniki** — `{"keys":{"id":"...","key":"...","secret":"..."}}` (`key` = application_key). See [#52](https://github.com/modx-pro/modx-hybridauth/issues/52).
 
-**MailRu** is not shipped; use VK ID for Mail.ru accounts.
+**MailRu** is not shipped; VK ID can cover Mail.ru accounts in one OAuth flow.
 
 Callback URL for each provider: `{site_url}?hauth_done={ProviderName}` (underscore; required for Facebook).
 

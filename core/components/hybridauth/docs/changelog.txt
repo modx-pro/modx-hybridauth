@@ -5,6 +5,7 @@ Changelog for HybridAuth.
 - Updated HybridAuth core to 3.13.0 (CVE-2026-4587)
 - Supported PHP 7.4–8.4
 - Restored local providers removed upstream in 3.8.2: Vkontakte, Yandex, Odnoklassniki
+- #56 Added VkId provider (VK ID OAuth 2.1 + PKCE); keep legacy Vkontakte for old apps
 - #52 Fixed Odnoklassniki birthday parsing (YYYY-MM-DD) and documented keys id/key/secret
 - Added ha.keys.Odnoklassniki system setting
 - MailRu is not restored; use VK ID for Mail.ru accounts

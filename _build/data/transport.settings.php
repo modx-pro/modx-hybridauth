@@ -33,6 +33,11 @@ $tmp = array(
         'value' => '{"keys":{"key":"12345","secret":"12345"}}',
         'area' => 'ha.keys',
     ),
+    'keys.VkId' => array(
+        'xtype' => 'textfield',
+        'value' => '{"keys":{"id":"12345","secret":"12345"},"scope":"vkid.personal_info email"}',
+        'area' => 'ha.keys',
+    ),
     'keys.Vkontakte' => array(
         'xtype' => 'textfield',
         'value' => '{"keys":{"id":"12345","secret":"12345"},"scope":"email"}',

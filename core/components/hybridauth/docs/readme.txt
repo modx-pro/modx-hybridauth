@@ -56,5 +56,11 @@ You can also install dependencies yourself:
 
 composer.lock is committed so builds resolve the same Hybridauth version.
 
-MailRu is not shipped (removed upstream in Hybridauth 3.8.2); use VK ID for Mail.ru accounts.
-New VK apps should use VK ID — see https://github.com/modx-pro/modx-hybridauth/issues/56
+MailRu is not shipped (removed upstream in Hybridauth 3.8.2); VK ID can cover Mail.ru accounts.
+
+VK ID (OAuth 2.1 + PKCE):
+1. Create an app at https://id.vk.com/about/business/go
+2. Set ha.keys.VkId, e.g. {"keys":{"id":"...","secret":"..."},"scope":"vkid.personal_info email"}
+3. Callback {site_url}?hauth_done=VkId
+4. Snippet [[!HybridAuth?providers=`VkId`]]
+Legacy ha.keys.Vkontakte (api.vk.com) remains for old apps only.
