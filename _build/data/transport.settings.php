@@ -28,6 +28,11 @@ $tmp = array(
         'value' => '{"keys":{"id":"12345","secret":"12345"},"scope":"email"}',
         'area' => 'ha.keys',
     ),
+    'keys.Odnoklassniki' => array(
+        'xtype' => 'textfield',
+        'value' => '{"keys":{"id":"12345","key":"12345","secret":"12345"}}',
+        'area' => 'ha.keys',
+    ),
     'register_users' => array(
         'xtype' => 'combo-boolean',
         'value' => true,

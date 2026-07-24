@@ -1,5 +1,15 @@
 Changelog for HybridAuth.
 
+3.2.0-pl
+==============
+- Updated HybridAuth core to 3.13.0 (CVE-2026-4587)
+- Supported PHP 7.4–8.4
+- Restored local providers removed upstream in 3.8.2: Vkontakte, Yandex, Odnoklassniki
+- #52 Fixed Odnoklassniki birthday parsing (YYYY-MM-DD) and documented keys id/key/secret
+- Added ha.keys.Odnoklassniki system setting
+- MailRu is not restored; use VK ID for Mail.ru accounts
+- Before building the transport package run: composer install in core/components/hybridauth/
+
 3.1.1-pl
 ==============
 - #50 Fix position of lexicon in manager

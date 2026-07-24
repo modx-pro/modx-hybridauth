@@ -3,14 +3,17 @@ HybridAuth
 --------------------
 Author: Vasiliy Naumkin <bezumkin@yandex.ru>
 --------------------
-An integration of open source social sign on php library - http://hybridauth.sourceforge.net/ into MODX Revolution.
+An integration of open source social sign on php library Hybridauth
+(https://github.com/hybridauth/hybridauth, currently 3.13) into MODX Revolution.
+
+Supported PHP: 7.4–8.4
 
 The main goal of HybridAuth library is to act as an abstract api between your application and various social apis and identities providers such as Facebook, Twitter, MySpace, LinkedIn, Google and Yahoo.
 
 HybridAuth enable developers to easily build social applications to engage websites vistors and customers on a social level by implementing social signin, social sharing, users profiles, friends list, activities stream, status updates and more.
 
 Feel free to suggest ideas/improvements/bugs on GitHub:
-http://github.com/bezumkin/modx-hybridauth/issues
+https://github.com/modx-pro/modx-hybridauth/issues
 
 --------------------
 Installation
@@ -19,10 +22,25 @@ Download and install it with MODX package manager
 
 Then:
 1. Register and get api keys from needed services. For example, create twitter application - https://dev.twitter.com/apps/new
-2. Open system settings in manager, switch to hybridauth and make\update ha.keys.Servicename. In our wxample it will be ha.keys.Twitter
-3. You need to set your keys as json sting with array. {"key":"you key from twitter","secret":"secret from twitter"}. It needed for proper initialization of the library (http://hybridauth.sourceforge.net/userguide/Configuration.html).
-4. Now you can run snippet [[!HybriAuth?providers=`Twitter`]] on any page.
+2. Open system settings in manager, switch to hybridauth and make\update ha.keys.Servicename. In our example it will be ha.keys.Twitter
+3. You need to set your keys as json string with array. Example:
+   {"keys":{"id":"your id","secret":"your secret"}}
+   Odnoklassniki also needs public application_key as "key":
+   {"keys":{"id":"...","key":"...","secret":"..."}}
+   Add the same callback URL in the provider cabinet: {site_url}?hauth.done={Provider}
+4. Now you can run snippet [[!HybridAuth?providers=`Twitter`]] on any page.
 
 If there will be any errors on library initialization - it will be logged in in system log.
 
 I recorded simple video with Twitter login http://www.youtube.com/watch?v=ron_VTaQeWE for you.
+
+--------------------
+Building from source
+--------------------
+Before building the transport package from this repository run:
+  cd core/components/hybridauth && composer install
+
+vendor/ is not committed; the package must include dependencies after composer install.
+
+MailRu is not shipped (removed upstream in Hybridauth 3.8.2); use VK ID for Mail.ru accounts.
+New VK apps should use VK ID — see https://github.com/modx-pro/modx-hybridauth/issues/56

@@ -1,50 +1,85 @@
 <?php
 
+/*!
+* Hybridauth
+* https://hybridauth.github.io | https://github.com/hybridauth/hybridauth
+*  (c) 2017 Hybridauth authors | https://hybridauth.github.io/license.html
+*/
+
 namespace Hybridauth\Provider;
 
 use Hybridauth\Adapter\OAuth2;
 use Hybridauth\Exception\Exception;
-use Hybridauth\Data\Collection;
-use Hybridauth\User\Profile;
+use Hybridauth\Exception\UnexpectedApiResponseException;
+use Hybridauth\Data;
+use Hybridauth\User;
 
-
+/**
+ * Yandex OAuth2 provider adapter.
+ */
 class Yandex extends OAuth2
 {
+    /**
+     * {@inheritdoc}
+     */
     protected $apiBaseUrl = 'https://login.yandex.ru/info';
-    protected $authorizeUrl = 'https://oauth.yandex.ru/authorize';
-    protected $accessTokenUrl = 'https://oauth.yandex.ru/token';
-
 
     /**
-     * @return bool|Profile
+     * {@inheritdoc}
+     */
+    protected $authorizeUrl = 'https://oauth.yandex.ru/authorize';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $accessTokenUrl = 'https://oauth.yandex.ru/token';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $apiDocumentation = 'https://yandex.com/dev/id/doc/en/';
+
+    /**
+     * Load the user profile from the IDp api client
+     *
      * @throws Exception
-     * @throws \Hybridauth\Exception\HttpClientFailureException
-     * @throws \Hybridauth\Exception\HttpRequestFailedException
-     * @throws \Hybridauth\Exception\InvalidAccessTokenException
      */
     public function getUserProfile()
     {
-        $data = new Collection($this->apiRequest('', 'GET'));
-        if (!$data->exists('id')) {
-            throw new Exception('User profile request failed! ModxPro returned an invalid response.');
-        }
-        $userProfile = new Profile();
+        $this->scope = implode(',', []);
 
+        $response = $this->apiRequest($this->apiBaseUrl, 'GET', ['format' => 'json']);
+
+        if (!isset($response->id)) {
+            throw new UnexpectedApiResponseException('Provider API returned an unexpected response.');
+        }
+
+        $data = new Data\Collection($response);
+
+        if (!$data->exists('id')) {
+            throw new UnexpectedApiResponseException('Provider API returned an unexpected response.');
+        }
+
+        $userProfile = new User\Profile();
         $userProfile->identifier = $data->get('id');
-        $userProfile->firstName = $data->get('real_name');
-        $userProfile->lastName = $data->get('family_name');
+        $userProfile->firstName = $data->get('first_name');
+        $userProfile->lastName = $data->get('last_name');
         $userProfile->displayName = $data->get('display_name');
-        $userProfile->photoURL = 'http://upics.yandex.net/' . $userProfile->identifier . '/normal';
-        $userProfile->profileURL = '';
-        $userProfile->gender = (int)$data->get('sex') == 'female';
-        $userProfile->email =
+        $userProfile->photoURL
+            = 'https://avatars.yandex.net/get-yapic/' .
+            $data->get('default_avatar_id') . '/islands-200';
+        $userProfile->gender = $data->get('sex');
+        $userProfile->email = $data->get('default_email');
         $userProfile->emailVerified = $data->get('default_email');
 
-        if ($dob = $data->get('birthday')) {
-            list($userProfile->birthYear, $userProfile->birthMonth, $userProfile->birthDay) = explode('-', $dob);
+        if ($data->get('birthday')) {
+            list($birthday_year, $birthday_month, $birthday_day)
+                = explode('-', $data->get('birthday'));
+            $userProfile->birthDay = (int)$birthday_day;
+            $userProfile->birthMonth = (int)$birthday_month;
+            $userProfile->birthYear = (int)$birthday_year;
         }
 
         return $userProfile;
     }
 }
-

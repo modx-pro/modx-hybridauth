@@ -100,7 +100,7 @@ class HybridAuth
      */
     public function loadHybridAuth()
     {
-        if (!class_exists('OAuth2')) {
+        if (!class_exists(\Hybridauth\Adapter\OAuth2::class)) {
             require_once MODX_CORE_PATH . 'components/hybridauth/vendor/autoload.php';
         }
 

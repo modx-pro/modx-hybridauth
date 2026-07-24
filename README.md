@@ -1,33 +1,34 @@
 ## HybridAuth for MODX Revolution
 
-Component for login through 3rd party services.
+Social login for MODX Revolution via [Hybridauth](https://github.com/hybridauth/hybridauth) **3.13**.
 
-## HybridAuth
+**PHP:** 7.4–8.4
 
-HybridAuth enables developers to easily build social applications and tools
-to engage websites vistors and customers on a social level by implementing
-social sign-in, social sharing, users profiles, friends list, activities
-stream, status updates and more.
+### Build
 
-The main goal of HybridAuth is to act as an abstract API between your application
-and various social apis and identities providers such as Facebook, Twitter,
-MySpace and Google.
+Before building the transport package:
 
-## Repository
+```bash
+cd core/components/hybridauth
+composer install
+```
 
-HybridAuth repository is made up of several projects:
+`vendor/` is not committed; the package must include it after `composer install`.
 
-- **HybridAuth Core library** includes OpenID, Facebook, Twitter, LinkedIn,
-  MySpace, Google, Yahoo, Windows Live, Foursquare and AOL.
-- **The additional providers project** contains many others services
-  which you may want to use,
-- **Examples and demos** contains five working examples for you to test,
+### Providers
 
-## Getting Started
+Built-in Hybridauth providers (Google, Facebook, GitHub, Twitter/X, …) work through `ha.keys.{Name}` JSON settings.
 
-We highly recommend that you download and use the latest release from HybridAuth website
-at [http://hybridauth.sourceforge.net/download.html](http://hybridauth.sourceforge.net/download.html)
+Local classmap providers (restored after Hybridauth 3.8.2 removed them):
 
-You can find  complete documentation for HybridAuth
-at [http://hybridauth.sourceforge.net](http://hybridauth.sourceforge.net)
+- **Yandex** — `{"keys":{"id":"...","secret":"..."}}`
+- **Vkontakte** (legacy OAuth) — `{"keys":{"id":"...","secret":"..."},"scope":"email"}`. New apps: [VK ID](https://dev.vk.com/ru/vkid) ([#56](https://github.com/modx-pro/modx-hybridauth/issues/56)).
+- **Odnoklassniki** — `{"keys":{"id":"...","key":"...","secret":"..."}}` (`key` = application_key). See [#52](https://github.com/modx-pro/modx-hybridauth/issues/52).
 
+**MailRu** is not shipped; use VK ID for Mail.ru accounts.
+
+Callback URL for each provider: `{site_url}?hauth.done={ProviderName}`.
+
+### Issues
+
+https://github.com/modx-pro/modx-hybridauth/issues
