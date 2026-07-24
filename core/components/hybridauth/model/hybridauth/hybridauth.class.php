@@ -519,31 +519,52 @@ class HybridAuth
 
         if (empty($url)) {
             $request = preg_replace('#^' . $this->modx->getOption('base_url') . '#', '', $_SERVER['REQUEST_URI']);
-            $url = $this->modx->getOption('site_url') . ltrim($request, '/');
-            if ($pos = strpos($url, '?')) {
-                $arr = explode('&', substr($url, $pos + 1));
-                $url = substr($url, 0, $pos);
-                if (count($arr) > 1) {
-                    foreach ($arr as $k => $v) {
-                        if (
-                            preg_match(
-                                '#(action|provider|hauth\.action|hauth\.done|hauth_action|hauth_done|state|code|error|error_description)=#i',
-                                $v,
-                                $matches
-                            )
-                        ) {
-                            unset($arr[$k]);
-                        }
-                    }
-                    if (!empty($arr)) {
-                        $url = $url . '?' . implode('&', $arr);
-                    }
-
-                }
-            }
+            $url = $this->stripAuthQueryParams(
+                $this->modx->getOption('site_url') . ltrim($request, '/')
+            );
         }
 
         $this->modx->sendRedirect($url);
+    }
+
+
+    /**
+     * Drop auth/logout query params so a post-login redirect cannot bounce back
+     * to hauth_action=logout / service=logout (#36).
+     *
+     * @param string $url
+     * @return string
+     */
+    protected function stripAuthQueryParams($url)
+    {
+        $pos = strpos($url, '?');
+        if ($pos === false) {
+            return $url;
+        }
+
+        $base = substr($url, 0, $pos);
+        $query = substr($url, $pos + 1);
+        if ($query === '') {
+            return $base;
+        }
+
+        $keep = [];
+        foreach (explode('&', $query) as $pair) {
+            if ($pair === '') {
+                continue;
+            }
+            if (
+                preg_match(
+                    '#^(?:action|provider|service|hauth\.action|hauth\.done|hauth_action|hauth_done|state|code|device_id|error|error_description)=#i',
+                    $pair
+                )
+            ) {
+                continue;
+            }
+            $keep[] = $pair;
+        }
+
+        return $keep === [] ? $base : $base . '?' . implode('&', $keep);
     }
 
 
@@ -558,6 +579,7 @@ class HybridAuth
         $url = $this->modx->getOption('site_url') . ltrim(rawurldecode($request), '/');
         $url = preg_replace('#["\']#', '', strip_tags($url));
         $url = preg_replace('#\[\[.*?\]\]#', '', $url);
+        $url = $this->stripAuthQueryParams($url);
 
         $url .= strpos($url, '?')
             ? '&amp;hauth_action='

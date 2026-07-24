@@ -17,6 +17,7 @@ Changelog for HybridAuth.
 - #32 Added ha.keys.Yahoo and setup docs (Hybridauth Provider\Yahoo)
 - #38 Facebook HTTPS: callback uses hauth_done; upgrade http site_url to https when request is TLS
 - #25 Reject off-site redirectUri; refuse rebinding an OAuth identity to another logged-in user
+- #36 Strip logout/auth query params on redirect and login link base URL
 
 3.1.1-pl
 ==============
