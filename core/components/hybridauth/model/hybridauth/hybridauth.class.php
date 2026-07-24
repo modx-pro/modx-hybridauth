@@ -145,7 +145,7 @@ class HybridAuth
 
     /**
      * Normalize ha.keys.* JSON for OAuth1 (key/secret) and OAuth2 (id/secret).
-     * Mirrors key↔id so Twitter keeps working when operators paste OAuth2-style JSON (#47).
+     * Mirrors key↔id so OAuth1 adapters (legacy Twitter) keep working with OAuth2-style JSON (#47).
      * Preserves scope and other adapter options.
      *
      * @param array $config

@@ -8,7 +8,7 @@
  * @translation by Viktorminator
  */
 
-$_lang['ha.providers'] = 'Список провайдерів авторизації, через кому. Усі доступні провайдери знаходяться тут {core_path}components/hybridauth/model/hybridauth/lib/Providers/. Наприклад, &providers=`Google,Twitter,Facebook`.';
+$_lang['ha.providers'] = 'Список провайдерів авторизації, через кому. Усі доступні провайдери знаходяться тут {core_path}components/hybridauth/model/hybridauth/lib/Providers/. Наприклад, &providers=`Google,X,Facebook`.';
 $_lang['ha.groups'] = 'Список груп для реєстрації користувача, через кому. Можна вказувати роль юзера в групі через двокрапку. Наприклад, &groups=`Users:1` додасть юзера в групу "Users" з роллю "member".';
 $_lang['ha.rememberme'] = 'Запам’ятовує користувача на тривалий час. Дефолтно - увімкнуто.';
 $_lang['ha.loginContext'] = 'Основний контекст для авторизації. Дефолтно - поточний.';

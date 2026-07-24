@@ -11,7 +11,7 @@ and fails the build if `vendor/autoload.php` is missing (#54). `composer.lock` i
 
 ### Providers
 
-Built-in Hybridauth providers (Google, Facebook, GitHub, Twitter/X, …) work through `ha.keys.{Name}` JSON settings.
+Built-in Hybridauth providers (Google, Facebook, GitHub, X, …) work through `ha.keys.{Name}` JSON settings. Prefer **X** (OAuth 2); `Twitter` remains as legacy OAuth 1.0a.
 
 Local classmap providers (restored after Hybridauth 3.8.2 removed them):
 

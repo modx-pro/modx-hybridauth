@@ -8,7 +8,7 @@ An integration of open source social sign on php library Hybridauth
 
 Supported PHP: 7.4–8.4
 
-The main goal of HybridAuth library is to act as an abstract api between your application and various social apis and identities providers such as Facebook, Twitter, MySpace, LinkedIn, Google and Yahoo.
+The main goal of HybridAuth library is to act as an abstract api between your application and various social apis and identities providers such as Facebook, X, LinkedIn, Google and Yahoo.
 
 HybridAuth enable developers to easily build social applications to engage websites vistors and customers on a social level by implementing social signin, social sharing, users profiles, friends list, activities stream, status updates and more.
 
@@ -21,19 +21,21 @@ Installation
 Download and install it with MODX package manager
 
 Then:
-1. Register and get api keys from needed services. For example, create twitter application - https://dev.twitter.com/apps/new
-2. Open system settings in manager, switch to hybridauth and make\update ha.keys.Servicename. In our example it will be ha.keys.Twitter
+1. Register and get api keys from needed services. For example, create an X app - https://developer.x.com/
+2. Open system settings in manager, switch to hybridauth and make\update ha.keys.Servicename. In our example it will be ha.keys.X
 3. You need to set your keys as json string with array. Example:
    {"keys":{"id":"your id","secret":"your secret"}}
+   X (OAuth 2) example with scope:
+   {"keys":{"id":"...","secret":"..."},"scope":"tweet.read users.read users.email offline.access"}
+   Legacy Twitter OAuth 1.0a uses consumer key (not id):
+   {"keys":{"key":"...","secret":"..."}}
    Odnoklassniki also needs public application_key as "key":
    {"keys":{"id":"...","key":"...","secret":"..."}}
    Add the same callback URL in the provider cabinet: {site_url}?hauth_done={Provider}
    (underscore; Facebook rejects hauth.done). site_url must be https on TLS sites.
-4. Now you can run snippet [[!HybridAuth?providers=`Twitter`]] on any page.
+4. Now you can run snippet [[!HybridAuth?providers=`X`]] on any page.
 
 If there will be any errors on library initialization - it will be logged in in system log.
-
-I recorded simple video with Twitter login http://www.youtube.com/watch?v=ron_VTaQeWE for you.
 
 --------------------
 Building from source

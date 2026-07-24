@@ -7,7 +7,7 @@
  * @subpackage lexicon
  */
 
-$_lang['ha.providers'] = 'Список провайдеров авторизации, через запятую. Все доступные провайдеры находятся тут {core_path}components/hybridauth/model/hybridauth/lib/Providers/. Например, &providers=`Google,Twitter,Facebook`.';
+$_lang['ha.providers'] = 'Список провайдеров авторизации, через запятую. Все доступные провайдеры находятся тут {core_path}components/hybridauth/model/hybridauth/lib/Providers/. Например, &providers=`Google,X,Facebook`.';
 $_lang['ha.groups'] = 'Список групп для регистрации пользователя, через запятую. Можно указывать роль юзера в группе через двоеточие. Например, &groups=`Users:1` добавит юзера в группу "Users" с ролью "member".';
 $_lang['ha.rememberme'] = 'Запомниает пользователя на долгое время. По умолчанию - включено.';
 $_lang['ha.loginContext'] = 'Основной контекст для авторизации. По умолчанию - текущий.';
