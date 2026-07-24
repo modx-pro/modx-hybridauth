@@ -32,7 +32,7 @@ $_lang['area_ha.keys'] = 'Ключі';
 $_lang['setting_ha.keys.Google'] = 'Ключі для Google';
 $_lang['setting_ha.keys.Google_desc'] = 'Додати додаток та згенерувати ключі можна за цим посиланням: <a target="_blank" href="https://code.google.com/apis/console/">https://code.google.com/apis/console/</a>. Про налаштування інших провайдерів можна прочитати в документації: <a target="_blank" href="http://hybridauth.sourceforge.net/userguide.html">http://hybridauth.sourceforge.net/userguide.html</a>.';
 $_lang['setting_ha.keys.Twitter'] = 'Ключі для Twitter';
-$_lang['setting_ha.keys.Twitter_desc'] = 'Додати додаток та згенерувати ключі можна за цим посиланням: <a target="_blank" href="https://dev.twitter.com/apps/new">https://dev.twitter.com/apps/new</a>. Про налаштування інших провайдерів можна прочитати в документації: <a target="_blank" href="http://hybridauth.sourceforge.net/userguide.html">http://hybridauth.sourceforge.net/userguide.html</a>.';
+$_lang['setting_ha.keys.Twitter_desc'] = 'OAuth 1.0a додаток: <a target="_blank" href="https://developer.x.com/">developer.x.com</a>. У JSON потрібен consumer <code>key</code> (не лише id): {"keys":{"key":"...","secret":"..."}}. Callback: {site_url}?hauth.done=Twitter. Для OAuth 2 використовуйте провайдер X.';
 $_lang['setting_ha.keys.Yandex'] = 'Ключі для Yandex';
 $_lang['setting_ha.keys.Yandex_desc'] = 'Створіть додаток і отримайте Client ID / Client secret на <a target="_blank" href="https://oauth.yandex.ru/">https://oauth.yandex.ru/</a>. Документація: <a target="_blank" href="https://yandex.com/dev/id/doc/en/oauth-cabinet">Yandex ID OAuth</a>.';
 $_lang['setting_ha.keys.Facebook'] = 'Ключі для Facebook';

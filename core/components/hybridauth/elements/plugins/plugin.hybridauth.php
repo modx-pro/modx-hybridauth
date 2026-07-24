@@ -11,7 +11,8 @@ switch ($modx->event->name) {
         }
 
         if ($modx->user->isAuthenticated($modx->context->key)) {
-            if (!$modx->user->active || $modx->user->Profile->blocked) {
+            $profile = $modx->user->getOne('Profile');
+            if (!$modx->user->active || ($profile && $profile->get('blocked'))) {
                 $modx->runProcessor('security/logout');
                 $modx->sendRedirect($modx->makeUrl($modx->getOption('site_start'), '', '', 'full'));
             }
@@ -60,7 +61,10 @@ switch ($modx->event->name) {
 
     case 'OnUserFormPrerender':
         /** @var modUser $user */
-        if (!isset($user) || $user->get('id') < 1) {
+        if (empty($user) || !is_object($user) || (int)$user->get('id') < 1) {
+            return;
+        }
+        if (empty($modx->controller) || !is_object($modx->controller)) {
             return;
         }
         $path = MODX_CORE_PATH . 'components/hybridauth/model/hybridauth/';

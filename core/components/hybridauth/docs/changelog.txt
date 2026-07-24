@@ -10,6 +10,8 @@ Changelog for HybridAuth.
 - MailRu is not restored; use VK ID for Mail.ru accounts
 - #54 Build runs composer install so transport packages include vendor/autoload.php
 - composer.lock is committed for reproducible builds
+- #45 #46 Guard modUser map composite on PHP 8+; safer OnUserFormPrerender / Profile access
+- #47 Twitter OAuth1: keep/mirror keys.key (was dropped when normalizing to id)
 
 3.1.1-pl
 ==============

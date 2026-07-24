@@ -48,7 +48,7 @@ $_lang['setting_ha.keys.Google_desc'] = 'Add the application and generate the ke
 $_lang['setting_ha.keys.GitHub'] = 'Keys for GitHub';
 $_lang['setting_ha.keys.GitHub_desc'] = 'Add the application and generate the keys at this link: <a target="_blank" href="https://github.com/settings/applications/new">https://github.com/settings/applications/new</a>.';
 $_lang['setting_ha.keys.Twitter'] = 'Keys for Twitter';
-$_lang['setting_ha.keys.Twitter_desc'] = 'Add the application and generate the keys at this link: <a target="_blank" href="https://dev.twitter.com/apps/new">https://dev.twitter.com/apps/new</a>.';
+$_lang['setting_ha.keys.Twitter_desc'] = 'OAuth 1.0a app at <a target="_blank" href="https://developer.x.com/">developer.x.com</a>. JSON must use consumer <code>key</code> (not only id): {"keys":{"key":"...","secret":"..."}}. Callback: {site_url}?hauth.done=Twitter. For OAuth 2 use the X provider instead.';
 $_lang['setting_ha.keys.Yandex'] = 'Keys for Yandex';
 $_lang['setting_ha.keys.Yandex_desc'] = 'Create an application and get Client ID / Client secret at <a target="_blank" href="https://oauth.yandex.ru/">https://oauth.yandex.ru/</a>. Docs: <a target="_blank" href="https://yandex.com/dev/id/doc/en/oauth-cabinet">Yandex ID OAuth</a>.';
 $_lang['setting_ha.keys.Facebook'] = 'Keys for Facebook';

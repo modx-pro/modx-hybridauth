@@ -48,7 +48,7 @@ $_lang['setting_ha.keys.Google_desc'] = 'Добавить приложение �
 $_lang['setting_ha.keys.GitHub'] = 'Ключи для GitHub';
 $_lang['setting_ha.keys.GitHub_desc'] = 'Добавить приложение и сгенерировать ключи можно по этой ссылке: <a target="_blank" href="https://github.com/settings/applications/new">https://github.com/settings/applications/new</a>.';
 $_lang['setting_ha.keys.Twitter'] = 'Ключи для Twitter';
-$_lang['setting_ha.keys.Twitter_desc'] = 'Добавить приложение и сгенерировать ключи можно по этой ссылке: <a target="_blank" href="https://dev.twitter.com/apps/new">https://dev.twitter.com/apps/new</a>.';
+$_lang['setting_ha.keys.Twitter_desc'] = 'OAuth 1.0a приложение: <a target="_blank" href="https://developer.x.com/">developer.x.com</a>. В JSON нужен consumer <code>key</code> (не только id): {"keys":{"key":"...","secret":"..."}}. Callback: {site_url}?hauth.done=Twitter. Для OAuth 2 используйте провайдер X.';
 $_lang['setting_ha.keys.Yandex'] = 'Ключи для Yandex';
 $_lang['setting_ha.keys.Yandex_desc'] = 'Создайте приложение и получите Client ID / Client secret на <a target="_blank" href="https://oauth.yandex.ru/">https://oauth.yandex.ru/</a>. Документация: <a target="_blank" href="https://yandex.ru/dev/id/doc/ru/">Yandex ID OAuth</a>.';
 $_lang['setting_ha.keys.Facebook'] = 'Ключи для Facebook';

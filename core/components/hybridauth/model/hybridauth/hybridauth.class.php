@@ -128,14 +128,7 @@ class HybridAuth
                 $config = json_decode($config, true);
                 $class = '\Hybridauth\Provider\\' . $provider;
                 if (is_array($config) && class_exists($class)) {
-                    if (!isset($config['keys'])) {
-                        $config = [
-                            'keys' => [
-                                'id' => $config['key'] ?? $config['id'],
-                                'secret' => $config['secret'],
-                            ],
-                        ];
-                    }
+                    $config = $this->normalizeProviderConfig($config);
 
                     try {
                         $config['callback'] = $this->modx->getOption('site_url') . '?hauth.done=' . $provider;
@@ -147,6 +140,37 @@ class HybridAuth
             }
         }
         $_SESSION['HA'] = [];
+    }
+
+
+    /**
+     * Normalize ha.keys.* JSON for OAuth1 (key/secret) and OAuth2 (id/secret).
+     * Mirrors key↔id so Twitter keeps working when operators paste OAuth2-style JSON (#47).
+     * Preserves scope and other adapter options.
+     *
+     * @param array $config
+     * @return array
+     */
+    protected function normalizeProviderConfig(array $config)
+    {
+        if (!isset($config['keys']) || !is_array($config['keys'])) {
+            $config['keys'] = [
+                'id' => $config['id'] ?? null,
+                'key' => $config['key'] ?? null,
+                'secret' => $config['secret'] ?? null,
+            ];
+            unset($config['id'], $config['key'], $config['secret']);
+        }
+
+        $keys = &$config['keys'];
+        if (!empty($keys['id']) && empty($keys['key'])) {
+            $keys['key'] = $keys['id'];
+        }
+        if (!empty($keys['key']) && empty($keys['id'])) {
+            $keys['id'] = $keys['key'];
+        }
+
+        return $config;
     }
 
 
