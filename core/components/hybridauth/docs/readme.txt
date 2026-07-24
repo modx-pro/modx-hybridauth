@@ -37,6 +37,11 @@ Then:
    (underscore; Facebook rejects hauth.done). site_url must be https on TLS sites.
 4. Now you can run snippet [[!HybridAuth?providers=`X`]] or [[!HybridAuth?providers=`Yahoo`]] on any page.
 
+Post hooks (issue #31):
+  [[!HybridAuth?providers=`X` &postHooks=`hookNewsletter`]]
+  Snippet gets user, userid, provider, profile, ha_mode (register|login).
+  System events: OnHAUserCreate, OnHAUserLogin, OnHAUserBind.
+
 Security:
 - Register the exact HTTPS callback URI in each IdP. Do not put open-redirect pages on the
   same domain as site_url (Covert Redirect / issue #25).

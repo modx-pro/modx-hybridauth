@@ -19,6 +19,7 @@ Changelog for HybridAuth.
 - #25 Reject off-site redirectUri; refuse rebinding an OAuth identity to another logged-in user
 - #36 Strip logout/auth query params on redirect and login link base URL
 - #51 Remove unused FULLTEXT index on ha_user_services.extended (InnoDB error 1214)
+- #31 &postHooks= snippets; system events OnHAUserCreate, OnHAUserLogin, OnHAUserBind
 
 3.1.1-pl
 ==============

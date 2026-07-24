@@ -26,6 +26,18 @@ Local classmap providers:
 
 Callback URL for each provider: `{site_url}?hauth_done={ProviderName}` (underscore; required for Facebook).
 
+### Post hooks (#31)
+
+After OAuth signup/login you can run snippets or plugins:
+
+```
+[[!HybridAuth?providers=`X` &postHooks=`hookNewsletter`]]
+```
+
+Snippet properties: `user`, `userid`, `provider`, `profile`, `ha_mode` (`register` or `login`).
+
+System events: `OnHAUserCreate`, `OnHAUserLogin`, `OnHAUserBind` (payload includes the same fields).
+
 ### Security
 
 - Register the **exact** callback URI in each IdP app (HTTPS on TLS sites).

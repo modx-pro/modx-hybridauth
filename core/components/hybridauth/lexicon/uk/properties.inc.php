@@ -25,3 +25,4 @@ $_lang['ha.activeProviderTpl'] = 'Чанк для виведення іконк�
 
 $_lang['ha.profileFields'] = 'Список дозволених для редагування полів юзера, через кому. Також можна вказати максимальну довжину значень, через двокрапку. Наприклад, &profileFields=`username:25,fullname:50,email`.';
 $_lang['ha.requiredFields'] = 'Список обов’язкових полів при редагуванні. Ці поля повинні бути заповнені для успішного оновлення профілю. Наприклад, &requiredFields=`username,fullname,email`.';
+$_lang['ha.postHooks'] = 'Сніпети через кому після OAuth-реєстрації або входу (як у Login). У сніпет: user, userid, provider, profile, ha_mode (register|login). Також події OnHAUserCreate, OnHAUserLogin, OnHAUserBind.';

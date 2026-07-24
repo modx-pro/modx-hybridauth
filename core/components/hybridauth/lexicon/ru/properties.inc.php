@@ -25,3 +25,4 @@ $_lang['ha.activeProviderTpl'] = 'Чанк для вывода иконки пр
 $_lang['ha.profileFields'] = 'Список разрешенных для редактирования полей юзера, через запятую. Также можно указать максимальну. длину значений, через двоеточие. Например, &profileFields=`username:25,fullname:50,email`.';
 $_lang['ha.requiredFields'] = 'Список обязательных полей при редактировании. Эти поля должны быть заполнены для успешного обновления профиля. Например, &requiredFields=`username,fullname,email`.';
 $_lang['ha.redirectUri'] = 'Вы можете указать "redirect_uri", на который вас отправит удалённый сервис. По умолчанию, это корень текущего контекста.';
+$_lang['ha.postHooks'] = 'Сниппеты через запятую после OAuth-регистрации или входа (как у Login). В сниппет приходят user, userid, provider, profile, ha_mode (register|login). Также события OnHAUserCreate, OnHAUserLogin, OnHAUserBind.';

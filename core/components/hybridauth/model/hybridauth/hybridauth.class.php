@@ -38,6 +38,7 @@ class HybridAuth
             'loginResourceId' => 0,
             'logoutResourceId' => 0,
             'providers' => '',
+            'postHooks' => '',
         ], $config);
 
         $this->loadHybridAuth();
@@ -281,6 +282,10 @@ class HybridAuth
         }
         $profile['provider'] = $provider;
 
+        $haRegistered = false;
+        $haBound = false;
+        $haLoggedIn = false;
+        $uid = 0;
 
         /** @var haUserService $service */
         $service = $this->modx->getObject('haUserService', [
@@ -301,6 +306,8 @@ class HybridAuth
                         '[HybridAuth] unable to save service profile for user ' . $uid . '. Message: ' . $msg
                     );
                     $_SESSION['HybridAuth']['error'] = $msg;
+                } else {
+                    $haBound = true;
                 }
             } else {
                 // Create a new user and add this record to him
@@ -382,6 +389,8 @@ class HybridAuth
                                 '[HybridAuth] unable to save service profile for user ' . $uid . '. Message: ' . $msg
                             );
                             $_SESSION['HybridAuth']['error'] = $msg;
+                        } else {
+                            $haRegistered = true;
                         }
                     }
                 }
@@ -424,6 +433,7 @@ class HybridAuth
             } else {
                 $service->remove();
                 $this->Login($provider);
+                return;
             }
         }
 
@@ -451,10 +461,82 @@ class HybridAuth
                     '[HybridAuth] error login for user ' . $login_data['username'] . '. Message: ' . $msg
                 );
                 $_SESSION['HybridAuth']['error'] = $msg;
+            } else {
+                $haLoggedIn = true;
             }
         }
 
+        if (empty($_SESSION['HybridAuth']['error']) && $uid > 0) {
+            $this->fireAuthHooks($haRegistered, $haBound, $haLoggedIn, $uid, $provider, $profile);
+        }
+
         $this->Refresh('login');
+    }
+
+
+    /**
+     * System events + Login-style &postHooks= snippets after OAuth (#31).
+     *
+     * @param bool $registered
+     * @param bool $bound
+     * @param bool $loggedIn
+     * @param int $uid
+     * @param string $provider
+     * @param array $profile
+     * @return void
+     */
+    protected function fireAuthHooks($registered, $bound, $loggedIn, $uid, $provider, array $profile)
+    {
+        /** @var modUser|null $user */
+        $user = $this->modx->getObject('modUser', (int)$uid);
+        $fields = [
+            'user' => $user,
+            'userid' => (int)$uid,
+            'provider' => $provider,
+            'profile' => $profile,
+            'HybridAuth' => $this,
+        ];
+
+        if ($registered) {
+            $this->modx->invokeEvent('OnHAUserCreate', $fields + ['mode' => 'register']);
+            $this->runPostHooks('register', $fields);
+        }
+        if ($bound) {
+            $this->modx->invokeEvent('OnHAUserBind', $fields + ['mode' => 'bind']);
+        }
+        if ($loggedIn) {
+            $this->modx->invokeEvent('OnHAUserLogin', $fields + [
+                'mode' => $registered ? 'register' : 'login',
+            ]);
+            if (!$registered) {
+                $this->runPostHooks('login', $fields);
+            }
+        }
+    }
+
+
+    /**
+     * Run comma-separated snippets from &postHooks= (Login-compatible).
+     *
+     * @param string $mode register|login
+     * @param array $fields
+     * @return void
+     */
+    protected function runPostHooks($mode, array $fields)
+    {
+        $hooks = !empty($this->config['postHooks']) ? $this->config['postHooks'] : '';
+        if ($hooks === '') {
+            return;
+        }
+
+        foreach (array_map('trim', explode(',', $hooks)) as $name) {
+            if ($name === '') {
+                continue;
+            }
+            $this->modx->runSnippet($name, array_merge($fields, [
+                'ha_mode' => $mode,
+            ]));
+        }
     }
 
 
