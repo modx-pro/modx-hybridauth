@@ -13,7 +13,9 @@ Changelog for HybridAuth.
 - #45 #46 Guard modUser map composite on PHP 8+; safer OnUserFormPrerender / Profile access
 - #47 Twitter OAuth1: keep/mirror keys.key (was dropped when normalizing to id)
 - Added ha.keys.X (OAuth 2); Twitter setting kept as legacy OAuth 1.0a
+- #32 Added ha.keys.Yahoo and setup docs (Hybridauth Provider\Yahoo)
 - #38 Facebook HTTPS: callback uses hauth_done; upgrade http site_url to https when request is TLS
+- #25 Reject off-site redirectUri; refuse rebinding an OAuth identity to another logged-in user
 
 3.1.1-pl
 ==============

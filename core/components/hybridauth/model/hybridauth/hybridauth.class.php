@@ -185,10 +185,17 @@ class HybridAuth
      */
     protected function getProviderCallback($provider)
     {
+        $siteUrl = $this->ensureHttpsUrl($this->modx->getOption('site_url'));
         $base = !empty($this->config['redirectUri'])
-            ? $this->config['redirectUri']
-            : $this->modx->getOption('site_url');
-        $base = $this->ensureHttpsUrl($base);
+            ? $this->ensureHttpsUrl($this->config['redirectUri'])
+            : $siteUrl;
+        if (!$this->isSameOriginUrl($base, $siteUrl)) {
+            $this->modx->log(
+                modX::LOG_LEVEL_ERROR,
+                '[HybridAuth] redirectUri rejected (not same-origin): ' . $base
+            );
+            $base = $siteUrl;
+        }
         $sep = strpos($base, '?') === false ? '?' : '&';
 
         return rtrim($base, '?&') . $sep . 'hauth_done=' . rawurlencode($provider);
@@ -211,6 +218,33 @@ class HybridAuth
         }
 
         return $url;
+    }
+
+
+    /**
+     * True when $url is http(s) and shares host with $origin (#25 Covert Redirect).
+     *
+     * @param string $url
+     * @param string $origin
+     * @return bool
+     */
+    protected function isSameOriginUrl($url, $origin)
+    {
+        if (!is_string($url) || $url === '' || preg_match('#^(//|javascript:|data:)#i', $url)) {
+            return false;
+        }
+        $urlParts = parse_url($url);
+        $originParts = parse_url($origin);
+        if (
+            empty($urlParts['scheme'])
+            || empty($urlParts['host'])
+            || empty($originParts['host'])
+            || !in_array(strtolower($urlParts['scheme']), ['http', 'https'], true)
+        ) {
+            return false;
+        }
+
+        return strtolower($urlParts['host']) === strtolower($originParts['host']);
     }
 
 
@@ -354,10 +388,19 @@ class HybridAuth
             }
         } else {
             // Find and use connected MODX user
+            $boundUid = (int)$service->get('internalKey');
             if ($this->modx->user->isAuthenticated($this->modx->context->key)) {
-                $uid = $this->modx->user->id;
+                $uid = (int)$this->modx->user->id;
+                // Do not steal an OAuth identity already linked to another account (#25)
+                if ($boundUid > 0 && $boundUid !== $uid) {
+                    $_SESSION['HybridAuth']['error'] = $this->modx->lexicon('ha_err_service_bound', [
+                        'provider' => $provider,
+                    ]);
+                    $this->Refresh('login');
+                    return;
+                }
             } else {
-                $uid = $service->get('internalKey');
+                $uid = $boundUid;
             }
 
             /** @var modUser $user */

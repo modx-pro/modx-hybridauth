@@ -29,11 +29,19 @@ Then:
    {"keys":{"id":"...","secret":"..."},"scope":"tweet.read users.read users.email offline.access"}
    Legacy Twitter OAuth 1.0a uses consumer key (not id):
    {"keys":{"key":"...","secret":"..."}}
+   Yahoo example (enable OpenID Connect Permissions in the Yahoo app):
+   {"keys":{"id":"...","secret":"..."},"scope":"profile"}
    Odnoklassniki also needs public application_key as "key":
    {"keys":{"id":"...","key":"...","secret":"..."}}
    Add the same callback URL in the provider cabinet: {site_url}?hauth_done={Provider}
    (underscore; Facebook rejects hauth.done). site_url must be https on TLS sites.
-4. Now you can run snippet [[!HybridAuth?providers=`X`]] on any page.
+4. Now you can run snippet [[!HybridAuth?providers=`X`]] or [[!HybridAuth?providers=`Yahoo`]] on any page.
+
+Security:
+- Register the exact HTTPS callback URI in each IdP. Do not put open-redirect pages on the
+  same domain as site_url (Covert Redirect / issue #25).
+- Snippet &redirectUri= must be same-origin as site_url; other hosts are rejected.
+- Hybridauth uses OAuth authorization code + state.
 
 If there will be any errors on library initialization - it will be logged in in system log.
 

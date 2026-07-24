@@ -12,6 +12,7 @@ $_lang['ha_err_no_providers'] = 'Вы должны указать хотя бы 
 $_lang['ha_err_no_provider_keys'] = 'Не могу получить ключи [[+provider]] из системных настроек. [[+provider]] не был активирован.';
 $_lang['ha_err_not_logged_in'] = 'Вы должны быть авторизованы для редактирования своего профиля.';
 $_lang['ha_register_disabled'] = 'Регистрация новых пользователей отключена.';
+$_lang['ha_err_service_bound'] = 'Этот аккаунт [[+provider]] уже привязан к другому пользователю.';
 
 $_lang['ha.username'] = 'Логин';
 $_lang['ha.fullname'] = 'Имя пользователя';
@@ -59,6 +60,8 @@ $_lang['setting_ha.keys.Vkontakte'] = 'Ключи для Vkontakte';
 $_lang['setting_ha.keys.Vkontakte_desc'] = 'Legacy OAuth ВКонтакте: App ID и защищённый ключ. Новые приложения — в кабинете <a target="_blank" href="https://dev.vk.com/ru/vkid">VK ID</a> (отдельный адаптер: issue #56). Пример: {"keys":{"id":"...","secret":"..."},"scope":"email"}.';
 $_lang['setting_ha.keys.Odnoklassniki'] = 'Ключи для Odnoklassniki';
 $_lang['setting_ha.keys.Odnoklassniki_desc'] = 'Создайте приложение с платформой OAuth: <a target="_blank" href="https://apiok.ru/dev/app/create">apiok.ru</a> (права разработчика: <a target="_blank" href="https://ok.ru/devaccess">ok.ru/devaccess</a>). JSON: {"keys":{"id":"...","key":"...","secret":"..."}}, где key — публичный application_key. В redirect_uri добавьте {site_url}?hauth_done=Odnoklassniki.';
+$_lang['setting_ha.keys.Yahoo'] = 'Ключи для Yahoo';
+$_lang['setting_ha.keys.Yahoo_desc'] = 'OAuth 2 приложение: <a target="_blank" href="https://developer.yahoo.com/apps/">developer.yahoo.com/apps</a>. Включите OpenID Connect Permissions. JSON: {"keys":{"id":"...","secret":"..."},"scope":"profile"}. Callback: {site_url}?hauth_done=Yahoo. Сниппет: &providers=`Yahoo`.';
 
 $_lang['setting_ha.frontend_css'] = 'Стили фронтенда';
 $_lang['setting_ha.frontend_css_desc'] = 'Путь к файлу со стилями компонента. Если вы хотите использовать собственные стили - укажите путь к ним здесь, или очистите параметр и загрузите их вручную через шаблон сайта.';

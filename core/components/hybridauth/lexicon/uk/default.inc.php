@@ -12,6 +12,8 @@ $_lang['hybridauth'] = 'HybridAuth';
 $_lang['ha_err_no_providers'] = 'Ви повинні вказати хоча б одного провайдера.';
 $_lang['ha_err_not_logged_in'] = 'Ви повинні бути авторизовані для редагування свого профілю';
 $_lang['ha_err_no_provider_keys'] = 'Не можу отримати ключі [[+provider]] з системних налаштувань. [[+provider]] не було активовано.';
+$_lang['ha_register_disabled'] = 'Реєстрація нових користувачів вимкнена.';
+$_lang['ha_err_service_bound'] = 'Цей обліковий запис [[+provider]] вже прив’язано до іншого користувача.';
 
 $_lang['ha.username'] = 'Логін';
 $_lang['ha.fullname'] = 'Ім’я користувача';
@@ -43,6 +45,8 @@ $_lang['setting_ha.keys.Vkontakte'] = 'Ключі для Vkontakte';
 $_lang['setting_ha.keys.Vkontakte_desc'] = 'Legacy OAuth ВКонтакті: App ID і захищений ключ. Нові додатки — в кабінеті <a target="_blank" href="https://dev.vk.com/ru/vkid">VK ID</a> (окремий адаптер: issue #56). Приклад: {"keys":{"id":"...","secret":"..."},"scope":"email"}.';
 $_lang['setting_ha.keys.Odnoklassniki'] = 'Ключі для Odnoklassniki';
 $_lang['setting_ha.keys.Odnoklassniki_desc'] = 'Створіть додаток з платформою OAuth: <a target="_blank" href="https://apiok.ru/dev/app/create">apiok.ru</a> (права розробника: <a target="_blank" href="https://ok.ru/devaccess">ok.ru/devaccess</a>). JSON: {"keys":{"id":"...","key":"...","secret":"..."}}, де key — публічний application_key. У redirect_uri додайте {site_url}?hauth_done=Odnoklassniki.';
+$_lang['setting_ha.keys.Yahoo'] = 'Ключі для Yahoo';
+$_lang['setting_ha.keys.Yahoo_desc'] = 'OAuth 2 додаток: <a target="_blank" href="https://developer.yahoo.com/apps/">developer.yahoo.com/apps</a>. Увімкніть OpenID Connect Permissions. JSON: {"keys":{"id":"...","secret":"..."},"scope":"profile"}. Callback: {site_url}?hauth_done=Yahoo. Сніпет: &providers=`Yahoo`.';
 
 $_lang['setting_ha.frontend_css'] = 'Стилі фронтенда';
 $_lang['setting_ha.frontend_css_desc'] = 'Шлях до файлу зі стилями компонента. Якщо ви хочете використовувати власні стилі - вкажіть шлях до них тут, або очистіть параметр і завантажте їх вручну через шаблон сайту.';

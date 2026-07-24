@@ -12,6 +12,7 @@ $_lang['ha_err_no_providers'] = 'You must specify at least one provider.';
 $_lang['ha_err_no_provider_keys'] = 'Could not retrieve keys for provider [[+provider]] from system settings. [[+provider]] was not activated.';
 $_lang['ha_err_not_logged_in'] = 'You must be logged in to edit your profile.';
 $_lang['ha_register_disabled'] = 'Creation of new users is disabled.';
+$_lang['ha_err_service_bound'] = 'This [[+provider]] account is already linked to another user.';
 
 $_lang['ha.username'] = 'Username';
 $_lang['ha.fullname'] = 'Full name';
@@ -59,6 +60,8 @@ $_lang['setting_ha.keys.Vkontakte'] = 'Keys for Vkontakte';
 $_lang['setting_ha.keys.Vkontakte_desc'] = 'Legacy VK OAuth: App ID and Secure key. New apps: register in <a target="_blank" href="https://dev.vk.com/ru/vkid">VK ID</a> (see issue #56 for a dedicated adapter). Example: {"keys":{"id":"...","secret":"..."},"scope":"email"}.';
 $_lang['setting_ha.keys.Odnoklassniki'] = 'Keys for Odnoklassniki';
 $_lang['setting_ha.keys.Odnoklassniki_desc'] = 'Create an app with the OAuth platform at <a target="_blank" href="https://apiok.ru/dev/app/create">apiok.ru</a> (developer access: <a target="_blank" href="https://ok.ru/devaccess">ok.ru/devaccess</a>). Required JSON: {"keys":{"id":"...","key":"...","secret":"..."}} where key is the public application_key. Add callback {site_url}?hauth_done=Odnoklassniki to redirect_uri.';
+$_lang['setting_ha.keys.Yahoo'] = 'Keys for Yahoo';
+$_lang['setting_ha.keys.Yahoo_desc'] = 'OAuth 2 app at <a target="_blank" href="https://developer.yahoo.com/apps/">developer.yahoo.com/apps</a>. Enable OpenID Connect Permissions. JSON: {"keys":{"id":"...","secret":"..."},"scope":"profile"}. Callback: {site_url}?hauth_done=Yahoo. Snippet: &providers=`Yahoo`.';
 
 $_lang['setting_ha.frontend_css'] = 'Styles of frontend';
 $_lang['setting_ha.frontend_css_desc'] = 'Path to the file with styles of component. If you want to use your own styles - specify the path to it here, or clear and include them manually via the website template.';
