@@ -222,7 +222,6 @@ $xpdo_meta_map['haUserService'] = array(
                     'dbtype' => 'text',
                     'phptype' => 'json',
                     'null' => true,
-                    'index' => 'fulltext',
                 ),
         ),
     'indexes' =>
