@@ -21,7 +21,7 @@ Local classmap providers (restored after Hybridauth 3.8.2 removed them):
 
 **MailRu** is not shipped; use VK ID for Mail.ru accounts.
 
-Callback URL for each provider: `{site_url}?hauth.done={ProviderName}`.
+Callback URL for each provider: `{site_url}?hauth_done={ProviderName}` (underscore; required for Facebook).
 
 ### Issues
 

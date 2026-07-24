@@ -27,7 +27,8 @@ Then:
    {"keys":{"id":"your id","secret":"your secret"}}
    Odnoklassniki also needs public application_key as "key":
    {"keys":{"id":"...","key":"...","secret":"..."}}
-   Add the same callback URL in the provider cabinet: {site_url}?hauth.done={Provider}
+   Add the same callback URL in the provider cabinet: {site_url}?hauth_done={Provider}
+   (underscore; Facebook rejects hauth.done). site_url must be https on TLS sites.
 4. Now you can run snippet [[!HybridAuth?providers=`Twitter`]] on any page.
 
 If there will be any errors on library initialization - it will be logged in in system log.

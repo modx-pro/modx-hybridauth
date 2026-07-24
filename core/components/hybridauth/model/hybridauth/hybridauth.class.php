@@ -131,7 +131,7 @@ class HybridAuth
                     $config = $this->normalizeProviderConfig($config);
 
                     try {
-                        $config['callback'] = $this->modx->getOption('site_url') . '?hauth.done=' . $provider;
+                        $config['callback'] = $this->getProviderCallback($provider);
                         $this->adapters[$provider] = new $class($config);
                     } catch (Exception $e) {
                         $this->exceptionHandler($e);
@@ -171,6 +171,46 @@ class HybridAuth
         }
 
         return $config;
+    }
+
+
+    /**
+     * OAuth redirect_uri for a provider.
+     * Use hauth_done (underscore): Facebook rejects hauth.done, and PHP maps dots to
+     * underscores in $_REQUEST anyway (#38). Prefer &redirectUri= / HTTPS of the request
+     * when site_url still says http behind TLS.
+     *
+     * @param string $provider
+     * @return string
+     */
+    protected function getProviderCallback($provider)
+    {
+        $base = !empty($this->config['redirectUri'])
+            ? $this->config['redirectUri']
+            : $this->modx->getOption('site_url');
+        $base = $this->ensureHttpsUrl($base);
+        $sep = strpos($base, '?') === false ? '?' : '&';
+
+        return rtrim($base, '?&') . $sep . 'hauth_done=' . rawurlencode($provider);
+    }
+
+
+    /**
+     * @param string $url
+     * @return string
+     */
+    protected function ensureHttpsUrl($url)
+    {
+        $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            || (isset($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443)
+            || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])
+                && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https');
+
+        if ($https && stripos($url, 'http://') === 0) {
+            return 'https://' . substr($url, 7);
+        }
+
+        return $url;
     }
 
 
@@ -444,7 +484,7 @@ class HybridAuth
                     foreach ($arr as $k => $v) {
                         if (
                             preg_match(
-                                '#(action|provider|hauth.action|hauth.done|state|code|error|error_description)+#i',
+                                '#(action|provider|hauth\.action|hauth\.done|hauth_action|hauth_done|state|code|error|error_description)=#i',
                                 $v,
                                 $matches
                             )

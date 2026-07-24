@@ -48,15 +48,15 @@ $_lang['setting_ha.keys.Google_desc'] = 'Add the application and generate the ke
 $_lang['setting_ha.keys.GitHub'] = 'Keys for GitHub';
 $_lang['setting_ha.keys.GitHub_desc'] = 'Add the application and generate the keys at this link: <a target="_blank" href="https://github.com/settings/applications/new">https://github.com/settings/applications/new</a>.';
 $_lang['setting_ha.keys.Twitter'] = 'Keys for Twitter';
-$_lang['setting_ha.keys.Twitter_desc'] = 'OAuth 1.0a app at <a target="_blank" href="https://developer.x.com/">developer.x.com</a>. JSON must use consumer <code>key</code> (not only id): {"keys":{"key":"...","secret":"..."}}. Callback: {site_url}?hauth.done=Twitter. For OAuth 2 use the X provider instead.';
+$_lang['setting_ha.keys.Twitter_desc'] = 'OAuth 1.0a app at <a target="_blank" href="https://developer.x.com/">developer.x.com</a>. JSON must use consumer <code>key</code> (not only id): {"keys":{"key":"...","secret":"..."}}. Callback: {site_url}?hauth_done=Twitter. For OAuth 2 use the X provider instead.';
 $_lang['setting_ha.keys.Yandex'] = 'Keys for Yandex';
 $_lang['setting_ha.keys.Yandex_desc'] = 'Create an application and get Client ID / Client secret at <a target="_blank" href="https://oauth.yandex.ru/">https://oauth.yandex.ru/</a>. Docs: <a target="_blank" href="https://yandex.com/dev/id/doc/en/oauth-cabinet">Yandex ID OAuth</a>.';
 $_lang['setting_ha.keys.Facebook'] = 'Keys for Facebook';
-$_lang['setting_ha.keys.Facebook_desc'] = 'Add the application and generate the keys at this link: <a target="_blank" href="https://developers.facebook.com/apps">https://developers.facebook.com/apps</a>.';
+$_lang['setting_ha.keys.Facebook_desc'] = 'App at <a target="_blank" href="https://developers.facebook.com/apps">developers.facebook.com/apps</a>. Valid OAuth redirect URI must be HTTPS and use underscore: {site_url}?hauth_done=Facebook (not hauth.done). JSON: {"keys":{"id":"...","secret":"..."},"scope":"email,public_profile"}.';
 $_lang['setting_ha.keys.Vkontakte'] = 'Keys for Vkontakte';
 $_lang['setting_ha.keys.Vkontakte_desc'] = 'Legacy VK OAuth: App ID and Secure key. New apps: register in <a target="_blank" href="https://dev.vk.com/ru/vkid">VK ID</a> (see issue #56 for a dedicated adapter). Example: {"keys":{"id":"...","secret":"..."},"scope":"email"}.';
 $_lang['setting_ha.keys.Odnoklassniki'] = 'Keys for Odnoklassniki';
-$_lang['setting_ha.keys.Odnoklassniki_desc'] = 'Create an app with the OAuth platform at <a target="_blank" href="https://apiok.ru/dev/app/create">apiok.ru</a> (developer access: <a target="_blank" href="https://ok.ru/devaccess">ok.ru/devaccess</a>). Required JSON: {"keys":{"id":"...","key":"...","secret":"..."}} where key is the public application_key. Add callback {site_url}?hauth.done=Odnoklassniki to redirect_uri.';
+$_lang['setting_ha.keys.Odnoklassniki_desc'] = 'Create an app with the OAuth platform at <a target="_blank" href="https://apiok.ru/dev/app/create">apiok.ru</a> (developer access: <a target="_blank" href="https://ok.ru/devaccess">ok.ru/devaccess</a>). Required JSON: {"keys":{"id":"...","key":"...","secret":"..."}} where key is the public application_key. Add callback {site_url}?hauth_done=Odnoklassniki to redirect_uri.';
 
 $_lang['setting_ha.frontend_css'] = 'Styles of frontend';
 $_lang['setting_ha.frontend_css_desc'] = 'Path to the file with styles of component. If you want to use your own styles - specify the path to it here, or clear and include them manually via the website template.';

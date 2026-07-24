@@ -48,15 +48,15 @@ $_lang['setting_ha.keys.Google_desc'] = 'Добавить приложение �
 $_lang['setting_ha.keys.GitHub'] = 'Ключи для GitHub';
 $_lang['setting_ha.keys.GitHub_desc'] = 'Добавить приложение и сгенерировать ключи можно по этой ссылке: <a target="_blank" href="https://github.com/settings/applications/new">https://github.com/settings/applications/new</a>.';
 $_lang['setting_ha.keys.Twitter'] = 'Ключи для Twitter';
-$_lang['setting_ha.keys.Twitter_desc'] = 'OAuth 1.0a приложение: <a target="_blank" href="https://developer.x.com/">developer.x.com</a>. В JSON нужен consumer <code>key</code> (не только id): {"keys":{"key":"...","secret":"..."}}. Callback: {site_url}?hauth.done=Twitter. Для OAuth 2 используйте провайдер X.';
+$_lang['setting_ha.keys.Twitter_desc'] = 'OAuth 1.0a приложение: <a target="_blank" href="https://developer.x.com/">developer.x.com</a>. В JSON нужен consumer <code>key</code> (не только id): {"keys":{"key":"...","secret":"..."}}. Callback: {site_url}?hauth_done=Twitter. Для OAuth 2 используйте провайдер X.';
 $_lang['setting_ha.keys.Yandex'] = 'Ключи для Yandex';
 $_lang['setting_ha.keys.Yandex_desc'] = 'Создайте приложение и получите Client ID / Client secret на <a target="_blank" href="https://oauth.yandex.ru/">https://oauth.yandex.ru/</a>. Документация: <a target="_blank" href="https://yandex.ru/dev/id/doc/ru/">Yandex ID OAuth</a>.';
 $_lang['setting_ha.keys.Facebook'] = 'Ключи для Facebook';
-$_lang['setting_ha.keys.Facebook_desc'] = 'Добавить приложение и сгенерировать ключи можно по этой ссылке: <a target="_blank" href="https://developers.facebook.com/apps">https://developers.facebook.com/apps</a>.';
+$_lang['setting_ha.keys.Facebook_desc'] = 'Приложение: <a target="_blank" href="https://developers.facebook.com/apps">developers.facebook.com/apps</a>. Valid OAuth redirect URI — HTTPS и с подчёркиванием: {site_url}?hauth_done=Facebook (не hauth.done). JSON: {"keys":{"id":"...","secret":"..."},"scope":"email,public_profile"}.';
 $_lang['setting_ha.keys.Vkontakte'] = 'Ключи для Vkontakte';
 $_lang['setting_ha.keys.Vkontakte_desc'] = 'Legacy OAuth ВКонтакте: App ID и защищённый ключ. Новые приложения — в кабинете <a target="_blank" href="https://dev.vk.com/ru/vkid">VK ID</a> (отдельный адаптер: issue #56). Пример: {"keys":{"id":"...","secret":"..."},"scope":"email"}.';
 $_lang['setting_ha.keys.Odnoklassniki'] = 'Ключи для Odnoklassniki';
-$_lang['setting_ha.keys.Odnoklassniki_desc'] = 'Создайте приложение с платформой OAuth: <a target="_blank" href="https://apiok.ru/dev/app/create">apiok.ru</a> (права разработчика: <a target="_blank" href="https://ok.ru/devaccess">ok.ru/devaccess</a>). JSON: {"keys":{"id":"...","key":"...","secret":"..."}}, где key — публичный application_key. В redirect_uri добавьте {site_url}?hauth.done=Odnoklassniki.';
+$_lang['setting_ha.keys.Odnoklassniki_desc'] = 'Создайте приложение с платформой OAuth: <a target="_blank" href="https://apiok.ru/dev/app/create">apiok.ru</a> (права разработчика: <a target="_blank" href="https://ok.ru/devaccess">ok.ru/devaccess</a>). JSON: {"keys":{"id":"...","key":"...","secret":"..."}}, где key — публичный application_key. В redirect_uri добавьте {site_url}?hauth_done=Odnoklassniki.';
 
 $_lang['setting_ha.frontend_css'] = 'Стили фронтенда';
 $_lang['setting_ha.frontend_css_desc'] = 'Путь к файлу со стилями компонента. Если вы хотите использовать собственные стили - укажите путь к ним здесь, или очистите параметр и загрузите их вручную через шаблон сайта.';
