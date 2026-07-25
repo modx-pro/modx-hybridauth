@@ -1,231 +1,299 @@
-Changelog for HybridAuth.
+# Changelog
 
-3.2.1-pl
-==============
-- Replaced legacy PNG icon sprites with official SVG brand icons (no custom drawing)
-- Icons from Simple Icons v16 (https://simpleicons.org, MIT) — each links to brand guidelines
-- Yandex: official app icon from Yandex/Wikimedia; ModxPro: docs.modx.pro logo
-- LinkedIn/Yahoo: pinned last Simple Icons releases before brand removal
-- Provider icons render as inline SVG images in chunks (tpl.HybridAuth.provider*)
-- Fix ha_user_services.createdon timestamp (was using month token instead of seconds)
-- getUrl() respects HTTPS behind TLS proxy (same as OAuth callback)
-- Unbind requires web session; guest gets ha_err_not_logged_in
-- Removed unused $_SESSION['HA']['verified'] flag
-- Active/linked providers use CSS grayscale instead of a separate grayscale sprite
+All notable changes to this project will be documented in this file.
 
-3.2.0-pl
-==============
-- Updated HybridAuth core to 3.13.0 (CVE-2026-4587)
-- Supported PHP 7.4–8.4
-- Restored local providers removed upstream in 3.8.2: Vkontakte, Yandex, Odnoklassniki
-- #56 Added VkId provider (VK ID OAuth 2.1 + PKCE); keep legacy Vkontakte for old apps
-- #52 Fixed Odnoklassniki birthday parsing (YYYY-MM-DD) and documented keys id/key/secret
-- Added ha.keys.Odnoklassniki system setting
-- MailRu is not restored; use VK ID for Mail.ru accounts
-- #54 Build runs composer install so transport packages include vendor/autoload.php
-- composer.lock is committed for reproducible builds
-- #45 #46 Guard modUser map composite on PHP 8+; safer OnUserFormPrerender / Profile access
-- #47 Twitter OAuth1: keep/mirror keys.key (was dropped when normalizing to id)
-- Added ha.keys.X (OAuth 2); Twitter setting kept as legacy OAuth 1.0a
-- #32 Added ha.keys.Yahoo and setup docs (Hybridauth Provider\Yahoo)
-- #38 Facebook HTTPS: callback uses hauth_done; upgrade http site_url to https when request is TLS
-- #25 Reject off-site redirectUri; refuse rebinding an OAuth identity to another logged-in user
-- #36 Strip logout/auth query params on redirect and login link base URL
-- #51 Remove unused FULLTEXT index on ha_user_services.extended (InnoDB error 1214)
-- #31 &postHooks= snippets; system events OnHAUserCreate, OnHAUserLogin, OnHAUserBind
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-3.1.1-pl
-==============
-- #50 Fix position of lexicon in manager
-- #53 fix used modx tags in provider urls
+## [3.2.0-pl] - 2026-07-25
 
-3.1.0-pl
-==============
-- Refactoring PHP to PSR-12
-- Updated HybridAuth core to 3.7.1
+### Security
+- Updated HybridAuth core to 3.13.0 (CVE-2026-4587).
+- [#25] Reject off-site `redirectUri`; refuse rebinding an OAuth identity to another logged-in user.
+- [#38] Facebook HTTPS: callback uses `hauth_done`; upgrade `http` `site_url` to `https` when the request is TLS.
 
-3.0.2-pl
-==============
+### Added
+- [#56] VkId provider (VK ID OAuth 2.1 + PKCE); legacy Vkontakte kept for old apps.
+- Restored local providers removed upstream in 3.8.2: Vkontakte, Yandex, Odnoklassniki.
+- [#32] `ha.keys.Yahoo` system setting and setup docs (Hybridauth `Provider\Yahoo`).
+- `ha.keys.X` (OAuth 2); Twitter setting kept as legacy OAuth 1.0a.
+- `ha.keys.Odnoklassniki` system setting.
+- [#31] `&postHooks=` snippets; system events `OnHAUserCreate`, `OnHAUserLogin`, `OnHAUserBind`.
+- [#54] Build runs `composer install` so transport packages include `vendor/autoload.php`; `composer.lock` committed for reproducible builds.
+- Provider icons as inline SVG in chunks (`tpl.HybridAuth.provider*`): Simple Icons v16 (https://simpleicons.org, MIT); Yandex app icon from Yandex/Wikimedia; ModxPro logo from docs.modx.pro.
+- LinkedIn/Yahoo: pinned last Simple Icons releases before brand removal.
+
+### Fixed
+- [#52] Odnoklassniki birthday parsing (`YYYY-MM-DD`); documented keys `id`/`key`/`secret`.
+- [#47] Twitter OAuth1: keep/mirror `keys.key` (was dropped when normalizing to `id`).
+- [#45] [#46] Guard `modUser` map composite on PHP 8+; safer `OnUserFormPrerender` / Profile access.
+- [#36] Strip logout/auth query params on redirect and login link base URL.
+- [#51] Remove unused FULLTEXT index on `ha_user_services.extended` (InnoDB error 1214).
+- `ha_user_services.createdon` timestamp (was using month token instead of seconds).
+- `getUrl()` respects HTTPS behind TLS proxy (same as OAuth callback).
+- Unbind requires web session; guest gets `ha_err_not_logged_in`.
+
+### Changed
+- PHP 7.4–8.4 supported.
+- Replaced legacy PNG icon sprites with official SVG brand icons (no custom drawing).
+- Active/linked providers use CSS grayscale instead of a separate grayscale sprite.
+- MailRu is not restored; use VK ID for Mail.ru accounts.
+- Removed unused `$_SESSION['HA']['verified']` flag.
+
+## [3.1.1-pl]
+
+### Fixed
+- [#50] Fix position of lexicon in manager.
+- [#53] Fix used MODX tags in provider URLs.
+
+## [3.1.0-pl]
+
+### Changed
+- Refactoring PHP to PSR-12.
+- Updated HybridAuth core to 3.7.1.
+
+## [3.0.2-pl]
+
+### Fixed
 - Fixed retrieving date of birth from remote profile.
 
-3.0.1-pl
-==============
-- Updated HybridAuth core to 3.0.0 stable
-- Fixed php type of "country" in model map.
+## [3.0.1-pl]
 
-3.0.0-pl
-==============
+### Fixed
+- Updated HybridAuth core to 3.0.0 stable.
+- Fixed PHP type of `country` in model map.
+
+## [3.0.0-pl]
+
+### Changed
 - Updated HybridAuth core.
 
-3.0.0-rc
-==============
+## [3.0.0-rc]
+
+### Changed
 - Refactored to use HybridAuth 3.
 - Updated default providers.
 
-2.1.0 pl
-==============
-- Added modx.pro provider.
-- Improved compatibility with PHP 7.2.
-- Improved ExtJs grid in manager.
+## [2.1.0-pl]
 
-2.0.4 pl
-==============
+### Added
+- Added modx.pro provider.
+
+### Changed
+- Improved compatibility with PHP 7.2.
+- Improved ExtJS grid in manager.
+
+## [2.0.4-pl]
+
+### Fixed
 - Fixed possible "No provider ID specified" message in the system log.
+
+### Changed
 - Updated HybridAuth library to version 2.9.1.
 
-2.0.3 pl
-==============
+## [2.0.3-pl]
+
+### Changed
 - Improved the handling of exceptions.
 - Fixed debug mode.
 
-2.0.2 pl
-==============
+## [2.0.2-pl]
+
+### Fixed
 - Fixed possible XSS in the authorization links.
 
-2.0.1 pl
-==============
+## [2.0.1-pl]
+
+### Fixed
 - Removed error "You cannot access this page directly" from system log.
 
-2.0.0 pl
-==============
-- PSR-2
+## [2.0.0-pl]
+
+### Added
+- Ability to unbind services from a user profile.
+
+### Changed
+- PSR-2.
 - Updated HybridAuth library to version 2.8.2.
 - HybridAuth library integrated via composer.
-- Ability to unbind services from a profile of user.
-- If pdoTools is installed, the component will use it for the processing of a chunks.
+- If pdoTools is installed, the component uses it for chunk processing.
 
-1.1.4 pl
-==============
+## [1.1.4-pl]
+
+### Fixed
 - [#34] Fixed scopes in Facebook provider.
 - Fixed possible E_WARNING in Vkontakte provider.
 
-1.1.3 pl
-==============
-- [#37] Increased length of some haUserService fields.
+## [1.1.3-pl]
 
-1.1.2 pl
-==============
-- Updated main oAuth providers, including Google and Facebook.
+### Changed
+- [#37] Increased length of some `haUserService` fields.
 
-1.1.1 pl
-==============
-- [#17] Fixed work with enabled php-apc after updated HybridAuth core to version 2.3.0.
+## [1.1.2-pl]
 
-1.1.0 pl
-==============
+### Changed
+- Updated main OAuth providers, including Google and Facebook.
+
+## [1.1.1-pl]
+
+### Fixed
+- [#17] Fixed work with enabled php-apc after updating HybridAuth core to version 2.3.0.
+
+## [1.1.0-pl]
+
+### Changed
 - Updated HybridAuth core to version 2.3.0.
 - Shows more errors from HybridAuth in MODX log.
 
-1.0.0 pl
-==============
-- Removed object haUser. All existing users will be converted to modUser on package upgrade.
-- Removed function filter_var() for email validation.
+## [1.0.0-pl]
+
+### Changed
+- Removed object `haUser`. All existing users are converted to `modUser` on package upgrade.
+- Removed `filter_var()` for email validation.
 - Returned back transparent images.
 
-0.9.0 pl
-==============
-- Added possibility to view user's linked services in manager.
+## [0.9.0-pl]
 
-0.8.8 pl1
-==============
+### Added
+- Possibility to view user's linked services in manager.
+
+## [0.8.8-pl1]
+
+### Fixed
 - [#26] Fixed calculation of time of the queries.
-- Fixed E_NOTICE on line 99 of hybridauth.class.php.
+- Fixed E_NOTICE on line 99 of `hybridauth.class.php`.
 
-0.8.7 pl
-==============
-- [#23] Fixed parameter "debug" for HybridAuth.
+## [0.8.7-pl]
+
+### Fixed
+- [#23] Fixed parameter `debug` for HybridAuth.
 - [#21] Improved usernames.
 
-0.8.6 pl
-==============
-- [#20] Improved work with context settings.
-- Fixed method makePlaceholders.
+## [0.8.6-pl]
 
-0.8.5 pl4
-==============
-- Improved package uninstall and reinstall.
-- [#17] Fixed work with enabled php-apc.
+### Fixed
+- [#20] Improved work with context settings.
+- Fixed method `makePlaceholders`.
+
+## [0.8.5-pl4]
+
+### Added
 - Added Foursquare icon.
+
+### Fixed
+- [#17] Fixed work with enabled php-apc.
 - Fixed possible E_WARNING on initialization.
 
-0.8.4 pl
-==============
-- Added rel="nofollow" into chunk with link to provider.
+### Changed
+- Improved package uninstall and reinstall.
+
+## [0.8.4-pl]
+
+### Changed
+- Added `rel="nofollow"` into chunk with link to provider.
 - Improved description of system settings.
 
-0.8.3 pl
-==============
+## [0.8.3-pl]
+
+### Changed
 - Improved generation of providers links.
 
-0.8.2 pl
-==============
-- Added parameter "&redirectUri=``" for solve issue "redirect_uri_mismatch" when using multiple contexts.
-- Context settings now can override providers keys in system settings. Very helpful for multiple contexts.
+## [0.8.2-pl]
 
-0.8.1 pl
-==============
-- Fixed bug with saving parameters to $_SESSION.
+### Added
+- Parameter `&redirectUri=` for `redirect_uri_mismatch` when using multiple contexts.
 
-0.8.0 pl
-==============
+### Changed
+- Context settings can override provider keys in system settings (helpful for multiple contexts).
+
+## [0.8.1-pl]
+
+### Fixed
+- Fixed bug with saving parameters to `$_SESSION`.
+
+## [0.8.0-pl]
+
+### Fixed
 - [#7] Fixed generation of links for sites in subfolder.
 - [#4] Fixed login to separate contexts.
+
+### Changed
 - Improved support of multiple contexts.
 
-0.7.0 pl2
-==============
-- New snippet "haProfile" for update user profile.
-- Automatic generation of links of providers.
-- Improved chunks, added icons for some providers.
-- Automatic logout of users that was been blocked by administrator.
-- Added virtual field "gravatar" to class "haUser". You can get it with $modx->user->get('gravatar');.
-- Extension package is removed from system settings when you uninstall component.
-- Replaced file "action.php" to plugin "HybridAuth".
-- Added new providers: "Draugiem" and "Xing".
+## [0.7.0-pl2]
+
+### Added
+- New snippet `haProfile` for updating user profile.
+- Automatic generation of provider links.
+- Automatic logout of users blocked by administrator.
+- Virtual field `gravatar` on user profile (`$modx->user->get('gravatar')`).
+- New providers: Draugiem and Xing.
+
+### Fixed
 - [#3] Fixed "No foreign key definition for parentClass: modUser using relation alias: Services" log entries.
-- Fixed order of links to providers, specified in the parameter "&providers".
+- Fixed order of links to providers specified in `&providers`.
 
-0.6.0 pl
-==============
-- Added ability to disable new user registrations. See system setting "ha.register_users".
+### Changed
+- Improved chunks; added icons for some providers.
+- Extension package is removed from system settings on uninstall.
+- Replaced file `action.php` with plugin `HybridAuth`.
 
-0.5.0 beta
-==============
-- Fixed login trough vk.com
-- Updated HybridAuth core to version 2.1.2
+## [0.6.0-pl]
 
-0.4.0 beta
-==============
-- Updated HybridAuth core to version 2.1.1
-- Improved initialization of main class
+### Added
+- Ability to disable new user registrations (`ha.register_users` system setting).
 
-0.3.3 beta
-==============
-- Fixed issue with empty email
+## [0.5.0-beta]
 
-0.3.2 beta
-==============
-- Added exception handler for catching all exceptions from HybridAuth into MODX system log
+### Fixed
+- Fixed login through vk.com.
 
-0.3.1 beta
-==============
-- Changing user class to haUser on login through remote service.
-- On uninstall of component all haUsers becomes modUsers.
+### Changed
+- Updated HybridAuth core to version 2.1.2.
 
-0.3.0 beta
-==============
-- Fixed save of a photo in profile.
+## [0.4.0-beta]
+
+### Changed
+- Updated HybridAuth core to version 2.1.1.
+- Improved initialization of main class.
+
+## [0.3.3-beta]
+
+### Fixed
+- Fixed issue with empty email.
+
+## [0.3.2-beta]
+
+### Added
+- Exception handler for catching HybridAuth exceptions into MODX system log.
+
+## [0.3.1-beta]
+
+### Changed
+- Changing user class to `haUser` on login through remote service.
+- On uninstall, all `haUser` records become `modUser`.
+
+## [0.3.0-beta]
+
+### Fixed
+- Fixed save of photo in profile.
 - Improved errors handling.
 - Fixed increment of username if remote username exists on site.
-- If authenticated user linking remote service record, that already exists in remote profiles of the site - this record changes the owner. You can re-link any of your records to any accounts on site.
 
-0.2.0 beta
-==============
-- Added parameter &groups=``. For example, &groups=`Users:1` will add new user to group "Users" with role "member"
-- Updated snippet params, added russian localization.
-- Chunks localization
-- Updated readme
+### Changed
+- If authenticated user links a remote service record that already exists, the record changes owner (re-link supported).
 
-0.1.0 beta
-==============
+## [0.2.0-beta]
+
+### Added
+- Parameter `&groups=` (e.g. `&groups=`Users:1`` adds new user to group Users with member role).
+
+### Changed
+- Updated snippet params; added Russian localization.
+- Chunks localization.
+- Updated readme.
+
+## [0.1.0-beta]
+
+### Added
 - Initial release.
