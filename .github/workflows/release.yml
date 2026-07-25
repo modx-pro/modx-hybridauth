@@ -1,0 +1,32 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer
+          coverage: none
+
+      - name: Install component Hybridauth deps
+        run: composer install --no-interaction --no-dev --prefer-dist
+        working-directory: core/components/hybridauth
+
+      - name: Build transport package
+        run: php _build/build.transport.php
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: _packages/*.transport.zip
