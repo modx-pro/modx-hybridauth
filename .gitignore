@@ -3,3 +3,14 @@
 .DS_Store
 config.core.php
 /core/components/hybridauth/vendor/
+
+# Local QA / dev-only (not shipped in package)
+/_build/install_dev.php
+/_build/setup_test_page.php
+/_build/simulate_oauth.php
+/_build/qa_release.php
+/_build/debug_*.php
+/_build/generate_icons.py
+/docs/E2E-SMOKE.md
+/core/components/hybridauth/elements/snippets/snippet.hatesthook.php
+

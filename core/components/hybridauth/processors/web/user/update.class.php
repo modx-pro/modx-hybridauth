@@ -1,6 +1,12 @@
 <?php
 
-require MODX_CORE_PATH . 'model/modx/processors/security/user/update.class.php';
+use MODX\Revolution\Processors\Security\User\Update as UserUpdateProcessor;
+
+if (!class_exists('modUserUpdateProcessor', false)) {
+    class modUserUpdateProcessor extends UserUpdateProcessor
+    {
+    }
+}
 
 class haUserUpdateProcessor extends modUserUpdateProcessor
 {

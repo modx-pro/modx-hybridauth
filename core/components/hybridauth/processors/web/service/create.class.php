@@ -25,7 +25,7 @@ class haUserServiceCreateProcessor extends modObjectCreateProcessor
                 $properties[$k] = $this->modx->stripTags($v);
             }
         }
-        $properties['createdon'] = date('Y-m-d H:i:m');
+        $properties['createdon'] = date('Y-m-d H:i:s');
 
         if (empty($properties['internalKey'])) {
             $this->addFieldError('internalKey', $this->modx->lexicon('field_required'));

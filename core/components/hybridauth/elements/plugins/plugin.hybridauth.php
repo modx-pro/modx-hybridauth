@@ -39,7 +39,9 @@ switch ($modx->event->name) {
                             $HybridAuth->Logout();
                             break;
                         case 'unbind':
-                            if (!empty($_REQUEST['provider'])) {
+                            if (!$modx->user->isAuthenticated($modx->context->key)) {
+                                $_SESSION['HybridAuth']['error'] = $modx->lexicon('ha_err_not_logged_in');
+                            } elseif (!empty($_REQUEST['provider'])) {
                                 $HybridAuth->runProcessor('web/service/remove', array(
                                     'provider' => $_REQUEST['provider'],
                                 ));

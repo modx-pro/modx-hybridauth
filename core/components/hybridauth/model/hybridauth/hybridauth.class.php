@@ -87,7 +87,8 @@ class HybridAuth
             default:
                 $config = $this->makePlaceholders($this->config);
                 if ($css = $this->modx->getOption('ha.frontend_css')) {
-                    $this->modx->regClientCSS(str_replace($config['pl'], $config['vl'], $css));
+                    $css = str_replace($config['pl'], $config['vl'], $css);
+                    $this->modx->regClientCSS($this->versionAssetUrl($css));
                 }
                 $this->initialized[$ctx] = true;
         }
@@ -256,6 +257,7 @@ class HybridAuth
      */
     public function Login($provider)
     {
+        $adapter = null;
         try {
             if (isset($this->adapters[$provider])) {
                 /** @var OAuth2 $adapter */
@@ -279,13 +281,32 @@ class HybridAuth
         } catch (Exception $e) {
             $this->exceptionHandler($e);
             $this->Refresh('login');
+            return;
         }
+        if (empty($profile['identifier'])) {
+            $this->Refresh('login');
+            return;
+        }
+
+        $this->processOAuthProfile($provider, $profile);
+    }
+
+
+    /**
+     * Complete OAuth login after profile is resolved.
+     *
+     * @param string $provider
+     * @param array $profile
+     */
+    protected function processOAuthProfile($provider, array $profile)
+    {
         $profile['provider'] = $provider;
 
         $haRegistered = false;
         $haBound = false;
         $haLoggedIn = false;
         $uid = 0;
+        $login_data = [];
 
         /** @var haUserService $service */
         $service = $this->modx->getObject('haUserService', [
@@ -437,13 +458,12 @@ class HybridAuth
             }
         }
 
-        $this->modx->error->reset();
+        $this->resetModxError();
         if (
             empty($_SESSION['HybridAuth']['error'])
             && !$this->modx->user->isAuthenticated($this->modx->context->key)
             && !empty($login_data)
         ) {
-            $_SESSION['HA']['verified'] = 1;
             if (!empty($this->config['loginContext'])) {
                 $login_data['login_context'] = $this->config['loginContext'];
             }
@@ -658,7 +678,9 @@ class HybridAuth
     public function getUrl()
     {
         $request = preg_replace('#^' . $this->modx->getOption('base_url') . '#', '', $_SERVER['REQUEST_URI']);
-        $url = $this->modx->getOption('site_url') . ltrim(rawurldecode($request), '/');
+        $url = $this->ensureHttpsUrl(
+            $this->modx->getOption('site_url') . ltrim(rawurldecode($request), '/')
+        );
         $url = preg_replace('#["\']#', '', strip_tags($url));
         $url = preg_replace('#\[\[.*?\]\]#', '', $url);
         $url = $this->stripAuthQueryParams($url);
@@ -704,6 +726,7 @@ class HybridAuth
                 'unbind_url' => $url . 'unbind',
                 'provider' => strtolower($provider),
                 'title' => $provider,
+                'icon_url' => $this->config['assetsUrl'] . 'img/web/providers/' . strtolower($provider) . '.svg',
             ];
 
             $output .= !in_array($pls['provider'], $active)
@@ -744,7 +767,7 @@ class HybridAuth
      */
     public function runProcessor($action = '', $scriptProperties = [])
     {
-        $this->modx->error->reset();
+        $this->resetModxError();
 
         return $this->modx->runProcessor(
             $action,
@@ -753,6 +776,76 @@ class HybridAuth
                 'processors_path' => $this->config['processorsPath'],
             ]
         );
+    }
+
+
+    /**
+     * MODX 3 may not set $modx->error until runProcessor; ensure it exists before reset.
+     */
+    public static function resetModxErrorFor(modX $modx)
+    {
+        if ($modx->error) {
+            $modx->error->reset();
+            return;
+        }
+        if (!isset($modx->services)) {
+            return;
+        }
+        if (!$modx->services->has('error')) {
+            $class = class_exists(\MODX\Revolution\Error\modError::class)
+                ? \MODX\Revolution\Error\modError::class
+                : 'modError';
+            $modx->services->add('error', new $class($modx));
+        }
+        $modx->error = $modx->services->get('error');
+        $modx->error->reset();
+    }
+
+
+    /**
+     * MODX 3 may not set $modx->error until runProcessor; ensure it exists before reset.
+     */
+    protected function resetModxError()
+    {
+        self::resetModxErrorFor($this->modx);
+    }
+
+
+    /**
+     * Append filemtime query param so browser cache invalidates after CSS updates.
+     *
+     * @param string $url
+     *
+     * @return string
+     */
+    protected function versionAssetUrl($url)
+    {
+        if (empty($url)) {
+            return $url;
+        }
+
+        $assetsUrl = $this->modx->getOption('assets_url', null, MODX_ASSETS_URL);
+        $assetsPath = $this->modx->getOption('assets_path', null, MODX_ASSETS_PATH);
+        $siteUrl = $this->modx->getOption('site_url', null, '');
+
+        $path = $url;
+        if (!empty($siteUrl) && strpos($path, $siteUrl) === 0) {
+            $path = substr($path, strlen($siteUrl));
+        }
+
+        $queryPos = strpos($path, '?');
+        $pathOnly = $queryPos !== false ? substr($path, 0, $queryPos) : $path;
+
+        if (strpos($pathOnly, $assetsUrl) === 0) {
+            $file = $assetsPath . substr($pathOnly, strlen($assetsUrl));
+            if (is_readable($file)) {
+                $base = $queryPos !== false ? substr($url, 0, $queryPos) : $url;
+
+                return $base . '?v=' . filemtime($file);
+            }
+        }
+
+        return $url;
     }
 
 
