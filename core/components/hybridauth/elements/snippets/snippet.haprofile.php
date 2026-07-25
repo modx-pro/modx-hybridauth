@@ -77,7 +77,10 @@ if ((!empty($_REQUEST['action']) && strtolower($_REQUEST['action']) == 'updatepr
 }
 
 $add = array();
-if ($services = $modx->user->getMany('Services')) {
+$services = $modx->getCollection('haUserService', array(
+    'internalKey' => (int)$modx->user->id,
+));
+if (!empty($services)) {
     /** @var haUserService $service */
     foreach ($services as $service) {
         $add = array_merge($add, $service->toArray(strtolower($service->get('provider') . '.')));

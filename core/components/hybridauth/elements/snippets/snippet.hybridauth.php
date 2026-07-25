@@ -41,7 +41,10 @@ if (!empty($_SESSION['HybridAuth']['error'])) {
 
 if ($modx->user->isAuthenticated($modx->context->key)) {
     $add = array();
-    if ($services = $modx->user->getMany('Services')) {
+    $services = $modx->getCollection('haUserService', array(
+        'internalKey' => (int)$modx->user->id,
+    ));
+    if (!empty($services)) {
         /** @var haUserService $service */
         foreach ($services as $service) {
             $add = array_merge($add, $service->toArray(strtolower($service->get('provider') . '.')));

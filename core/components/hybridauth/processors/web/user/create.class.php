@@ -1,14 +1,22 @@
 <?php
 
-use MODX\Revolution\Processors\Security\User\Create as UserCreateProcessor;
-
-if (!class_exists('modUserCreateProcessor', false)) {
-    class modUserCreateProcessor extends UserCreateProcessor
-    {
+if (!class_exists('haUserCreateBaseProcessor', false)) {
+    if (class_exists('modUserCreateProcessor')) {
+        class haUserCreateBaseProcessor extends modUserCreateProcessor
+        {
+        }
+    } elseif (class_exists(\MODX\Revolution\Processors\Security\User\Create::class)) {
+        class haUserCreateBaseProcessor extends \MODX\Revolution\Processors\Security\User\Create
+        {
+        }
+    } else {
+        class haUserCreateBaseProcessor extends modObjectCreateProcessor
+        {
+        }
     }
 }
 
-class haUserCreateProcessor extends modUserCreateProcessor
+class haUserCreateProcessor extends haUserCreateBaseProcessor
 {
     public $classKey = 'modUser';
     public $languageTopics = array('core:default', 'core:user');
