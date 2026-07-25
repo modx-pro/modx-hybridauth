@@ -1,14 +1,22 @@
 <?php
 
-use MODX\Revolution\Processors\Security\User\Update as UserUpdateProcessor;
-
-if (!class_exists('modUserUpdateProcessor', false)) {
-    class modUserUpdateProcessor extends UserUpdateProcessor
-    {
+if (!class_exists('haUserUpdateBaseProcessor', false)) {
+    if (class_exists('modUserUpdateProcessor')) {
+        class haUserUpdateBaseProcessor extends modUserUpdateProcessor
+        {
+        }
+    } elseif (class_exists(\MODX\Revolution\Processors\Security\User\Update::class)) {
+        class haUserUpdateBaseProcessor extends \MODX\Revolution\Processors\Security\User\Update
+        {
+        }
+    } else {
+        class haUserUpdateBaseProcessor extends modObjectUpdateProcessor
+        {
+        }
     }
 }
 
-class haUserUpdateProcessor extends modUserUpdateProcessor
+class haUserUpdateProcessor extends haUserUpdateBaseProcessor
 {
     public $classKey = 'modUser';
     public $languageTopics = array('core:default', 'core:user');

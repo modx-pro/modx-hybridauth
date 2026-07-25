@@ -36,6 +36,17 @@ $modx->setLogLevel(modX::LOG_LEVEL_INFO);
 $modx->setLogTarget('ECHO');
 $modx->getService('error', 'error.modError');
 
+// MODX3 namespaces compatibility for legacy builder script.
+if (!class_exists('modPackageBuilder') && class_exists(\MODX\Revolution\Transport\modPackageBuilder::class)) {
+    class_alias(\MODX\Revolution\Transport\modPackageBuilder::class, 'modPackageBuilder');
+}
+if (!class_exists('xPDOTransport') && class_exists(\xPDO\Transport\xPDOTransport::class)) {
+    class_alias(\xPDO\Transport\xPDOTransport::class, 'xPDOTransport');
+}
+if (!class_exists('xPDO') && class_exists(\xPDO\xPDO::class)) {
+    class_alias(\xPDO\xPDO::class, 'xPDO');
+}
+
 /* vendor/ is gitignored; transport must include it (#54) */
 ensureComposerVendor($sources['source_core'], $modx);
 

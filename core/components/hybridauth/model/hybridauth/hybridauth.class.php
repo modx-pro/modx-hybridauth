@@ -12,6 +12,8 @@ class HybridAuth
     public $adapters = [];
     /** @var array $initialized */
     public $initialized = [];
+    /** @var bool $modelLoaded */
+    protected $modelLoaded = false;
 
 
     public function __construct(modX $modx, array $config = [])
@@ -41,8 +43,37 @@ class HybridAuth
             'postHooks' => '',
         ], $config);
 
+        $this->ensureModelPackageLoaded();
+
         $this->loadHybridAuth();
         $_SESSION['HybridAuth'][$this->modx->context->key] = $this->config;
+    }
+
+
+    /**
+     * Ensure xPDO package metadata and classes are loaded for haUserService.
+     *
+     * @return bool
+     */
+    protected function ensureModelPackageLoaded()
+    {
+        if ($this->modelLoaded) {
+            return true;
+        }
+
+        $modelPath = rtrim($this->config['modelPath'], '/') . '/';
+        $this->modx->setPackage('hybridauth', $modelPath);
+
+        if (!$this->modx->loadClass('haUserService', $modelPath . 'hybridauth/', true, false)) {
+            $this->modx->log(
+                modX::LOG_LEVEL_ERROR,
+                '[HybridAuth] Unable to load class haUserService from ' . $modelPath . 'hybridauth/'
+            );
+            return false;
+        }
+
+        $this->modelLoaded = true;
+        return true;
     }
 
 
@@ -300,6 +331,12 @@ class HybridAuth
      */
     protected function processOAuthProfile($provider, array $profile)
     {
+        if (!$this->ensureModelPackageLoaded()) {
+            $_SESSION['HybridAuth']['error'] = 'hauserservice_class_not_found';
+            $this->Refresh('login');
+            return;
+        }
+
         $profile['provider'] = $provider;
 
         $haRegistered = false;
@@ -576,6 +613,14 @@ class HybridAuth
             $this->exceptionHandler($e);
         }
 
+        // Avoid running MODX logout processor for anonymous requests.
+        // It may trigger permission checks and noisy SQL errors in some setups.
+        if (!$this->modx->user->isAuthenticated($this->modx->context->key)) {
+            unset($_SESSION['HybridAuth']['verified'], $_SESSION['HybridAuth']['error']);
+            $this->Refresh('logout');
+            return;
+        }
+
         $logout_data = [];
         if (!empty($this->config['loginContext'])) {
             $logout_data['login_context'] = $this->config['loginContext'];
@@ -587,6 +632,10 @@ class HybridAuth
         $response = $this->modx->runProcessor('security/logout', $logout_data);
         if ($response->isError()) {
             $msg = implode(', ', $response->getAllErrors());
+            if ($msg === 'not_logged_in') {
+                $this->Refresh('logout');
+                return;
+            }
             $this->modx->log(
                 modX::LOG_LEVEL_ERROR,
                 '[HybridAuth] logout error. Username: ' . $this->modx->user->get('username') . ', uid: ' . $msg
@@ -704,6 +753,8 @@ class HybridAuth
         if (empty($this->adapters)) {
             return '';
         }
+
+        $this->ensureModelPackageLoaded();
 
         $output = '';
         $url = $this->getUrl();

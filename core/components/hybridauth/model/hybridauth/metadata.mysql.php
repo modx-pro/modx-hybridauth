@@ -7,16 +7,7 @@ $xpdo_meta_map = array(
         ),
 );
 
-// Guard: on PHP 8+ writing into a missing map key fatals the manager (#45, #46).
-if (isset($this->map['modUser']) && is_array($this->map['modUser'])) {
-    if (!isset($this->map['modUser']['composites']) || !is_array($this->map['modUser']['composites'])) {
-        $this->map['modUser']['composites'] = array();
-    }
-    $this->map['modUser']['composites']['Services'] = array(
-        'class' => 'haUserService',
-        'local' => 'id',
-        'foreign' => 'internalKey',
-        'cardinality' => 'many',
-        'owner' => 'local',
-    );
-}
+// Do not mutate $this->map at runtime here.
+// On MODX 3 + xPDOMap (ArrayAccess), nested map writes can emit
+// "Indirect modification of overloaded element ... has no effect".
+// Services are loaded explicitly via haUserService queries in snippets.
