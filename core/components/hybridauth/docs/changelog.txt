@@ -20,10 +20,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ha.keys.Odnoklassniki` system setting.
 - [#31] `&postHooks=` snippets; system events `OnHAUserCreate`, `OnHAUserLogin`, `OnHAUserBind`.
 - [#54] Build runs `composer install` so transport packages include `vendor/autoload.php`; `composer.lock` committed for reproducible builds.
+- [#58] Build script aliases MODX 3 transport/xPDO classes so `build.transport.php` runs on MODX 3.
 - Provider icons as inline SVG in chunks (`tpl.HybridAuth.provider*`): Simple Icons v16 (https://simpleicons.org, MIT); Yandex app icon from Yandex/Wikimedia; ModxPro logo from docs.modx.pro.
 - LinkedIn/Yahoo: pinned last Simple Icons releases before brand removal.
 
 ### Fixed
+- [#58] MODX 3: load `haUserService` package/class before OAuth and provider queries (fixes missing table name/class and broken SQL like `FROM AS haUserService`).
+- [#58] MODX 3: `web/user/create` and `web/user/update` processors resolve base class on MODX 2 and 3 (fixes `Requested processor is invalid` during OAuth registration).
+- [#58] Skip `security/logout` for anonymous `hauth_action=logout` requests (avoids `not_logged_in` errors and noisy `modAccess` SQL on logout).
+- [#58] Snippets load linked providers via `getCollection('haUserService')` instead of the `modUser` relation alias `Services`.
+- [#58] Remove runtime `$this->map` mutation in package metadata (fixes `Indirect modification of overloaded element of xPDOMap` on MODX 3).
 - [#52] Odnoklassniki birthday parsing (`YYYY-MM-DD`); documented keys `id`/`key`/`secret`.
 - [#47] Twitter OAuth1: keep/mirror `keys.key` (was dropped when normalizing to `id`).
 - [#45] [#46] Guard `modUser` map composite on PHP 8+; safer `OnUserFormPrerender` / Profile access.
