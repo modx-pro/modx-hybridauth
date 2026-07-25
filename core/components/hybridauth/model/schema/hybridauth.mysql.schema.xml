@@ -36,7 +36,7 @@
         <field key="city" dbtype="varchar" precision="100" phptype="string" null="true"/>
         <field key="zip" dbtype="varchar" precision="25" phptype="string" null="true"/>
 
-        <field key="extended" dbtype="text" phptype="json" null="true" index="fulltext"/>
+        <field key="extended" dbtype="text" phptype="json" null="true"/>
 
         <index alias="unique_fields" name="unique_fields" primary="false" unique="true" type="BTREE">
             <column key="internalKey" length="" collation="A" null="false"/>

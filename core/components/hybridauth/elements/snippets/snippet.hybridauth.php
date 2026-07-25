@@ -2,10 +2,10 @@
 
 /** @var array $scriptProperties */
 /** @var modX $modx */
-$modx->error->reset();
 if (!$modx->loadClass('hybridauth', MODX_CORE_PATH . 'components/hybridauth/model/hybridauth/', false, true)) {
     return;
 }
+HybridAuth::resetModxErrorFor($modx);
 $HybridAuth = new HybridAuth($modx, $scriptProperties);
 $HybridAuth->initialize($modx->context->key);
 

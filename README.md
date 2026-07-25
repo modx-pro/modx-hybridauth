@@ -1,33 +1,50 @@
 ## HybridAuth for MODX Revolution
 
-Component for login through 3rd party services.
+Social login for MODX Revolution via [Hybridauth](https://github.com/hybridauth/hybridauth) **3.13**.
 
-## HybridAuth
+**PHP:** 7.4–8.4
 
-HybridAuth enables developers to easily build social applications and tools
-to engage websites vistors and customers on a social level by implementing
-social sign-in, social sharing, users profiles, friends list, activities
-stream, status updates and more.
+### Build
 
-The main goal of HybridAuth is to act as an abstract API between your application
-and various social apis and identities providers such as Facebook, Twitter,
-MySpace and Google.
+`vendor/` is gitignored. `_build/build.transport.php` runs `composer install --no-dev`
+and fails the build if `vendor/autoload.php` is missing (#54). `composer.lock` is committed.
 
-## Repository
+### Providers
 
-HybridAuth repository is made up of several projects:
+Built-in Hybridauth providers (Google, Facebook, GitHub, X, Yahoo, …) work through `ha.keys.{Name}` JSON settings. Prefer **X** (OAuth 2); `Twitter` remains as legacy OAuth 1.0a.
 
-- **HybridAuth Core library** includes OpenID, Facebook, Twitter, LinkedIn,
-  MySpace, Google, Yahoo, Windows Live, Foursquare and AOL.
-- **The additional providers project** contains many others services
-  which you may want to use,
-- **Examples and demos** contains five working examples for you to test,
+- **Yahoo** — create an app at [developer.yahoo.com/apps](https://developer.yahoo.com/apps/), enable OpenID Connect Permissions, set `ha.keys.Yahoo` to `{"keys":{"id":"...","secret":"..."},"scope":"profile"}`, use `&providers=`Yahoo``.
 
-## Getting Started
+Local classmap providers:
 
-We highly recommend that you download and use the latest release from HybridAuth website
-at [http://hybridauth.sourceforge.net/download.html](http://hybridauth.sourceforge.net/download.html)
+- **VkId** (OAuth 2.1 + PKCE) — register in [VK ID](https://id.vk.com/about/business/go), set `ha.keys.VkId` to `{"keys":{"id":"...","secret":"..."},"scope":"vkid.personal_info email"}`, use `&providers=`VkId``. See [#56](https://github.com/modx-pro/modx-hybridauth/issues/56).
+- **Yandex** — `{"keys":{"id":"...","secret":"..."}}`
+- **Vkontakte** (legacy `api.vk.com` OAuth) — only for old apps; prefer **VkId**.
+- **Odnoklassniki** — `{"keys":{"id":"...","key":"...","secret":"..."}}` (`key` = application_key). See [#52](https://github.com/modx-pro/modx-hybridauth/issues/52).
 
-You can find  complete documentation for HybridAuth
-at [http://hybridauth.sourceforge.net](http://hybridauth.sourceforge.net)
+**MailRu** is not shipped; VK ID can cover Mail.ru accounts in one OAuth flow.
 
+Callback URL for each provider: `{site_url}?hauth_done={ProviderName}` (underscore; required for Facebook).
+
+### Post hooks (#31)
+
+After OAuth signup/login you can run snippets or plugins:
+
+```
+[[!HybridAuth?providers=`X` &postHooks=`hookNewsletter`]]
+```
+
+Snippet properties: `user`, `userid`, `provider`, `profile`, `ha_mode` (`register` or `login`).
+
+System events: `OnHAUserCreate`, `OnHAUserLogin`, `OnHAUserBind` (payload includes the same fields).
+
+### Security
+
+- Register the **exact** callback URI in each IdP app (HTTPS on TLS sites).
+- Do not host open redirects on the same domain as `site_url` ([Covert Redirect](https://www.phpclasses.org/blog/package/7700/post/4-Is-Your-OAuth-20-Application-Secure.html) / [#25](https://github.com/modx-pro/modx-hybridauth/issues/25)).
+- `&redirectUri=` must be same-origin as `site_url`; off-site values are ignored.
+- Hybridauth uses authorization code + OAuth2 `state`.
+
+### Issues
+
+https://github.com/modx-pro/modx-hybridauth/issues

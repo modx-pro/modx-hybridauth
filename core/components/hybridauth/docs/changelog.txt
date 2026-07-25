@@ -1,5 +1,39 @@
 Changelog for HybridAuth.
 
+3.2.1-pl
+==============
+- Replaced legacy PNG icon sprites with official SVG brand icons (no custom drawing)
+- Icons from Simple Icons v16 (https://simpleicons.org, MIT) — each links to brand guidelines
+- Yandex: official app icon from Yandex/Wikimedia; ModxPro: docs.modx.pro logo
+- LinkedIn/Yahoo: pinned last Simple Icons releases before brand removal
+- Provider icons render as inline SVG images in chunks (tpl.HybridAuth.provider*)
+- Fix ha_user_services.createdon timestamp (was using month token instead of seconds)
+- getUrl() respects HTTPS behind TLS proxy (same as OAuth callback)
+- Unbind requires web session; guest gets ha_err_not_logged_in
+- Removed unused $_SESSION['HA']['verified'] flag
+- Active/linked providers use CSS grayscale instead of a separate grayscale sprite
+
+3.2.0-pl
+==============
+- Updated HybridAuth core to 3.13.0 (CVE-2026-4587)
+- Supported PHP 7.4–8.4
+- Restored local providers removed upstream in 3.8.2: Vkontakte, Yandex, Odnoklassniki
+- #56 Added VkId provider (VK ID OAuth 2.1 + PKCE); keep legacy Vkontakte for old apps
+- #52 Fixed Odnoklassniki birthday parsing (YYYY-MM-DD) and documented keys id/key/secret
+- Added ha.keys.Odnoklassniki system setting
+- MailRu is not restored; use VK ID for Mail.ru accounts
+- #54 Build runs composer install so transport packages include vendor/autoload.php
+- composer.lock is committed for reproducible builds
+- #45 #46 Guard modUser map composite on PHP 8+; safer OnUserFormPrerender / Profile access
+- #47 Twitter OAuth1: keep/mirror keys.key (was dropped when normalizing to id)
+- Added ha.keys.X (OAuth 2); Twitter setting kept as legacy OAuth 1.0a
+- #32 Added ha.keys.Yahoo and setup docs (Hybridauth Provider\Yahoo)
+- #38 Facebook HTTPS: callback uses hauth_done; upgrade http site_url to https when request is TLS
+- #25 Reject off-site redirectUri; refuse rebinding an OAuth identity to another logged-in user
+- #36 Strip logout/auth query params on redirect and login link base URL
+- #51 Remove unused FULLTEXT index on ha_user_services.extended (InnoDB error 1214)
+- #31 &postHooks= snippets; system events OnHAUserCreate, OnHAUserLogin, OnHAUserBind
+
 3.1.1-pl
 ==============
 - #50 Fix position of lexicon in manager

@@ -12,6 +12,7 @@ $_lang['ha_err_no_providers'] = 'Вы должны указать хотя бы 
 $_lang['ha_err_no_provider_keys'] = 'Не могу получить ключи [[+provider]] из системных настроек. [[+provider]] не был активирован.';
 $_lang['ha_err_not_logged_in'] = 'Вы должны быть авторизованы для редактирования своего профиля.';
 $_lang['ha_register_disabled'] = 'Регистрация новых пользователей отключена.';
+$_lang['ha_err_service_bound'] = 'Этот аккаунт [[+provider]] уже привязан к другому пользователю.';
 
 $_lang['ha.username'] = 'Логин';
 $_lang['ha.fullname'] = 'Имя пользователя';
@@ -47,14 +48,22 @@ $_lang['setting_ha.keys.Google'] = 'Ключи для Google';
 $_lang['setting_ha.keys.Google_desc'] = 'Добавить приложение и сгенерировать ключи можно по этой ссылке: <a target="_blank" href="https://code.google.com/apis/console/">https://code.google.com/apis/console/</a>.';
 $_lang['setting_ha.keys.GitHub'] = 'Ключи для GitHub';
 $_lang['setting_ha.keys.GitHub_desc'] = 'Добавить приложение и сгенерировать ключи можно по этой ссылке: <a target="_blank" href="https://github.com/settings/applications/new">https://github.com/settings/applications/new</a>.';
-$_lang['setting_ha.keys.Twitter'] = 'Ключи для Twitter';
-$_lang['setting_ha.keys.Twitter_desc'] = 'Добавить приложение и сгенерировать ключи можно по этой ссылке: <a target="_blank" href="https://dev.twitter.com/apps/new">https://dev.twitter.com/apps/new</a>.';
+$_lang['setting_ha.keys.X'] = 'Ключи для X';
+$_lang['setting_ha.keys.X_desc'] = 'OAuth 2 приложение: <a target="_blank" href="https://developer.x.com/">developer.x.com</a>. JSON: {"keys":{"id":"...","secret":"..."},"scope":"tweet.read users.read users.email offline.access"}. Callback: {site_url}?hauth_done=X. Предпочтительнее legacy Twitter OAuth 1.0a.';
+$_lang['setting_ha.keys.Twitter'] = 'Ключи для Twitter (legacy)';
+$_lang['setting_ha.keys.Twitter_desc'] = 'Legacy OAuth 1.0a (старый Twitter API): <a target="_blank" href="https://developer.x.com/">developer.x.com</a>. В JSON нужен consumer <code>key</code>: {"keys":{"key":"...","secret":"..."}}. Callback: {site_url}?hauth_done=Twitter. Новые приложения — ha.keys.X.';
 $_lang['setting_ha.keys.Yandex'] = 'Ключи для Yandex';
-$_lang['setting_ha.keys.Yandex_desc'] = 'Добавить приложение и сгенерировать ключи можно по этой ссылке: <a target="_blank" href="https://oauth.yandex.ru/client/new">https://oauth.yandex.ru/client/new</a>.';
+$_lang['setting_ha.keys.Yandex_desc'] = 'Создайте приложение и получите Client ID / Client secret на <a target="_blank" href="https://oauth.yandex.ru/">https://oauth.yandex.ru/</a>. Документация: <a target="_blank" href="https://yandex.ru/dev/id/doc/ru/">Yandex ID OAuth</a>.';
 $_lang['setting_ha.keys.Facebook'] = 'Ключи для Facebook';
-$_lang['setting_ha.keys.Facebook_desc'] = 'Добавить приложение и сгенерировать ключи можно по этой ссылке: <a target="_blank" href="https://developers.facebook.com/apps">https://developers.facebook.com/apps</a>.';
-$_lang['setting_ha.keys.Vkontakte'] = 'Ключи для Vkontakte';
-$_lang['setting_ha.keys.Vkontakte_desc'] = 'Добавить приложение и сгенерировать ключи можно по этой ссылке: <a target="_blank" href="https://vk.com/editapp?act=create">https://vk.com/editapp?act=create</a>.';
+$_lang['setting_ha.keys.Facebook_desc'] = 'Приложение: <a target="_blank" href="https://developers.facebook.com/apps">developers.facebook.com/apps</a>. Valid OAuth redirect URI — HTTPS и с подчёркиванием: {site_url}?hauth_done=Facebook (не hauth.done). JSON: {"keys":{"id":"...","secret":"..."},"scope":"email,public_profile"}.';
+$_lang['setting_ha.keys.VkId'] = 'Ключи для VK ID';
+$_lang['setting_ha.keys.VkId_desc'] = 'OAuth 2.1 приложение в <a target="_blank" href="https://id.vk.com/about/business/go">кабинете VK ID</a>. JSON: {"keys":{"id":"...","secret":"..."},"scope":"vkid.personal_info email"} (secret — защищённый ключ; для public PKCE можно пустой). Callback: {site_url}?hauth_done=VkId. Сниппет: &providers=`VkId`. Документация: <a target="_blank" href="https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/start-integration/auth-without-sdk/auth-without-sdk-web">авторизация без SDK</a>.';
+$_lang['setting_ha.keys.Vkontakte'] = 'Ключи для Vkontakte (legacy)';
+$_lang['setting_ha.keys.Vkontakte_desc'] = 'Legacy OAuth api.vk.com. Новые приложения — <code>ha.keys.VkId</code>. Пример: {"keys":{"id":"...","secret":"..."},"scope":"email"}.';
+$_lang['setting_ha.keys.Odnoklassniki'] = 'Ключи для Odnoklassniki';
+$_lang['setting_ha.keys.Odnoklassniki_desc'] = 'Создайте приложение с платформой OAuth: <a target="_blank" href="https://apiok.ru/dev/app/create">apiok.ru</a> (права разработчика: <a target="_blank" href="https://ok.ru/devaccess">ok.ru/devaccess</a>). JSON: {"keys":{"id":"...","key":"...","secret":"..."}}, где key — публичный application_key. В redirect_uri добавьте {site_url}?hauth_done=Odnoklassniki.';
+$_lang['setting_ha.keys.Yahoo'] = 'Ключи для Yahoo';
+$_lang['setting_ha.keys.Yahoo_desc'] = 'OAuth 2 приложение: <a target="_blank" href="https://developer.yahoo.com/apps/">developer.yahoo.com/apps</a>. Включите OpenID Connect Permissions. JSON: {"keys":{"id":"...","secret":"..."},"scope":"profile"}. Callback: {site_url}?hauth_done=Yahoo. Сниппет: &providers=`Yahoo`.';
 
 $_lang['setting_ha.frontend_css'] = 'Стили фронтенда';
 $_lang['setting_ha.frontend_css_desc'] = 'Путь к файлу со стилями компонента. Если вы хотите использовать собственные стили - укажите путь к ним здесь, или очистите параметр и загрузите их вручную через шаблон сайта.';

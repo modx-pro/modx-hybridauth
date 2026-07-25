@@ -1,6 +1,12 @@
 <?php
 
-require MODX_CORE_PATH . 'model/modx/processors/security/user/create.class.php';
+use MODX\Revolution\Processors\Security\User\Create as UserCreateProcessor;
+
+if (!class_exists('modUserCreateProcessor', false)) {
+    class modUserCreateProcessor extends UserCreateProcessor
+    {
+    }
+}
 
 class haUserCreateProcessor extends modUserCreateProcessor
 {

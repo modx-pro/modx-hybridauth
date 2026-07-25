@@ -51,6 +51,10 @@ $tmp = array(
         'type' => 'textfield',
         'value' => '',
     ),
+    'postHooks' => array(
+        'type' => 'textfield',
+        'value' => '',
+    ),
 );
 
 foreach ($tmp as $k => $v) {

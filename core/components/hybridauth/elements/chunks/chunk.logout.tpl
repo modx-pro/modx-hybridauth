@@ -5,7 +5,9 @@
         [[%ha.greeting]] <b>[[+username]]</b> ([[+fullname]])! <a href="[[+logout_url]]">[[%ha.logout]]</a>
         <br/><br/>
         <small>[[%ha.providers_available]]</small><br/>
+        <div class="ha-providers">
         [[+providers]]
+        </div>
     </span>
 
 </div>

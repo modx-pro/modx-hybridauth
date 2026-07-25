@@ -7,7 +7,7 @@
  * @subpackage lexicon
  */
 
-$_lang['ha.providers'] = 'Comma separated list of a providers for authentification. All available providers are here {core_path}components/hybridauth/model/hybridauth/lib/Providers/. For example, &providers=`Google,Twitter,Facebook`.';
+$_lang['ha.providers'] = 'Comma separated list of a providers for authentification. All available providers are here {core_path}components/hybridauth/model/hybridauth/lib/Providers/. For example, &providers=`Google,X,Facebook`.';
 $_lang['ha.groups'] = 'Comma separated list of existing user groups for joining by user at the first login. For example, &groups=`Users:1` will add new user to group "Users" with role "member"';
 $_lang['ha.rememberme'] = 'If true, user will be remembered for a long time.';
 $_lang['ha.loginContext'] = 'Main context for authentication. By default - it is current context.';
@@ -25,3 +25,4 @@ $_lang['ha.activeProviderTpl'] = 'Chunk for output icon of linked service.';
 $_lang['ha.profileFields'] = 'Comma separated list of allowed user fields for update with maximum length of sended values. For example, &profileFields=`username:25,fullname:50,email`.';
 $_lang['ha.requiredFields'] = 'Comma separated list of required user fields when update. This fields must be filled for successful update of profile. For example, &requiredFields=`username,fullname,email`.';
 $_lang['ha.redirectUri'] = 'You can specify "redirect_uri" to which remote service will redirect you. By default, this is the root of the current context.';
+$_lang['ha.postHooks'] = 'Comma-separated snippets to run after OAuth signup or login (Login-style). Snippet gets user, userid, provider, profile, ha_mode (register|login). Also fires system events OnHAUserCreate, OnHAUserLogin, OnHAUserBind.';

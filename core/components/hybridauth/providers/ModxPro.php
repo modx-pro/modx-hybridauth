@@ -7,7 +7,6 @@ use Hybridauth\Exception\Exception;
 use Hybridauth\Data\Collection;
 use Hybridauth\User\Profile;
 
-
 class ModxPro extends OAuth2
 {
     protected $apiBaseUrl = 'https://id.modx.pro/oauth2';

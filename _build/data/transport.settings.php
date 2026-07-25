@@ -23,9 +23,34 @@ $tmp = array(
         'value' => '{"keys":{"id":"12345","secret":"12345"},"scope":"email,public_profile"}',
         'area' => 'ha.keys',
     ),
+    'keys.X' => array(
+        'xtype' => 'textfield',
+        'value' => '{"keys":{"id":"12345","secret":"12345"},"scope":"tweet.read users.read users.email offline.access"}',
+        'area' => 'ha.keys',
+    ),
+    'keys.Twitter' => array(
+        'xtype' => 'textfield',
+        'value' => '{"keys":{"key":"12345","secret":"12345"}}',
+        'area' => 'ha.keys',
+    ),
+    'keys.VkId' => array(
+        'xtype' => 'textfield',
+        'value' => '{"keys":{"id":"12345","secret":"12345"},"scope":"vkid.personal_info email"}',
+        'area' => 'ha.keys',
+    ),
     'keys.Vkontakte' => array(
         'xtype' => 'textfield',
         'value' => '{"keys":{"id":"12345","secret":"12345"},"scope":"email"}',
+        'area' => 'ha.keys',
+    ),
+    'keys.Odnoklassniki' => array(
+        'xtype' => 'textfield',
+        'value' => '{"keys":{"id":"12345","key":"12345","secret":"12345"}}',
+        'area' => 'ha.keys',
+    ),
+    'keys.Yahoo' => array(
+        'xtype' => 'textfield',
+        'value' => '{"keys":{"id":"12345","secret":"12345"},"scope":"profile"}',
         'area' => 'ha.keys',
     ),
     'register_users' => array(

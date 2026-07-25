@@ -1,7 +1,8 @@
 {
   "name": "bezumkin/modx-hybridauth",
   "require": {
-    "hybridauth/hybridauth": "3.7.*"
+    "php": ">=7.4 <8.5",
+    "hybridauth/hybridauth": "^3.13"
   },
   "autoload": {
     "classmap": [

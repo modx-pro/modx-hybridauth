@@ -4,7 +4,7 @@
 const PKG_NAME = 'HybridAuth';
 define('PKG_NAME_LOWER', strtolower(PKG_NAME));
 
-const PKG_VERSION = '3.1.1';
+const PKG_VERSION = '3.2.0';
 const PKG_RELEASE = 'pl';
 const PKG_AUTO_INSTALL = true;
 
@@ -36,7 +36,7 @@ const BUILD_CHUNK_UPDATE = false;
 
 const BUILD_SNIPPET_UPDATE = true;
 const BUILD_PLUGIN_UPDATE = true;
-//define('BUILD_EVENT_UPDATE', true);
+const BUILD_EVENT_UPDATE = true;
 //define('BUILD_POLICY_UPDATE', true);
 //define('BUILD_POLICY_TEMPLATE_UPDATE', true);
 //define('BUILD_PERMISSION_UPDATE', true);

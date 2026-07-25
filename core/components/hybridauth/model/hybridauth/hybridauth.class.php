@@ -38,6 +38,7 @@ class HybridAuth
             'loginResourceId' => 0,
             'logoutResourceId' => 0,
             'providers' => '',
+            'postHooks' => '',
         ], $config);
 
         $this->loadHybridAuth();
@@ -86,7 +87,8 @@ class HybridAuth
             default:
                 $config = $this->makePlaceholders($this->config);
                 if ($css = $this->modx->getOption('ha.frontend_css')) {
-                    $this->modx->regClientCSS(str_replace($config['pl'], $config['vl'], $css));
+                    $css = str_replace($config['pl'], $config['vl'], $css);
+                    $this->modx->regClientCSS($this->versionAssetUrl($css));
                 }
                 $this->initialized[$ctx] = true;
         }
@@ -100,8 +102,17 @@ class HybridAuth
      */
     public function loadHybridAuth()
     {
-        if (!class_exists('OAuth2')) {
-            require_once MODX_CORE_PATH . 'components/hybridauth/vendor/autoload.php';
+        if (!class_exists(\Hybridauth\Adapter\OAuth2::class)) {
+            $autoload = MODX_CORE_PATH . 'components/hybridauth/vendor/autoload.php';
+            if (!is_readable($autoload)) {
+                $this->modx->log(
+                    modX::LOG_LEVEL_ERROR,
+                    '[HybridAuth] Missing vendor/autoload.php. Reinstall the package built with ' .
+                    '`composer install` in core/components/hybridauth/ (see issue #54).'
+                );
+                return;
+            }
+            require_once $autoload;
         }
 
         if (!empty($this->config['providers'])) {
@@ -119,17 +130,10 @@ class HybridAuth
                 $config = json_decode($config, true);
                 $class = '\Hybridauth\Provider\\' . $provider;
                 if (is_array($config) && class_exists($class)) {
-                    if (!isset($config['keys'])) {
-                        $config = [
-                            'keys' => [
-                                'id' => $config['key'] ?? $config['id'],
-                                'secret' => $config['secret'],
-                            ],
-                        ];
-                    }
+                    $config = $this->normalizeProviderConfig($config);
 
                     try {
-                        $config['callback'] = $this->modx->getOption('site_url') . '?hauth.done=' . $provider;
+                        $config['callback'] = $this->getProviderCallback($provider);
                         $this->adapters[$provider] = new $class($config);
                     } catch (Exception $e) {
                         $this->exceptionHandler($e);
@@ -142,12 +146,118 @@ class HybridAuth
 
 
     /**
+     * Normalize ha.keys.* JSON for OAuth1 (key/secret) and OAuth2 (id/secret).
+     * Mirrors key↔id so OAuth1 adapters (legacy Twitter) keep working with OAuth2-style JSON (#47).
+     * Preserves scope and other adapter options.
+     *
+     * @param array $config
+     * @return array
+     */
+    protected function normalizeProviderConfig(array $config)
+    {
+        if (!isset($config['keys']) || !is_array($config['keys'])) {
+            $config['keys'] = [
+                'id' => $config['id'] ?? null,
+                'key' => $config['key'] ?? null,
+                'secret' => $config['secret'] ?? null,
+            ];
+            unset($config['id'], $config['key'], $config['secret']);
+        }
+
+        $keys = &$config['keys'];
+        if (!empty($keys['id']) && empty($keys['key'])) {
+            $keys['key'] = $keys['id'];
+        }
+        if (!empty($keys['key']) && empty($keys['id'])) {
+            $keys['id'] = $keys['key'];
+        }
+
+        return $config;
+    }
+
+
+    /**
+     * OAuth redirect_uri for a provider.
+     * Use hauth_done (underscore): Facebook rejects hauth.done, and PHP maps dots to
+     * underscores in $_REQUEST anyway (#38). Prefer &redirectUri= / HTTPS of the request
+     * when site_url still says http behind TLS.
+     *
+     * @param string $provider
+     * @return string
+     */
+    protected function getProviderCallback($provider)
+    {
+        $siteUrl = $this->ensureHttpsUrl($this->modx->getOption('site_url'));
+        $base = !empty($this->config['redirectUri'])
+            ? $this->ensureHttpsUrl($this->config['redirectUri'])
+            : $siteUrl;
+        if (!$this->isSameOriginUrl($base, $siteUrl)) {
+            $this->modx->log(
+                modX::LOG_LEVEL_ERROR,
+                '[HybridAuth] redirectUri rejected (not same-origin): ' . $base
+            );
+            $base = $siteUrl;
+        }
+        $sep = strpos($base, '?') === false ? '?' : '&';
+
+        return rtrim($base, '?&') . $sep . 'hauth_done=' . rawurlencode($provider);
+    }
+
+
+    /**
+     * @param string $url
+     * @return string
+     */
+    protected function ensureHttpsUrl($url)
+    {
+        $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            || (isset($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443)
+            || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])
+                && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https');
+
+        if ($https && stripos($url, 'http://') === 0) {
+            return 'https://' . substr($url, 7);
+        }
+
+        return $url;
+    }
+
+
+    /**
+     * True when $url is http(s) and shares host with $origin (#25 Covert Redirect).
+     *
+     * @param string $url
+     * @param string $origin
+     * @return bool
+     */
+    protected function isSameOriginUrl($url, $origin)
+    {
+        if (!is_string($url) || $url === '' || preg_match('#^(//|javascript:|data:)#i', $url)) {
+            return false;
+        }
+        $urlParts = parse_url($url);
+        $originParts = parse_url($origin);
+        if (
+            empty($urlParts['scheme'])
+            || empty($urlParts['host'])
+            || empty($originParts['host'])
+            || !in_array(strtolower($urlParts['scheme']), ['http', 'https'], true)
+        ) {
+            return false;
+        }
+
+        return strtolower($urlParts['host']) === strtolower($originParts['host']);
+    }
+
+
+    /**
      * Checks and login user. Also creates/updated user services profiles
      *
      * @param string $provider Remote service to login
      */
     public function Login($provider)
     {
+        $adapter = null;
         try {
             if (isset($this->adapters[$provider])) {
                 /** @var OAuth2 $adapter */
@@ -171,9 +281,32 @@ class HybridAuth
         } catch (Exception $e) {
             $this->exceptionHandler($e);
             $this->Refresh('login');
+            return;
         }
+        if (empty($profile['identifier'])) {
+            $this->Refresh('login');
+            return;
+        }
+
+        $this->processOAuthProfile($provider, $profile);
+    }
+
+
+    /**
+     * Complete OAuth login after profile is resolved.
+     *
+     * @param string $provider
+     * @param array $profile
+     */
+    protected function processOAuthProfile($provider, array $profile)
+    {
         $profile['provider'] = $provider;
 
+        $haRegistered = false;
+        $haBound = false;
+        $haLoggedIn = false;
+        $uid = 0;
+        $login_data = [];
 
         /** @var haUserService $service */
         $service = $this->modx->getObject('haUserService', [
@@ -194,6 +327,8 @@ class HybridAuth
                         '[HybridAuth] unable to save service profile for user ' . $uid . '. Message: ' . $msg
                     );
                     $_SESSION['HybridAuth']['error'] = $msg;
+                } else {
+                    $haBound = true;
                 }
             } else {
                 // Create a new user and add this record to him
@@ -275,16 +410,27 @@ class HybridAuth
                                 '[HybridAuth] unable to save service profile for user ' . $uid . '. Message: ' . $msg
                             );
                             $_SESSION['HybridAuth']['error'] = $msg;
+                        } else {
+                            $haRegistered = true;
                         }
                     }
                 }
             }
         } else {
             // Find and use connected MODX user
+            $boundUid = (int)$service->get('internalKey');
             if ($this->modx->user->isAuthenticated($this->modx->context->key)) {
-                $uid = $this->modx->user->id;
+                $uid = (int)$this->modx->user->id;
+                // Do not steal an OAuth identity already linked to another account (#25)
+                if ($boundUid > 0 && $boundUid !== $uid) {
+                    $_SESSION['HybridAuth']['error'] = $this->modx->lexicon('ha_err_service_bound', [
+                        'provider' => $provider,
+                    ]);
+                    $this->Refresh('login');
+                    return;
+                }
             } else {
-                $uid = $service->get('internalKey');
+                $uid = $boundUid;
             }
 
             /** @var modUser $user */
@@ -308,16 +454,16 @@ class HybridAuth
             } else {
                 $service->remove();
                 $this->Login($provider);
+                return;
             }
         }
 
-        $this->modx->error->reset();
+        $this->resetModxError();
         if (
             empty($_SESSION['HybridAuth']['error'])
             && !$this->modx->user->isAuthenticated($this->modx->context->key)
             && !empty($login_data)
         ) {
-            $_SESSION['HA']['verified'] = 1;
             if (!empty($this->config['loginContext'])) {
                 $login_data['login_context'] = $this->config['loginContext'];
             }
@@ -335,10 +481,82 @@ class HybridAuth
                     '[HybridAuth] error login for user ' . $login_data['username'] . '. Message: ' . $msg
                 );
                 $_SESSION['HybridAuth']['error'] = $msg;
+            } else {
+                $haLoggedIn = true;
             }
         }
 
+        if (empty($_SESSION['HybridAuth']['error']) && $uid > 0) {
+            $this->fireAuthHooks($haRegistered, $haBound, $haLoggedIn, $uid, $provider, $profile);
+        }
+
         $this->Refresh('login');
+    }
+
+
+    /**
+     * System events + Login-style &postHooks= snippets after OAuth (#31).
+     *
+     * @param bool $registered
+     * @param bool $bound
+     * @param bool $loggedIn
+     * @param int $uid
+     * @param string $provider
+     * @param array $profile
+     * @return void
+     */
+    protected function fireAuthHooks($registered, $bound, $loggedIn, $uid, $provider, array $profile)
+    {
+        /** @var modUser|null $user */
+        $user = $this->modx->getObject('modUser', (int)$uid);
+        $fields = [
+            'user' => $user,
+            'userid' => (int)$uid,
+            'provider' => $provider,
+            'profile' => $profile,
+            'HybridAuth' => $this,
+        ];
+
+        if ($registered) {
+            $this->modx->invokeEvent('OnHAUserCreate', $fields + ['mode' => 'register']);
+            $this->runPostHooks('register', $fields);
+        }
+        if ($bound) {
+            $this->modx->invokeEvent('OnHAUserBind', $fields + ['mode' => 'bind']);
+        }
+        if ($loggedIn) {
+            $this->modx->invokeEvent('OnHAUserLogin', $fields + [
+                'mode' => $registered ? 'register' : 'login',
+            ]);
+            if (!$registered) {
+                $this->runPostHooks('login', $fields);
+            }
+        }
+    }
+
+
+    /**
+     * Run comma-separated snippets from &postHooks= (Login-compatible).
+     *
+     * @param string $mode register|login
+     * @param array $fields
+     * @return void
+     */
+    protected function runPostHooks($mode, array $fields)
+    {
+        $hooks = !empty($this->config['postHooks']) ? $this->config['postHooks'] : '';
+        if ($hooks === '') {
+            return;
+        }
+
+        foreach (array_map('trim', explode(',', $hooks)) as $name) {
+            if ($name === '') {
+                continue;
+            }
+            $this->modx->runSnippet($name, array_merge($fields, [
+                'ha_mode' => $mode,
+            ]));
+        }
     }
 
 
@@ -403,31 +621,52 @@ class HybridAuth
 
         if (empty($url)) {
             $request = preg_replace('#^' . $this->modx->getOption('base_url') . '#', '', $_SERVER['REQUEST_URI']);
-            $url = $this->modx->getOption('site_url') . ltrim($request, '/');
-            if ($pos = strpos($url, '?')) {
-                $arr = explode('&', substr($url, $pos + 1));
-                $url = substr($url, 0, $pos);
-                if (count($arr) > 1) {
-                    foreach ($arr as $k => $v) {
-                        if (
-                            preg_match(
-                                '#(action|provider|hauth.action|hauth.done|state|code|error|error_description)+#i',
-                                $v,
-                                $matches
-                            )
-                        ) {
-                            unset($arr[$k]);
-                        }
-                    }
-                    if (!empty($arr)) {
-                        $url = $url . '?' . implode('&', $arr);
-                    }
-
-                }
-            }
+            $url = $this->stripAuthQueryParams(
+                $this->modx->getOption('site_url') . ltrim($request, '/')
+            );
         }
 
         $this->modx->sendRedirect($url);
+    }
+
+
+    /**
+     * Drop auth/logout query params so a post-login redirect cannot bounce back
+     * to hauth_action=logout / service=logout (#36).
+     *
+     * @param string $url
+     * @return string
+     */
+    protected function stripAuthQueryParams($url)
+    {
+        $pos = strpos($url, '?');
+        if ($pos === false) {
+            return $url;
+        }
+
+        $base = substr($url, 0, $pos);
+        $query = substr($url, $pos + 1);
+        if ($query === '') {
+            return $base;
+        }
+
+        $keep = [];
+        foreach (explode('&', $query) as $pair) {
+            if ($pair === '') {
+                continue;
+            }
+            if (
+                preg_match(
+                    '#^(?:action|provider|service|hauth\.action|hauth\.done|hauth_action|hauth_done|state|code|device_id|error|error_description)=#i',
+                    $pair
+                )
+            ) {
+                continue;
+            }
+            $keep[] = $pair;
+        }
+
+        return $keep === [] ? $base : $base . '?' . implode('&', $keep);
     }
 
 
@@ -439,9 +678,12 @@ class HybridAuth
     public function getUrl()
     {
         $request = preg_replace('#^' . $this->modx->getOption('base_url') . '#', '', $_SERVER['REQUEST_URI']);
-        $url = $this->modx->getOption('site_url') . ltrim(rawurldecode($request), '/');
+        $url = $this->ensureHttpsUrl(
+            $this->modx->getOption('site_url') . ltrim(rawurldecode($request), '/')
+        );
         $url = preg_replace('#["\']#', '', strip_tags($url));
         $url = preg_replace('#\[\[.*?\]\]#', '', $url);
+        $url = $this->stripAuthQueryParams($url);
 
         $url .= strpos($url, '?')
             ? '&amp;hauth_action='
@@ -484,6 +726,7 @@ class HybridAuth
                 'unbind_url' => $url . 'unbind',
                 'provider' => strtolower($provider),
                 'title' => $provider,
+                'icon_url' => $this->config['assetsUrl'] . 'img/web/providers/' . strtolower($provider) . '.svg',
             ];
 
             $output .= !in_array($pls['provider'], $active)
@@ -524,7 +767,7 @@ class HybridAuth
      */
     public function runProcessor($action = '', $scriptProperties = [])
     {
-        $this->modx->error->reset();
+        $this->resetModxError();
 
         return $this->modx->runProcessor(
             $action,
@@ -533,6 +776,76 @@ class HybridAuth
                 'processors_path' => $this->config['processorsPath'],
             ]
         );
+    }
+
+
+    /**
+     * MODX 3 may not set $modx->error until runProcessor; ensure it exists before reset.
+     */
+    public static function resetModxErrorFor(modX $modx)
+    {
+        if ($modx->error) {
+            $modx->error->reset();
+            return;
+        }
+        if (!isset($modx->services)) {
+            return;
+        }
+        if (!$modx->services->has('error')) {
+            $class = class_exists(\MODX\Revolution\Error\modError::class)
+                ? \MODX\Revolution\Error\modError::class
+                : 'modError';
+            $modx->services->add('error', new $class($modx));
+        }
+        $modx->error = $modx->services->get('error');
+        $modx->error->reset();
+    }
+
+
+    /**
+     * MODX 3 may not set $modx->error until runProcessor; ensure it exists before reset.
+     */
+    protected function resetModxError()
+    {
+        self::resetModxErrorFor($this->modx);
+    }
+
+
+    /**
+     * Append filemtime query param so browser cache invalidates after CSS updates.
+     *
+     * @param string $url
+     *
+     * @return string
+     */
+    protected function versionAssetUrl($url)
+    {
+        if (empty($url)) {
+            return $url;
+        }
+
+        $assetsUrl = $this->modx->getOption('assets_url', null, MODX_ASSETS_URL);
+        $assetsPath = $this->modx->getOption('assets_path', null, MODX_ASSETS_PATH);
+        $siteUrl = $this->modx->getOption('site_url', null, '');
+
+        $path = $url;
+        if (!empty($siteUrl) && strpos($path, $siteUrl) === 0) {
+            $path = substr($path, strlen($siteUrl));
+        }
+
+        $queryPos = strpos($path, '?');
+        $pathOnly = $queryPos !== false ? substr($path, 0, $queryPos) : $path;
+
+        if (strpos($pathOnly, $assetsUrl) === 0) {
+            $file = $assetsPath . substr($pathOnly, strlen($assetsUrl));
+            if (is_readable($file)) {
+                $base = $queryPos !== false ? substr($url, 0, $queryPos) : $url;
+
+                return $base . '?v=' . filemtime($file);
+            }
+        }
+
+        return $url;
     }
 
 

@@ -9,53 +9,44 @@
     display: inline-block;
 }
 
+.ha-providers {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
 .ha-icon,
 .ha-icon-active {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
     width: 48px;
     height: 48px;
-    margin: 0 2px;
-    background-image: url('../../img/web/color-icons.png');
-    background-repeat: no-repeat;
-    text-indent: -9999px;
-    opacity: 1;
+    padding: 8px;
+    box-sizing: border-box;
+    margin: 0;
+    vertical-align: middle;
+    text-decoration: none;
+    background: none;
+    border: none;
+    border-radius: 4px;
+    transition: opacity .15s ease;
 }
 
-.ha-icon:hover { opacity: .8; }
-
-.ha-icon.active {
-    background-image: url('../../img/web/grayscale-icons.png');
-    opacity: .5 !important;
+.ha-icon__img {
+    display: block;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
 }
 
-.ha-icon.facebook { background-position: 0 0; }
+.ha-icon:hover {
+    opacity: .85;
+}
 
-.ha-icon.github { background-position: -48px 0; }
-
-.ha-icon.google { background-position: -96px 0; }
-
-.ha-icon.instagram { background-position: -144px 0; }
-
-.ha-icon.linkedin { background-position: -192px 0; }
-
-.ha-icon.livejournal { background-position: -240px 0; }
-
-.ha-icon.mailru { background-position: -288px 0; }
-
-.ha-icon.odnoklassniki { background-position: -336px 0; }
-
-.ha-icon.thumblr { background-position: -384px 0; }
-
-.ha-icon.twitter { background-position: -432px 0; }
-
-.ha-icon.vimeo { background-position: -480px 0; }
-
-.ha-icon.vkontakte { background-position: -528px 0; }
-
-.ha-icon.yandex { background-position: -576px 0; }
-
-.ha-icon.youtube { background-position: -624px 0; }
-
-.ha-icon.foursquare { background-position: -672px 0; }
-
-.ha-icon.modxpro { background-position: -720px 0; }
+.ha-icon.active .ha-icon__img {
+    filter: grayscale(1);
+    opacity: .55;
+}

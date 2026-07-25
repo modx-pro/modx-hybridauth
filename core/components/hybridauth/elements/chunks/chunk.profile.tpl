@@ -36,7 +36,9 @@
     <div class="control-group">
         <label class="control-label">[[%ha.providers_available]]</label>
         <div class="controls">
+            <div class="ha-providers">
             [[+providers]]
+            </div>
         </div>
     </div>
 

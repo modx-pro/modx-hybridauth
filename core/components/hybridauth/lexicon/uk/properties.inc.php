@@ -8,7 +8,7 @@
  * @translation by Viktorminator
  */
 
-$_lang['ha.providers'] = 'Список провайдерів авторизації, через кому. Усі доступні провайдери знаходяться тут {core_path}components/hybridauth/model/hybridauth/lib/Providers/. Наприклад, &providers=`Google,Twitter,Facebook`.';
+$_lang['ha.providers'] = 'Список провайдерів авторизації, через кому. Усі доступні провайдери знаходяться тут {core_path}components/hybridauth/model/hybridauth/lib/Providers/. Наприклад, &providers=`Google,X,Facebook`.';
 $_lang['ha.groups'] = 'Список груп для реєстрації користувача, через кому. Можна вказувати роль юзера в групі через двокрапку. Наприклад, &groups=`Users:1` додасть юзера в групу "Users" з роллю "member".';
 $_lang['ha.rememberme'] = 'Запам’ятовує користувача на тривалий час. Дефолтно - увімкнуто.';
 $_lang['ha.loginContext'] = 'Основний контекст для авторизації. Дефолтно - поточний.';
@@ -25,3 +25,4 @@ $_lang['ha.activeProviderTpl'] = 'Чанк для виведення іконк�
 
 $_lang['ha.profileFields'] = 'Список дозволених для редагування полів юзера, через кому. Також можна вказати максимальну довжину значень, через двокрапку. Наприклад, &profileFields=`username:25,fullname:50,email`.';
 $_lang['ha.requiredFields'] = 'Список обов’язкових полів при редагуванні. Ці поля повинні бути заповнені для успішного оновлення профілю. Наприклад, &requiredFields=`username,fullname,email`.';
+$_lang['ha.postHooks'] = 'Сніпети через кому після OAuth-реєстрації або входу (як у Login). У сніпет: user, userid, provider, profile, ha_mode (register|login). Також події OnHAUserCreate, OnHAUserLogin, OnHAUserBind.';
