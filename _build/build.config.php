@@ -6,7 +6,9 @@ define('PKG_NAME_LOWER', strtolower(PKG_NAME));
 
 const PKG_VERSION = '3.2.0';
 const PKG_RELEASE = 'pl';
-const PKG_AUTO_INSTALL = true;
+if (!defined('PKG_AUTO_INSTALL')) {
+    define('PKG_AUTO_INSTALL', getenv('GITHUB_ACTIONS') !== 'true');
+}
 
 // define paths
 if (isset($_SERVER['MODX_BASE_PATH'])) {

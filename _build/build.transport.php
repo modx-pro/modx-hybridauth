@@ -280,6 +280,22 @@ $modx->log(modX::LOG_LEVEL_INFO, 'Added package attributes and setup options.');
 $modx->log(modX::LOG_LEVEL_INFO, 'Packing up transport package zip...');
 $builder->pack();
 
+$signature = $builder->getSignature();
+$builtZip = rtrim($modx->getOption('core_path'), '/') . '/packages/' . $signature . '.transport.zip';
+$artifactDir = dirname(__DIR__) . '/_packages';
+if (is_readable($builtZip)) {
+    if (!is_dir($artifactDir) && !mkdir($artifactDir, 0755, true) && !is_dir($artifactDir)) {
+        $modx->log(modX::LOG_LEVEL_ERROR, 'Could not create artifact directory: ' . $artifactDir);
+    } else {
+        $artifactPath = $artifactDir . '/' . basename($builtZip);
+        if (@copy($builtZip, $artifactPath)) {
+            $modx->log(modX::LOG_LEVEL_INFO, 'Copied transport package to ' . $artifactPath);
+        } else {
+            $modx->log(modX::LOG_LEVEL_ERROR, 'Could not copy transport package to ' . $artifactPath);
+        }
+    }
+}
+
 $mtime = microtime();
 $mtime = explode(" ", $mtime);
 $mtime = $mtime[1] + $mtime[0];
@@ -287,7 +303,6 @@ $tend = $mtime;
 $totalTime = ($tend - $tstart);
 $totalTime = sprintf("%2.4f s", $totalTime);
 
-$signature = $builder->getSignature();
 if (defined('PKG_AUTO_INSTALL') && PKG_AUTO_INSTALL) {
     $sig = explode('-', $signature);
     $versionSignature = explode('.', $sig[1]);
